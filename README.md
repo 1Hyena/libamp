@@ -13,6 +13,12 @@ of individual cells called glyphs. Each glyph stores color and style information
 to form a complete picture.
 
 
+# Installation #################################################################
+
+Clone the repository and include the header file in your project. Compile using
+a C compiler (C23 or later required).
+
+
 # License ######################################################################
 
 The AnsMap Library has been authored by Erich Erstu and is released under the
