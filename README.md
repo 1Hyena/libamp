@@ -81,11 +81,10 @@ arguments.
 
 ### Rendering ansmap images ####################################################
 
-In order to render an ansmap for displaying in the terminal, the main function
-to use is `amp_to_ans()`. It takes a pointer to the ansmap image structure as
-an argument and optionally also a pointer to the location in memory where to
-copy the result. If `nullptr` is given for the result, then the library writes
-the result into the program's standard output.
+To display an ansmap in the terminal, use the `amp_to_ans()` function. It
+requires a pointer to the ansmap image structure and a pointer to the memory
+location to copy the result. If `nullptr` is used for the memory location, the
+output will be written to the standard output of the program.
 
 
 ## License #####################################################################
