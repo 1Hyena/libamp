@@ -26,11 +26,8 @@
 #ifndef AMP_H_12_01_2026
 #define AMP_H_12_01_2026
 ////////////////////////////////////////////////////////////////////////////////
-#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
-#include <sys/types.h>
-#include <stdio.h>
 #include <stdckdint.h>
 #include <limits.h>
 #include <ctype.h>

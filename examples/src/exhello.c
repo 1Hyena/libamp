@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
 #define AMP_BUF_SIZE 256 // Let's use the integrated buffer for our convenience.
 #include "../../amp.h"
-#include <stdlib.h>
-#include <unistd.h>
+
 
 int main(int, char **) {
     struct amp_type amp;
