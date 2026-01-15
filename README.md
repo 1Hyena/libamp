@@ -14,7 +14,7 @@ art graphics to the terminal. The AnsMap Library is accompanied by a set of
 methods for ansmap construction and for the conversion of ansmap images to ANSI
 escape code sequences.
 
-In this context, an _ansmap_ is a digital text-based image represented as a grid
+In this context, an ansmap is a digital text-based image represented as a grid
 of individual cells called glyphs. Each glyph stores color and style information
 to form a complete picture.
 
