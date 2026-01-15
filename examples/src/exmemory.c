@@ -38,10 +38,10 @@ int main(int, char **) {
                 (char) random_uint64() % CHAR_MAX, '\0'
             };
 
-            amp_draw_text(
+            amp_draw_glyph(
                 &amp,
                 random_uint64(), // Let's enable random styles.
-                x, y, AMP_ALIGN_LEFT, glyph
+                x, y, glyph
             );
         }
     }

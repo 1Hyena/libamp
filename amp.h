@@ -194,6 +194,28 @@ static inline bool                      amp_put_style(
     uint32_t                                x,
     uint32_t                                y
 );
+static inline bool                      amp_set_bg_color(
+    struct amp_type *                       amp,
+    struct amp_color_type                   bg_color,
+    uint32_t                                x,
+    uint32_t                                y
+);
+static inline struct amp_color_type     amp_get_bg_color(
+    struct amp_type *                       amp,
+    uint32_t                                x,
+    uint32_t                                y
+);
+static inline bool                      amp_set_fg_color(
+    struct amp_type *                       amp,
+    struct amp_color_type                   fg_color,
+    uint32_t                                x,
+    uint32_t                                y
+);
+static inline struct amp_color_type     amp_get_fg_color(
+    struct amp_type *                       amp,
+    uint32_t                                x,
+    uint32_t                                y
+);
 static inline struct amp_color_type     amp_map_rgb(
     uint8_t                                 r,
     uint8_t                                 g,
@@ -1099,6 +1121,40 @@ static inline bool amp_put_style(
     return amp_set_mode(amp, x, y, mode);
 }
 
+static inline bool amp_set_bg_color(
+    struct amp_type *amp, struct amp_color_type bg_color, uint32_t x, uint32_t y
+) {
+    auto mode = amp_get_mode(amp, x, y);
+
+    mode.bg = bg_color;
+    mode.bitset.bg = true;
+
+    return amp_set_mode(amp, x, y, mode);
+}
+
+static inline struct amp_color_type amp_get_bg_color(
+    struct amp_type *amp, uint32_t x, uint32_t y
+) {
+    return amp_get_mode(amp, x, y).bg;
+}
+
+static inline bool amp_set_fg_color(
+    struct amp_type *amp, struct amp_color_type fg_color, uint32_t x, uint32_t y
+) {
+    auto mode = amp_get_mode(amp, x, y);
+
+    mode.fg = fg_color;
+    mode.bitset.fg = true;
+
+    return amp_set_mode(amp, x, y, mode);
+}
+
+static inline struct amp_color_type amp_get_fg_color(
+    struct amp_type *amp, uint32_t x, uint32_t y
+) {
+    return amp_get_mode(amp, x, y).fg;
+}
+
 static inline void amp_draw_glyph(
     struct amp_type *amp, AMP_STYLE style, long x, long y, const char *glyph_str
 ) {
@@ -1373,7 +1429,6 @@ static inline size_t amp_mode_to_ans(
                 ans + ans_size, amp_sub_size(sizeof(ans), ans_size), "48;2;"
             );
 
-
             ans_size += amp_str_append(
                 ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
                 amp_number_table[mode.bg.r]
@@ -1564,10 +1619,22 @@ static inline size_t amp_mode_update_to_ans(
             .bg = next.bg,
             .bitset = {
                 .fg = (
-                    !prev.bitset.fg && next.bitset.fg
+                    (!prev.bitset.fg && next.bitset.fg) || (
+                        prev.bitset.fg && next.bitset.fg && (
+                            prev.fg.r != next.fg.r ||
+                            prev.fg.g != next.fg.g ||
+                            prev.fg.b != next.fg.b
+                        )
+                    )
                 ),
                 .bg = (
-                    !prev.bitset.bg && next.bitset.bg
+                    (!prev.bitset.bg && next.bitset.bg) || (
+                        prev.bitset.bg && next.bitset.bg && (
+                            prev.bg.r != next.bg.r ||
+                            prev.bg.g != next.bg.g ||
+                            prev.bg.b != next.bg.b
+                        )
+                    )
                 )
             }
         }
