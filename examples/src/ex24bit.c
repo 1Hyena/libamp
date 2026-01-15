@@ -3,6 +3,8 @@
 #include <math.h>
 
 
+static void draw_palette(struct amp_type *amp);
+
 int main(int, char **) {
     constexpr size_t width = 80;
     constexpr size_t height = 24;
@@ -23,6 +25,16 @@ int main(int, char **) {
         return EXIT_FAILURE;
     }
 
+    amp_set_palette(&amp, AMP_PAL_24BIT); // Enable the true color mode.
+    amp_to_ans(&amp, nullptr, 0); // Write to stdout.
+    amp_write("\n", 1);
+
+    free(ansmap);
+
+    return EXIT_SUCCESS;
+}
+
+static void draw_palette(struct amp_type *amp) {
     struct amp_color_type peaks[] = {
         {   .r  = 255,  .g  =   0,  .b  =   0   },
         {   .r  = 255,  .g  = 255,  .b  =   0   },
@@ -87,7 +99,7 @@ int main(int, char **) {
             }
 
             amp_set_bg_color(
-                &amp,
+                amp,
                 amp_map_rgb(
                     r < 0 ? 0 : r > UINT8_MAX ? 255 : (uint8_t) r,
                     g < 0 ? 0 : g > UINT8_MAX ? 255 : (uint8_t) g,
@@ -96,12 +108,4 @@ int main(int, char **) {
             );
         }
     }
-
-    amp_set_palette(&amp, AMP_PAL_24BIT); // Enable the true color mode.
-    amp_to_ans(&amp, nullptr, 0); // Write to stdout.
-    amp_write("\n", 1);
-
-    free(ansmap);
-
-    return EXIT_SUCCESS;
 }
