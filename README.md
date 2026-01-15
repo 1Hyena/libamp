@@ -87,6 +87,11 @@ location to copy the result. If `nullptr` is used for the memory location, the
 output will be written to the standard output of the program.
 
 
+### API ########################################################################
+
+https://github.com/1Hyena/libamp/blob/8ca29b9f924a84ad0e013ac825764ad37620a085/amp.h#L113-237
+
+
 ## License #####################################################################
 
 The AnsMap Library has been authored by Erich Erstu and is released under the
