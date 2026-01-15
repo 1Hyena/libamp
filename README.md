@@ -7,7 +7,7 @@ In LibAMP, the letters AMP stand for "ANSI Map" (as in ANSI art), and the Lib
 prefix indicates that it is a library for the C programming language.
 
 
-# What is AnsMap ###############################################################
+## What is AnsMap ##############################################################
 
 AnsMap (AMP) is a data structure that stores the instructions for printing ANSI
 art graphics to the terminal. The AnsMap Library is accompanied by a set of
@@ -44,13 +44,45 @@ designed for creating terminal applications and games like multi-user dungeons
 * **Permissive license:** LibAMP is available under the [MIT license](LICENSE).
 
 
-# Installation #################################################################
+## Installation ################################################################
 
 Clone the repository and include the header file in your project. Compile using
 a C compiler (C23 or later required).
 
 
-# License ######################################################################
+## Using LibAMP ################################################################
+
+The usage of the library can be divided into two main parts: drawing and
+rendering. The following sections provide a brief overview of each.
+
+
+### Drawing ansmap images ######################################################
+
+To draw an ansmap image, you can include the [amp.h](amp.h) header file directly
+in your codebase. The library is implemented in a single C header file for easy
+integration.
+
+For drawing, the main functions to use are `amp_init()` and `amp_draw_text()`.
+The initialization function is needed for the specification of the image
+resolution and its data buffer. The text drawing function takes the initialized
+ansmap pointer as an argument and prints the desired text on it.
+
+Although the initialization of the ansmap data structure normally requires an
+external data buffer for the in-memory storage of the image state, it can be
+omitted. If omitted, the library attempts to use the limited amount of its
+integrated memory associated with each ansmap. The amount of integrated memory
+is defined by the `AMP_BUF_SIZE` macro which the user is allowed to define
+according to their needs in each compilation unit.
+
+In order to know the size of the external data buffer before initialization, the
+API provides the `amp_calc_size()` function that takes the image resolution as
+its arguments.
+
+
+### Rendering ansmap images ####################################################
+
+
+## License #####################################################################
 
 The AnsMap Library has been authored by Erich Erstu and is released under the
 [MIT](LICENSE) license.
