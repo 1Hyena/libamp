@@ -89,7 +89,7 @@ output will be written to the standard output of the program.
 
 ### API ########################################################################
 
-https://github.com/1Hyena/libamp/blob/e6fc75b66e85b4824f7654f56d98258b6f9a052d/amp.h#L113-237
+https://github.com/1Hyena/libamp/blob/e6fc75b66e85b4824f7654f56d98258b6f9a052d/amp.h#L113-L237
 
 
 ## License #####################################################################
