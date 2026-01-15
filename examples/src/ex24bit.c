@@ -25,6 +25,8 @@ int main(int, char **) {
         return EXIT_FAILURE;
     }
 
+    draw_palette(&amp);
+
     amp_set_palette(&amp, AMP_PAL_24BIT); // Enable the true color mode.
     amp_to_ans(&amp, nullptr, 0); // Write to stdout.
     amp_write("\n", 1);
@@ -35,6 +37,9 @@ int main(int, char **) {
 }
 
 static void draw_palette(struct amp_type *amp) {
+    const uint32_t width = amp->width;
+    const uint32_t height = amp->height;
+
     struct amp_color_type peaks[] = {
         {   .r  = 255,  .g  =   0,  .b  =   0   },
         {   .r  = 255,  .g  = 255,  .b  =   0   },
