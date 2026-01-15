@@ -92,6 +92,18 @@ output will be written to the standard output of the program.
 https://github.com/1Hyena/libamp/blob/bc035d1d37b41cd3ead4c69806b33979be97309f/amp.h#L113-L237
 
 
+### Examples ###################################################################
+
+#### ex24bit ###################################################################
+
+The [ex24bit](examples/src/ex24bit.c) example demonstrates how to use the 24 bit
+true color mode when converting the ansmap into a sequence of ANSI escape codes.
+
+https://github.com/1Hyena/libamp/blob/ff653ed59d8848de730c945f1c08f74d2c064d86/examples/src/ex24bit.c#L28-L32
+
+![screenshot](img/ex24bit.png "console output of ex24bit")
+
+
 ## License #####################################################################
 
 The AnsMap Library has been authored by Erich Erstu and is released under the
