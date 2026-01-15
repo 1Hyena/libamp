@@ -111,6 +111,10 @@ typedef enum : uint8_t {
 } AMP_ALIGN;
 
 // Public API: /////////////////////////////////////////////////////////////////
+static inline size_t                    amp_calc_size(
+    uint32_t                                w,
+    uint32_t                                h
+);
 static inline size_t                    amp_init(
     struct amp_type *                       amp,
     uint32_t                                width,
@@ -726,6 +730,10 @@ static inline const char *              amp_str_seg_skip_width(
 );
 ////////////////////////////////////////////////////////////////////////////////
 
+static inline size_t amp_calc_size(uint32_t w, uint32_t h) {
+    return AMP_CELL_SIZE * w * h;
+}
+
 static inline size_t amp_init(
     struct amp_type *amp, uint32_t w, uint32_t h, void *buf, size_t buf_size
 ) {
@@ -734,7 +742,7 @@ static inline size_t amp_init(
         buf_size = sizeof(amp->buffer);
     }
 
-    const size_t bytes_required = AMP_CELL_SIZE * w * h;
+    const size_t bytes_required = amp_calc_size(w, h);
     const size_t cell_count = (
         (buf_size < bytes_required ? buf_size : bytes_required) / AMP_CELL_SIZE
     );

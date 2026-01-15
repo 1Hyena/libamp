@@ -8,7 +8,7 @@ int main(int, char **) {
 
     if (amp_init(&amp, 16, 1, nullptr, 0) > sizeof(amp.buffer)) {
         static const char message[] = "amp_init: not enough memory provided\n";
-        write(2, message, sizeof(message));
+        write(2, message, strlen(message));
         return EXIT_FAILURE;
     }
 
