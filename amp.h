@@ -112,13 +112,13 @@ typedef enum : uint8_t {
 
 // Public API: /////////////////////////////////////////////////////////////////
 static inline size_t                    amp_calc_size(
-    uint32_t                                w,
-    uint32_t                                h
+    uint32_t                                ansmap_width,
+    uint32_t                                ansmap_height
 );
 static inline size_t                    amp_init(
     struct amp_type *                       amp,
-    uint32_t                                width,
-    uint32_t                                height,
+    uint32_t                                ansmap_width,
+    uint32_t                                ansmap_height,
     void *                                  data,
     size_t                                  data_size
 );
