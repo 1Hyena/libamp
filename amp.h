@@ -38,6 +38,11 @@
 #include <unistd.h>
 ////////////////////////////////////////////////////////////////////////////////
 
+#define AMP_MAJOR_VERSION  1
+#define AMP_MINOR_VERSION  0
+#define AMP_REVISION       0
+#define AMP_VERSION        "0.5.0"
+
 #ifndef AMP_BUF_SIZE
 #define AMP_BUF_SIZE sizeof(size_t)
 #endif
