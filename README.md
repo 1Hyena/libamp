@@ -89,7 +89,14 @@ output will be written to the standard output of the program.
 
 ### API ########################################################################
 
-https://github.com/1Hyena/libamp/blob/bc035d1d37b41cd3ead4c69806b33979be97309f/amp.h#L113-L237
+#### amp_calc_size #############################################################
+
+https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L113-L120
+
+
+#### amp_init ##################################################################
+
+https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L122-L133
 
 
 ### Examples ###################################################################
