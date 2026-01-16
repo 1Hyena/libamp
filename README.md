@@ -96,6 +96,66 @@ output will be written to the standard output of the program.
 * `amp_init`
   https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L122-L133
 
+* `amp_clear`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L135-L138
+
+* `amp_set_palette`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L140-L146
+
+* `amp_draw_glyph`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L148-L156
+
+* `amp_draw_text`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L158-L168
+
+* `amp_draw_multiline_text`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L170-L184
+
+* `amp_to_ans`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L186-L199
+
+* `amp_row_to_ans`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L201-L215
+
+* `amp_row_cut_to_ans`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L217-L233
+
+* `amp_get_glyph`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L235-L243
+
+* `amp_put_glyph`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L245-L255
+
+* `amp_get_style`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L257-L263
+
+* `amp_put_style`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L265-L274
+
+* `amp_get_bg_color`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L276-L283
+
+* `amp_set_bg_color`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L285-L294
+
+* `amp_get_fg_color`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L296-L303
+
+* `amp_set_fg_color`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L305-L314
+
+* `amp_map_rgb`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L316-L323
+
+* `amp_unmap_rgb`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L325-L333
+
+* `amp_lookup_color`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L335-L340
+
+* `amp_stdout`
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L342-L349
+
 
 ### Examples ###################################################################
 
