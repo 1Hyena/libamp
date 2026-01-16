@@ -114,28 +114,47 @@ typedef enum : uint8_t {
 static inline size_t                    amp_calc_size(
     uint32_t                                ansmap_width,
     uint32_t                                ansmap_height
+
+    // Returns the size of the data buffer needed for the initialization of an
+    // ansmap with the given resolution.
 );
+
 static inline size_t                    amp_init(
     struct amp_type *                       amp,
     uint32_t                                ansmap_width,
     uint32_t                                ansmap_height,
     void *                                  data,
     size_t                                  data_size
+
+    // Initializes the given ansmap data structure. If the data buffer is not
+    // big enough for the image, then the end of the image will be cut off.
+    //
+    // Returns the size of the data buffer needed for the given resolution.
 );
+
 static inline void                      amp_clear(
     struct amp_type *                       amp
+    // Fills the ansmap with empty string glyphs and resets their style.
 );
+
 static inline void                      amp_set_palette(
     struct amp_type *                       amp,
     AMP_PALETTE                             palette
+
+    // Sets the color palette for the given ansmap. It is effective only during
+    // the conversion of the ansmap into ANSI escape sequences.
 );
+
 static inline void                      amp_draw_glyph(
     struct amp_type *                       amp,
     AMP_STYLE                               glyph_style,
     long                                    glyph_x,
     long                                    glyph_y,
     const char *                            glyph_str
+
+    // Draws a single glyph on the given ansmap.
 );
+
 static inline void                      amp_draw_text(
     struct amp_type *                       amp,
     AMP_STYLE                               text_style,
@@ -143,7 +162,11 @@ static inline void                      amp_draw_text(
     long                                    text_y,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str
+
+    // Draws the provided UTF-8 encoded text on the ansmap. Newlines and other
+    // non-printable ASCII characters will be replaced by question marks.
 );
+
 static inline size_t                    amp_draw_multiline_text(
     struct amp_type *                       amp,
     AMP_STYLE                               text_style,
@@ -152,18 +175,45 @@ static inline size_t                    amp_draw_multiline_text(
     uint32_t                                text_max_width,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str
+
+    // Draws the provided UTF-8 encoded text on the ansmap. This function wraps
+    // the line if its width exceeds the maximum allowed width. If the maximum
+    // width is zero, then wrapping is disabled.
+    //
+    // Returns the number of lines drawn.
 );
+
 static inline ssize_t                   amp_to_ans(
     const struct amp_type *                 amp,
     char *                                  ans_dst,
     size_t                                  ans_dst_size
+
+    // Converts the given ansmap into ANSI escape sequences. The escape codes
+    // will be copied to the provided data buffer. If the buffer pointer is a
+    // null pointer, then the output will be written into the program's standard
+    // output.
+    //
+    // Returns the number of bytes that would have been written if the given
+    // buffer was big enough. If the buffer is too small, then its first byte
+    // is set to zero. The return value of -1 indicates an error.
 );
+
 static inline ssize_t                   amp_row_to_ans(
     const struct amp_type *                 amp,
     uint32_t                                y,
     char *                                  ans_dst,
     size_t                                  ans_dst_size
+
+    // Converts one row of the given ansmap into ANSI escape sequences. The
+    // escape codes will be copied to the provided data buffer. If the buffer
+    // pointer is a null pointer, then the output will be written into the
+    // program's standard output.
+    //
+    // Returns the number of bytes that would have been written if the given
+    // buffer was big enough. If the buffer is too small, then its first byte
+    // is set to zero. The return value of -1 indicates an error.
 );
+
 static inline ssize_t                   amp_row_cut_to_ans(
     const struct amp_type *                 amp,
     uint32_t                                x,
@@ -171,68 +221,131 @@ static inline ssize_t                   amp_row_cut_to_ans(
     uint32_t                                width,
     char *                                  ans_dst,
     size_t                                  ans_dst_size
+
+    // Converts a segment of a single row in the given ansmap into ANSI escape
+    // sequences. The escape codes will be copied to the provided data buffer.
+    // If the buffer pointer is a null pointer, then the output will be written
+    // into the program's standard output.
+    //
+    // Returns the number of bytes that would have been written if the given
+    // buffer was big enough. If the buffer is too small, then its first byte
+    // is set to zero. The return value of -1 indicates an error.
 );
+
+static inline const char *              amp_get_glyph(
+    const struct amp_type *                 amp,
+    uint32_t                                x,
+    uint32_t                                y
+
+    // Returns a pointer to the null-terminated UTF-8 encoded string of the
+    // glyph on the given position of the ansmap. If the specified position is
+    // not on the ansmap, then a null pointer is returned.
+);
+
 static inline const char *              amp_put_glyph(
     struct amp_type *                       amp,
     const char *                            glyph,
     uint32_t                                x,
     uint32_t                                y
+
+    // Overwrites a single glyph in the ansmap on the given position and returns
+    // a pointer to the null-terminated UTF-8 encoded string of the new glyph.
+    // If the specified position is not on the ansmap, then a null pointer is
+    // returned.
 );
-static inline const char *              amp_get_glyph(
-    const struct amp_type *                 amp,
-    uint32_t                                x,
-    uint32_t                                y
-);
+
 static inline AMP_STYLE                 amp_get_style(
     const struct amp_type *                 amp,
     uint32_t                                x,
     uint32_t                                y
+
+    // Returns the style bits of a glyph on the ansmap from the given position.
 );
+
 static inline bool                      amp_put_style(
     struct amp_type *                       amp,
     AMP_STYLE                               style,
     uint32_t                                x,
     uint32_t                                y
+
+    // Sets the style of a glyph on the ansmap at the given position.
+    //
+    // Returns true on success and false if the position is not on the ansmap.
 );
-static inline bool                      amp_set_bg_color(
-    struct amp_type *                       amp,
-    struct amp_color_type                   bg_color,
-    uint32_t                                x,
-    uint32_t                                y
-);
+
 static inline struct amp_color_type     amp_get_bg_color(
     struct amp_type *                       amp,
     uint32_t                                x,
     uint32_t                                y
+
+    // Returns a color data structure holding the background color information
+    // of a glyph on the ansmap at the given position.
 );
-static inline bool                      amp_set_fg_color(
+
+static inline bool                      amp_set_bg_color(
     struct amp_type *                       amp,
-    struct amp_color_type                   fg_color,
+    struct amp_color_type                   background_color,
     uint32_t                                x,
     uint32_t                                y
+
+    // Sets the background color of a glyph on the ansmap at the given position.
+    //
+    // Returns true on success and false if the position is not on the ansmap.
 );
+
 static inline struct amp_color_type     amp_get_fg_color(
     struct amp_type *                       amp,
     uint32_t                                x,
     uint32_t                                y
+
+    // Returns a color data structure holding the foreground color information
+    // of a glyph on the ansmap at the given position.
 );
+
+static inline bool                      amp_set_fg_color(
+    struct amp_type *                       amp,
+    struct amp_color_type                   foreground_color,
+    uint32_t                                x,
+    uint32_t                                y
+
+    // Sets the foreground color of a glyph on the ansmap at the given position.
+    //
+    // Returns true on success and false if the position is not on the ansmap.
+);
+
 static inline struct amp_color_type     amp_map_rgb(
-    uint8_t                                 r,
-    uint8_t                                 g,
-    uint8_t                                 b
+    uint8_t                                 red,
+    uint8_t                                 green,
+    uint8_t                                 blue
+
+    // Returns a color data structure holding the color information given in
+    // the arguments.
 );
+
 static inline void                      amp_unmap_rgb(
     struct amp_color_type                   color,
-    uint8_t *                               r,
-    uint8_t *                               g,
-    uint8_t *                               b
+    uint8_t *                               red,
+    uint8_t *                               green,
+    uint8_t *                               blue
+
+    // Copies the red, green and blue color components from the given color data
+    // structure to the addresses specified in the arguments respectively.
 );
+
 static inline struct amp_color_type     amp_lookup_color(
-    AMP_COLOR                               index
+    AMP_COLOR                               color_index
+
+    // Returns a color data structure holding the color information of the given
+    // color by its index.
 );
-static inline ssize_t                   amp_write(
+
+static inline ssize_t                   amp_stdout(
     const char *                            str_src,
     size_t                                  str_src_size
+
+    // Writes the given buffer into the program's standard output fully.
+    //
+    // Returns the number of bytes written or -1 to indicate an error.
 );
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1683,7 +1796,7 @@ static inline size_t amp_mode_update_to_ans(
     return written;
 }
 
-static inline ssize_t amp_write(const char *str_src, size_t str_src_size) {
+static inline ssize_t amp_stdout(const char *str_src, size_t str_src_size) {
     size_t n = 0;
 
     for (; n < str_src_size;) {
@@ -1739,7 +1852,7 @@ static inline ssize_t amp_row_cut_to_ans(
         }
         else if (mode_ans_size) {
             if (ans_to_stdout) {
-                if (amp_write(mode_ans, mode_ans_size) < 0) {
+                if (amp_stdout(mode_ans, mode_ans_size) < 0) {
                     return -1;
                 }
 
@@ -1764,7 +1877,7 @@ static inline ssize_t amp_row_cut_to_ans(
             const size_t space_size = strlen(space);
 
             if (ans_to_stdout) {
-                if (amp_write(space, space_size) < 0) {
+                if (amp_stdout(space, space_size) < 0) {
                     return -1;
                 }
 
@@ -1781,7 +1894,7 @@ static inline ssize_t amp_row_cut_to_ans(
         }
 
         if (ans_to_stdout) {
-            if (amp_write(glyph_data, (size_t) glyph_size) < 0) {
+            if (amp_stdout(glyph_data, (size_t) glyph_size) < 0) {
                 return -1;
             }
 
@@ -1799,7 +1912,7 @@ static inline ssize_t amp_row_cut_to_ans(
     const size_t esc_reset_size = strlen(esc_reset);
 
     if (ans_to_stdout) {
-        if (amp_write(esc_reset, strlen(esc_reset)) < 0) {
+        if (amp_stdout(esc_reset, strlen(esc_reset)) < 0) {
             return -1;
         }
 
@@ -1880,7 +1993,7 @@ static inline ssize_t amp_to_ans(
             const size_t crlf_size = strlen(crlf);
 
             if (ans_to_stdout) {
-                if (amp_write(crlf, crlf_size) < 0) {
+                if (amp_stdout(crlf, crlf_size) < 0) {
                     return -1;
                 }
 
