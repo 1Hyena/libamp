@@ -44,9 +44,9 @@
 #define AMP_BUF_SIZE sizeof(size_t)
 #endif
 
+#define AMP_ESC "\x1b"
+
 struct amp_type;
-struct amp_color_type;
-struct amp_mode_type;
 
 static constexpr size_t AMP_CELL_GLYPH_SIZE = 5; // 4 bytes for UTF8 + null byte
 static constexpr size_t AMP_CELL_MODE_SIZE  = 7;
@@ -1640,7 +1640,7 @@ static inline size_t amp_mode_to_ans(
 
     if (ans_size) {
         written += amp_str_append(
-            ans_dst + written, amp_sub_size(ans_dst_size, written), "\x1b["
+            ans_dst + written, amp_sub_size(ans_dst_size, written), AMP_ESC "["
         );
 
         written += amp_str_append(
@@ -1665,14 +1665,36 @@ static inline size_t amp_mode_update_to_ans(
     struct amp_mode_type prev, struct amp_mode_type next, AMP_PALETTE pal,
     char *ans_dst, size_t ans_dst_size
 ) {
-    if ((prev.bitset.hidden         && !next.bitset.hidden)
-    ||  (prev.bitset.faint          && !next.bitset.faint)
-    ||  (prev.bitset.italic         && !next.bitset.italic)
-    ||  (prev.bitset.underline      && !next.bitset.underline)
-    ||  (prev.bitset.blinking       && !next.bitset.blinking)
-    ||  (prev.bitset.strikethrough  && !next.bitset.strikethrough)
-    ||  (prev.bitset.fg             && !next.bitset.fg)
-    ||  (prev.bitset.bg             && !next.bitset.bg)) {
+    bool force_reset = false; // Needed to turn off inverse video mode.
+
+    if (pal == AMP_PAL_RGB16) {
+        if (prev.bitset.bg) {
+            auto prev_bg_rgb_row = amp_find_rgb16(amp_rgb16_bg_table, prev.bg);
+
+            if (prev_bg_rgb_row.bright) {
+                if (next.bitset.bg) {
+                    auto next_bg_rgb_row = amp_find_rgb16(
+                        amp_rgb16_bg_table, next.bg
+                    );
+
+                    if (!next_bg_rgb_row.bright) {
+                        force_reset = true;
+                    }
+                }
+                else force_reset = true;
+            }
+        }
+    }
+
+    if (force_reset
+    || (prev.bitset.hidden          && !next.bitset.hidden)
+    || (prev.bitset.faint           && !next.bitset.faint)
+    || (prev.bitset.italic          && !next.bitset.italic)
+    || (prev.bitset.underline       && !next.bitset.underline)
+    || (prev.bitset.blinking        && !next.bitset.blinking)
+    || (prev.bitset.strikethrough   && !next.bitset.strikethrough)
+    || (prev.bitset.fg              && !next.bitset.fg)
+    || (prev.bitset.bg              && !next.bitset.bg)) {
         struct amp_mode_type mode = next;
 
         mode.bitset.reset = true;
@@ -1683,6 +1705,42 @@ static inline size_t amp_mode_update_to_ans(
     char buf[256];
     char ans[256];
     size_t ans_size = 0;
+    bool force_fgbg = false;
+
+    if (pal == AMP_PAL_RGB16) {
+        // This is needed to make sure that foreground mode is enabled even
+        // if foreground color value does not change to solve a problem with
+        // the reverse video mode.
+
+        bool next_bg_bright = next_bg_bright = (
+            next.bitset.bg && (
+                amp_find_rgb16(amp_rgb16_bg_table, next.bg).bright
+            )
+        );
+
+        bool prev_bg_bright = prev_bg_bright = (
+            prev.bitset.bg && (
+                amp_find_rgb16(amp_rgb16_bg_table, prev.bg).bright
+            )
+        );
+
+        if (!prev_bg_bright && !next_bg_bright) {
+            // nop
+        }
+        else if (prev_bg_bright && next_bg_bright) {
+            force_fgbg = (
+                prev.fg.r != next.fg.r ||
+                prev.fg.g != next.fg.g ||
+                prev.fg.b != next.fg.b ||
+                prev.bg.r != next.bg.r ||
+                prev.bg.g != next.bg.g ||
+                prev.bg.b != next.bg.b
+            );
+        }
+        else {
+            force_fgbg = true;
+        }
+    }
 
     const struct amp_mode_type modes[] = {
         {
@@ -1732,6 +1790,7 @@ static inline size_t amp_mode_update_to_ans(
             .bg = next.bg,
             .bitset = {
                 .fg = (
+                    force_fgbg ||
                     (!prev.bitset.fg && next.bitset.fg) || (
                         prev.bitset.fg && next.bitset.fg && (
                             prev.fg.r != next.fg.r ||
@@ -1741,6 +1800,7 @@ static inline size_t amp_mode_update_to_ans(
                     )
                 ),
                 .bg = (
+                    force_fgbg ||
                     (!prev.bitset.bg && next.bitset.bg) || (
                         prev.bitset.bg && next.bitset.bg && (
                             prev.bg.r != next.bg.r ||
@@ -1775,7 +1835,8 @@ static inline size_t amp_mode_update_to_ans(
 
     if (ans_size) {
         written += amp_str_append(
-            ans_dst + written, amp_sub_size(ans_dst_size, written), "\x1b["
+            ans_dst + written, amp_sub_size(ans_dst_size, written),
+            AMP_ESC "["
         );
 
         written += amp_str_append(
@@ -1908,7 +1969,7 @@ static inline ssize_t amp_clip_to_ans(
         }
     }
 
-    const char *esc_reset = "\x1b[0m";
+    const char *esc_reset = AMP_ESC "[0m";
     const size_t esc_reset_size = strlen(esc_reset);
 
     if (ans_to_stdout) {

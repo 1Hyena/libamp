@@ -31,7 +31,7 @@ int main(int, char **) {
     );
 
     amp_draw_multiline_text(
-        &amp, AMP_FG_RED|AMP_BG_NAVY, 1, 1, amp.width - 3, AMP_ALIGN_LEFT,
+        &amp, AMP_FG_YELLOW|AMP_BG_NAVY, 1, 1, amp.width - 3, AMP_ALIGN_LEFT,
         "In this example, we also see text wrapping in action."
     );
 
