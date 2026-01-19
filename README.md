@@ -112,8 +112,13 @@ https://github.com/1Hyena/libamp/blob/26088431a14ee16e3c196e4fd9fa4824c272fd17/e
 
 ### API ########################################################################
 
-* `amp_calc_size`
-  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L114-L120
+#### amp_calc_size #############################################################
+
+https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L114-L120
+
+Examples:
+* [ex24bit](#ex24bit)
+* [exmemory](#exmemory)
 
 * `amp_init`
   https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L122-L133
