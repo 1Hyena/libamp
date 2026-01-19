@@ -14,10 +14,10 @@ int main(int, char **) {
 
     constexpr size_t width = 80;
     constexpr size_t height = 24;
-    size_t ansmap_size = amp_calc_size(width, height);
-    uint8_t *ansmap = malloc(ansmap_size);
+    size_t buffer_size = amp_calc_size(width, height);
+    uint8_t *buffer = malloc(buffer_size);
 
-    if (!ansmap) {
+    if (!buffer) {
         static const char message[] = "malloc: allocation failed\n";
         write(2, message, strlen(message));
         return EXIT_FAILURE;
@@ -25,7 +25,7 @@ int main(int, char **) {
 
     struct amp_type amp;
 
-    if (amp_init(&amp, width, height, ansmap, ansmap_size) > ansmap_size) {
+    if (amp_init(&amp, width, height, buffer, buffer_size) > buffer_size) {
         static const char message[] = "amp_init: not enough memory provided\n";
         write(2, message, strlen(message));
         return EXIT_FAILURE;
@@ -47,9 +47,9 @@ int main(int, char **) {
     }
 
     amp_to_ans(&amp, nullptr, 0); // Write to stdout.
-    amp_write("\n", 1);
+    amp_stdout("\n", 1);
 
-    free(ansmap);
+    free(buffer);
 
     return EXIT_SUCCESS;
 }

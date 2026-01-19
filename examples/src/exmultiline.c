@@ -20,7 +20,7 @@ int main(int, char **) {
     );
 
     amp_to_ans(&amp, nullptr, 0); // Write to stdout.
-    amp_write("\n", 1);
+    amp_stdout("\n", 1);
 
     return EXIT_SUCCESS;
 }
