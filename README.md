@@ -116,7 +116,7 @@ https://github.com/1Hyena/libamp/blob/26088431a14ee16e3c196e4fd9fa4824c272fd17/e
 
 https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L114-L120
 
-**Examples:**
+Examples:
 [ex24bit](#ex24bit), [exmemory](#exmemory)
 
 
@@ -124,7 +124,7 @@ https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/a
 
   https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L122-L133
 
-**Examples:**
+Examples:
 [exhello](examples/src/exhello.c), [exmultiline](examples/src/exmultiline.c),
 [ex24bit](#ex24bit), [exmemory](#exmemory)
 
