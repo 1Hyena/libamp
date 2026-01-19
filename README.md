@@ -87,11 +87,33 @@ location to copy the result. If `nullptr` is used for the memory location, the
 output will be written to the standard output of the program.
 
 
+### Examples ###################################################################
+
+#### ex24bit ###################################################################
+
+The [ex24bit](examples/src/ex24bit.c) example demonstrates how to use the 24 bit
+true color mode when converting the ansmap into a sequence of ANSI escape codes.
+
+https://github.com/1Hyena/libamp/blob/ff653ed59d8848de730c945f1c08f74d2c064d86/examples/src/ex24bit.c#L28-L32
+
+![screenshot](img/ex24bit.png "console output of ex24bit")
+
+
+#### exmemory ##################################################################
+
+The [exmemory](examples/src/exmemory.c) example shows how to allocate memory
+from the heap and use it for the storage of an ansmap image. It then fills the
+image with randomly chosen and styled printable ASCII characters.
+
+https://github.com/1Hyena/libamp/blob/26088431a14ee16e3c196e4fd9fa4824c272fd17/examples/src/exmemory.c#L17-L49
+
+![screenshot](img/exmemory.png "console output of exmemory")
+
+
 ### API ########################################################################
 
 * `amp_calc_size`
-  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L113-L120
-
+  https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L114-L120
 
 * `amp_init`
   https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L122-L133
@@ -155,18 +177,6 @@ output will be written to the standard output of the program.
 
 * `amp_stdout`
   https://github.com/1Hyena/libamp/blob/d6aaab19af4b7502491d82f01f4f925b7a2a2055/amp.h#L342-L349
-
-
-### Examples ###################################################################
-
-#### ex24bit ###################################################################
-
-The [ex24bit](examples/src/ex24bit.c) example demonstrates how to use the 24 bit
-true color mode when converting the ansmap into a sequence of ANSI escape codes.
-
-https://github.com/1Hyena/libamp/blob/ff653ed59d8848de730c945f1c08f74d2c064d86/examples/src/ex24bit.c#L28-L32
-
-![screenshot](img/ex24bit.png "console output of ex24bit")
 
 
 ## License #####################################################################
