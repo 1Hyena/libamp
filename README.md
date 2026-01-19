@@ -94,7 +94,7 @@ output will be written to the standard output of the program.
 The [ex24bit](examples/src/ex24bit.c) example demonstrates how to use the 24 bit
 true color mode when converting the ansmap into a sequence of ANSI escape codes.
 
-https://github.com/1Hyena/libamp/blob/ff653ed59d8848de730c945f1c08f74d2c064d86/examples/src/ex24bit.c#L28-L32
+https://github.com/1Hyena/libamp/blob/d402bb8783faaf413a74e77b9c67685eb3f89f07/examples/src/ex24bit.c#L28-L32
 
 ![screenshot](img/ex24bit.png "console output of ex24bit")
 
@@ -105,7 +105,7 @@ The [exmemory](examples/src/exmemory.c) example shows how to allocate memory
 from the heap and use it for the storage of an ansmap image. It then fills the
 image with randomly chosen and styled printable ASCII characters.
 
-https://github.com/1Hyena/libamp/blob/26088431a14ee16e3c196e4fd9fa4824c272fd17/examples/src/exmemory.c#L17-L49
+https://github.com/1Hyena/libamp/blob/d402bb8783faaf413a74e77b9c67685eb3f89f07/examples/src/exmemory.c#L17-L49
 
 ![screenshot](img/exmemory.png "console output of exmemory")
 
