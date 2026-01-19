@@ -180,7 +180,7 @@ Examples:
 https://github.com/1Hyena/libamp/blob/d402bb8783faaf413a74e77b9c67685eb3f89f07/amp.h#L201-L215
 
 
-#### amp_row_cut_to_ans ########################################################
+#### amp_clip_to_ans ###########################################################
 
 https://github.com/1Hyena/libamp/blob/d402bb8783faaf413a74e77b9c67685eb3f89f07/amp.h#L217-L233
 

@@ -214,7 +214,7 @@ static inline ssize_t                   amp_row_to_ans(
     // is set to zero. The return value of -1 indicates an error.
 );
 
-static inline ssize_t                   amp_row_cut_to_ans(
+static inline ssize_t                   amp_clip_to_ans(
     const struct amp_type *                 amp,
     uint32_t                                x,
     uint32_t                                y,
@@ -1812,7 +1812,7 @@ static inline ssize_t amp_stdout(const char *str_src, size_t str_src_size) {
     return n == str_src_size ? (ssize_t) n : -1;
 }
 
-static inline ssize_t amp_row_cut_to_ans(
+static inline ssize_t amp_clip_to_ans(
     const struct amp_type *amp, uint32_t x, uint32_t y, uint32_t width,
     char *ans_dst, size_t ans_dst_size
 ) {
@@ -1945,7 +1945,7 @@ static inline ssize_t amp_row_to_ans(
         // The number of characters that would have been written if
         // ans_dst_size had been sufficiently large, not counting the
         // terminating null character. Returns -1 on error.
-        amp_row_cut_to_ans(amp, 0, y, amp->width, ans_dst, ans_dst_size)
+        amp_clip_to_ans(amp, 0, y, amp->width, ans_dst, ans_dst_size)
     );
 }
 
