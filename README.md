@@ -192,6 +192,14 @@ Examples:
 [exunicode](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exunicode.c#L21)
 
 
+#### amp_print_rich_text #######################################################
+
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L353-L368
+
+Examples:
+[exrich](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exrich.c#L34)
+
+
 #### amp_to_ans ################################################################
 
 https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L188-L201
