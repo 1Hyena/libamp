@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-#define AMP_BUF_SIZE 2048 // Let's use the integrated buffer for convenience.
+#define AMP_BUF_SIZE 512 // Let's use the integrated buffer for convenience.
 #include "../../amp.h"
 #include <stdio.h>
 
