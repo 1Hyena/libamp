@@ -12,7 +12,7 @@ int main(int, char **) {
         return EXIT_FAILURE;
     }
 
-    amp_draw_text(&amp, AMP_BLINKING, 0, 0, AMP_ALIGN_LEFT, "Hello, world!");
+    amp_print_line(&amp, AMP_BLINKING, 0, 0, AMP_ALIGN_LEFT, "Hello, world!");
     amp_to_ans(&amp, nullptr, 0); // Write to stdout.
     amp_stdout("\n", 1);
 

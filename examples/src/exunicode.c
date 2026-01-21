@@ -14,11 +14,11 @@ int main(int, char **) {
 
     for (long y = 1; y < amp.height; ++y) {
         for (long x = 1; x < amp.width; ++x) {
-            amp_draw_glyph(&amp, AMP_BG_GRAY, x, y, "▒");
+            amp_print_glyph(&amp, AMP_BG_GRAY, x, y, "▒");
         }
     }
 
-    amp_draw_multiline_text(
+    amp_print_text(
         &amp, AMP_BG_BLUE|AMP_FG_WHITE, 0, 0, 0, AMP_ALIGN_LEFT,
         "╔═════════════╗\n"
         "║             ║\n"
@@ -30,7 +30,7 @@ int main(int, char **) {
         ""
     );
 
-    amp_draw_multiline_text(
+    amp_print_text(
         &amp, AMP_FG_YELLOW|AMP_BG_NAVY, 1, 1, amp.width - 3, AMP_ALIGN_LEFT,
         "In this example, we also see text wrapping in action."
     );

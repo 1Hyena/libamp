@@ -12,7 +12,7 @@ int main(int, char **) {
         return EXIT_FAILURE;
     }
 
-    amp_draw_multiline_text(
+    amp_print_text(
         &amp, 0, amp.width/2, 0, 0, AMP_ALIGN_CENTER,
         "In the beginning was the Word,\n"
         "and the Word was with God,\n"

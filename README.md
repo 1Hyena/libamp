@@ -157,7 +157,7 @@ Examples:
 [ex24bit](https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/examples/src/ex24bit.c#L30)
 
 
-#### amp_draw_glyph ############################################################
+#### amp_print_glyph ###########################################################
 
 https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/amp.h#L148-L156
 
@@ -165,7 +165,7 @@ Examples:
 [exmemory](https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/examples/src/exmemory.c#L41)
 
 
-#### amp_draw_text #############################################################
+#### amp_print_line ############################################################
 
 https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/amp.h#L158-L168
 
@@ -173,7 +173,7 @@ Examples:
 [exhello](https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/examples/src/exhello.c#L15)
 
 
-#### amp_draw_multiline_text ###################################################
+#### amp_print_text ############################################################
 
 https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/amp.h#L170-L184
 
