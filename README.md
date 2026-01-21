@@ -89,6 +89,11 @@ output will be written to the standard output of the program.
 
 ### Examples ###################################################################
 
+In order to compile all the examples, call `make` in the _examples_ directory.
+
+![screenshot](img/make.png "console output of make")
+
+
 #### ExUnicode #################################################################
 
 The [exunicode](examples/src/exunicode.c) example demonstrates the library's
