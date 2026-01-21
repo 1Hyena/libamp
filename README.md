@@ -105,7 +105,7 @@ https://github.com/1Hyena/libamp/blob/b46695dac9a59d6062f99db0f63e1a98e75bc037/e
 The [exrich](examples/src/exrich.c) example prints the list of available rich
 text markers with the respective text samples.
 
-https://github.com/1Hyena/libamp/blob/b46695dac9a59d6062f99db0f63e1a98e75bc037/examples/src/exrich.c#L29-L40
+https://github.com/1Hyena/libamp/blob/b46695dac9a59d6062f99db0f63e1a98e75bc037/examples/src/exrich.c#L46-L51
 
 ![screenshot](img/exrich.png "console output of exrich")
 
