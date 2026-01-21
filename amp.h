@@ -202,7 +202,7 @@ static inline ssize_t                   amp_to_ans(
 
 static inline ssize_t                   amp_row_to_ans(
     const struct amp_type *                 amp,
-    long                                    y,
+    long                                    row_y,
     char *                                  ans_dst,
     size_t                                  ans_dst_size
 
@@ -218,8 +218,8 @@ static inline ssize_t                   amp_row_to_ans(
 
 static inline ssize_t                   amp_clip_to_ans(
     const struct amp_type *                 amp,
-    long                                    x,
-    long                                    y,
+    long                                    clip_x,
+    long                                    clip_y,
     uint32_t                                width,
     char *                                  ans_dst,
     size_t                                  ans_dst_size
