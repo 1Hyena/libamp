@@ -89,7 +89,7 @@ output will be written to the standard output of the program.
 
 ### Examples ###################################################################
 
-#### exunicode #################################################################
+#### ExUnicode #################################################################
 
 The [exunicode](examples/src/exunicode.c) example demonstrates the library's
 ability to represent unicode glyphs on the ansmap. In addition, it features text
@@ -100,7 +100,7 @@ https://github.com/1Hyena/libamp/blob/088c3b751731107fddd33ab61d45b4695a907a55/e
 ![screenshot](img/exunicode.png "console output of exunicode")
 
 
-#### exrich ####################################################################
+#### ExRich ####################################################################
 
 The [exrich](examples/src/exrich.c) example prints the list of available rich
 text markers with the respective text samples.
@@ -110,7 +110,7 @@ https://github.com/1Hyena/libamp/blob/088c3b751731107fddd33ab61d45b4695a907a55/e
 ![screenshot](img/exrich.png "console output of exrich")
 
 
-#### ex24bit ###################################################################
+#### Ex24bit ###################################################################
 
 The [ex24bit](examples/src/ex24bit.c) example demonstrates how to use the 24 bit
 true color mode when converting the ansmap into a sequence of ANSI escape codes.
@@ -120,7 +120,7 @@ https://github.com/1Hyena/libamp/blob/088c3b751731107fddd33ab61d45b4695a907a55/e
 ![screenshot](img/ex24bit.png "console output of ex24bit")
 
 
-#### exmemory ##################################################################
+#### ExMemory ##################################################################
 
 The [exmemory](examples/src/exmemory.c) example shows how to allocate memory
 from the heap and use it for the storage of an ansmap image. It then fills the
