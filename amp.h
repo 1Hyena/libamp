@@ -608,35 +608,136 @@ struct amp_inline_style_type            amp_lookup_inline_style(
 
 
 static const struct amp_inline_style_type {
+    const char *name;
     char        glyph[AMP_CELL_GLYPH_SIZE];
     AMP_STYLE   style;
 } amp_inline_style_table[] = {
-    [  0]   = { .glyph  = "",   .style  = AMP_STYLE_NONE    },
+    [  0]   = {
+        .glyph  = "",
+        .style  = AMP_STYLE_NONE,
+        .name   = "none"
+    },
     ////////////////////////////////////////////////////////////////////////////
-    ['#']   = { .glyph  = "#",  .style  = AMP_HIDDEN        },
-    ['*']   = { .glyph  = "*",  .style  = AMP_BLINKING      },
-    ['-']   = { .glyph  = "-",  .style  = AMP_STRIKETHROUGH },
-    ['/']   = { .glyph  = "/",  .style  = AMP_ITALIC        },
-    ['?']   = { .glyph  = "?",  .style  = AMP_FAINT         },
-    ['B']   = { .glyph  = "B",  .style  = AMP_FG_BLUE       },
-    ['C']   = { .glyph  = "C",  .style  = AMP_FG_CYAN       },
-    ['D']   = { .glyph  = "D",  .style  = AMP_FG_GRAY       },
-    ['G']   = { .glyph  = "G",  .style  = AMP_FG_LIME       },
-    ['M']   = { .glyph  = "M",  .style  = AMP_FG_MAGENTA    },
-    ['R']   = { .glyph  = "R",  .style  = AMP_FG_RED        },
-    ['W']   = { .glyph  = "W",  .style  = AMP_FG_WHITE      },
-    ['X']   = { .glyph  = "X",  .style  = AMP_HARD_RESET    },
-    ['Y']   = { .glyph  = "Y",  .style  = AMP_FG_YELLOW     },
-    ['_']   = { .glyph  = "_",  .style  = AMP_UNDERLINE     },
-    ['b']   = { .glyph  = "b",  .style  = AMP_FG_NAVY       },
-    ['c']   = { .glyph  = "c",  .style  = AMP_FG_TEAL       },
-    ['d']   = { .glyph  = "d",  .style  = AMP_FG_BLACK      },
-    ['g']   = { .glyph  = "g",  .style  = AMP_FG_GREEN      },
-    ['m']   = { .glyph  = "m",  .style  = AMP_FG_PURPLE     },
-    ['r']   = { .glyph  = "r",  .style  = AMP_FG_MAROON     },
-    ['w']   = { .glyph  = "w",  .style  = AMP_FG_SILVER     },
-    ['x']   = { .glyph  = "x",  .style  = AMP_SOFT_RESET    },
-    ['y']   = { .glyph  = "y",  .style  = AMP_FG_OLIVE      },
+    ['#']   = {
+        .glyph  = "#",
+        .style  = AMP_HIDDEN,
+        .name   = "hidden"
+    },
+    ['*']   = {
+        .glyph  = "*",
+        .style  = AMP_BLINKING,
+        .name = "blinking"
+    },
+    ['-']   = {
+        .glyph  = "-",
+        .style  = AMP_STRIKETHROUGH,
+        .name = "strikethrough"
+    },
+    ['/']   = {
+        .glyph  = "/",
+        .style  = AMP_ITALIC,
+        .name   = "italic"
+    },
+    ['?']   = {
+        .glyph  = "?",
+        .style  = AMP_FAINT,
+        .name   = "faint"
+    },
+    ['B']   = {
+        .glyph  = "B",
+        .style  = AMP_FG_BLUE,
+        .name   = "bold blue"
+    },
+    ['C']   = {
+        .glyph  = "C",
+        .style  = AMP_FG_CYAN,
+        .name   = "bold cyan"
+    },
+    ['D']   = {
+        .glyph  = "D",
+        .style  = AMP_FG_GRAY,
+        .name   = "bold dark"
+    },
+    ['G']   = {
+        .glyph  = "G",
+        .style  = AMP_FG_LIME,
+        .name   = "bold green"
+    },
+    ['M']   = {
+        .glyph  = "M",
+        .style  = AMP_FG_MAGENTA,
+        .name   = "bold magenta"
+    },
+    ['R']   = {
+        .glyph  = "R",
+        .style  = AMP_FG_RED,
+        .name   = "bold red"
+    },
+    ['W']   = {
+        .glyph  = "W",
+        .style  = AMP_FG_WHITE,
+        .name   = "bold white"
+    },
+    ['X']   = {
+        .glyph  = "X",
+        .style  = AMP_HARD_RESET,
+        .name   = "reset"
+    },
+    ['Y']   = {
+        .glyph  = "Y",
+        .style  = AMP_FG_YELLOW,
+        .name   = "bold yellow"
+    },
+    ['_']   = {
+        .glyph  = "_",
+        .style  = AMP_UNDERLINE,
+        .name   = "underline"
+    },
+    ['b']   = {
+        .glyph  = "b",
+        .style  = AMP_FG_NAVY,
+        .name   = "blue"
+    },
+    ['c']   = {
+        .glyph  = "c",
+        .style  = AMP_FG_TEAL,
+        .name   = "cyan"
+    },
+    ['d']   = {
+        .glyph  = "d",
+        .style  = AMP_FG_BLACK,
+        .name   = "dark"
+    },
+    ['g']   = {
+        .glyph  = "g",
+        .style  = AMP_FG_GREEN,
+        .name   = "green"
+    },
+    ['m']   = {
+        .glyph  = "m",
+        .style  = AMP_FG_PURPLE,
+        .name   = "magenta"
+    },
+    ['r']   = {
+        .glyph  = "r",
+        .style  = AMP_FG_MAROON,
+        .name   = "red"
+    },
+    ['w']   = {
+        .glyph  = "w",
+        .style  = AMP_FG_SILVER,
+        .name   = "white"
+    },
+    ['x']   = {
+        .glyph  = "x",
+        .style  = AMP_SOFT_RESET,
+        .name   = "reset foreground"
+    },
+    ['y']   = {
+        .glyph  = "y",
+        .style  = AMP_FG_OLIVE,
+        .name   = "yellow"
+    },
     ////////////////////////////////////////////////////////////////////////////
     {}
 };

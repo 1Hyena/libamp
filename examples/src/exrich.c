@@ -27,18 +27,28 @@ int main(int, char **) {
         }
 
         int written = snprintf(
-            buf, sizeof(buf), " {{%s → {%ssample", row.glyph, row.glyph
+            buf, sizeof(buf), " {{%s → {%ssample{x (%s)",
+            row.glyph, row.glyph, row.name
         );
 
         if (written < (int) sizeof(buf) && written >= 0) {
             amp_print_rich_text(&amp, 0, 0, 0, 0, AMP_ALIGN_LEFT, buf);
             amp_to_ans(&amp, nullptr, 0); // Write to stdout.
+            amp_clear(&amp);
 
             if (n++ % 2) {
                 amp_stdout("\n", 1);
             }
         }
     }
+
+    amp_stdout("\n", 1);
+    amp_print_rich_text(
+        &amp, 0, 0, 0, 0, AMP_ALIGN_LEFT,
+        "{RA{rN{GS{gI {Bc{bo{Cl{co{Mr{ms {Ya{yr{We {wg{Da{xy{*!"
+    );
+    amp_to_ans(&amp, nullptr, 0); // Write to stdout.
+    amp_stdout("\n", 1);
 
     return EXIT_SUCCESS;
 }
