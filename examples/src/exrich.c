@@ -45,7 +45,7 @@ int main(int, char **) {
     amp_stdout("\n", 1);
     amp_print_rich_text(
         &amp, 0, 0, 0, 0, AMP_ALIGN_LEFT,
-        "{RA{rN{GS{gI {Bc{bo{Cl{co{Mr{ms {Ya{yr{We {wg{Da{xy{*!"
+        "{RA{rN{GS{gI {Bc{bo{Cl{co{Mr{ms {Ya{yr{We {wf{Du{xn{*!"
     );
     amp_to_ans(&amp, nullptr, 0); // Write to stdout.
     amp_stdout("\n", 1);
