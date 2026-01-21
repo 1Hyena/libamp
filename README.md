@@ -95,7 +95,7 @@ The [exunicode](examples/src/exunicode.c) example demonstrates the library's
 ability to represent unicode glyphs on the ansmap. In addition, it features text
 wrapping.
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exunicode.c#L21-L36
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exunicode.c#L21-L36
 
 ![screenshot](img/exunicode.png "console output of exunicode")
 
@@ -105,7 +105,7 @@ https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/e
 The [exrich](examples/src/exrich.c) example prints the list of available rich
 text markers with the respective text samples.
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exrich.c#L29-L40
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exrich.c#L29-L40
 
 ![screenshot](img/exrich.png "console output of exrich")
 
@@ -115,7 +115,7 @@ https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/e
 The [ex24bit](examples/src/ex24bit.c) example demonstrates how to use the 24 bit
 true color mode when converting the ansmap into a sequence of ANSI escape codes.
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L28-L32
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L28-L32
 
 ![screenshot](img/ex24bit.png "console output of ex24bit")
 
@@ -126,7 +126,7 @@ The [exmemory](examples/src/exmemory.c) example shows how to allocate memory
 from the heap and use it for the storage of an ansmap image. It then fills the
 image with randomly chosen and styled printable ASCII characters.
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmemory.c#L17-L49
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmemory.c#L17-L49
 
 ![screenshot](img/exmemory.png "console output of exmemory")
 
@@ -135,156 +135,156 @@ https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/e
 
 #### amp_calc_size #############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L116-L122
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L116-L122
 
 Examples:
-[ex24bit](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L11),
-[exmemory](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmemory.c#L17)
+[ex24bit](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L11),
+[exmemory](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmemory.c#L17)
 
 
 #### amp_init ##################################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L124-L135
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L124-L135
 
 Examples:
-[exhello](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exhello.c#L9),
-[exunicode](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exunicode.c#L9),
-[exmultiline](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmultiline.c#L9),
-[ex24bit](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L22),
-[exmemory](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmemory.c#L28)
+[exhello](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exhello.c#L9),
+[exunicode](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exunicode.c#L9),
+[exmultiline](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmultiline.c#L9),
+[ex24bit](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L22),
+[exmemory](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmemory.c#L28)
 
 
 #### amp_clear #################################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L137-L140
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L137-L140
 
 
 #### amp_set_palette ###########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L142-L148
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L142-L148
 
 Examples:
-[ex24bit](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L30)
+[ex24bit](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L30)
 
 
 #### amp_print_glyph ###########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L150-L158
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L150-L158
 
 Examples:
-[exmemory](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmemory.c#L41)
+[exmemory](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmemory.c#L41)
 
 
 #### amp_print_line ############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L160-L170
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L160-L170
 
 Examples:
-[exhello](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exhello.c#L15)
+[exhello](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exhello.c#L15)
 
 
 #### amp_print_text ############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L172-L186
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L172-L186
 
 Examples:
-[exmultiline](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmultiline.c#L15),
-[exunicode](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exunicode.c#L21)
+[exmultiline](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmultiline.c#L15),
+[exunicode](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exunicode.c#L21)
 
 
 #### amp_to_ans ################################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L188-L201
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L188-L201
 
 Examples:
-[exhello](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exhello.c#L16),
-[exunicode](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exunicode.c#L38),
-[exmultiline](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmultiline.c#L22),
-[ex24bit](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L31),
-[exmemory](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmemory.c#L49)
+[exhello](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exhello.c#L16),
+[exunicode](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exunicode.c#L38),
+[exmultiline](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmultiline.c#L22),
+[ex24bit](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L31),
+[exmemory](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmemory.c#L49)
 
 
 #### amp_row_to_ans ############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L203-L217
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L203-L217
 
 
 #### amp_clip_to_ans ###########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L219-L235
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L219-L235
 
 
 #### amp_get_glyph #############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L237-L245
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L237-L245
 
 
 #### amp_put_glyph #############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L247-L257
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L247-L257
 
 
 #### amp_get_style #############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L259-L265
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L259-L265
 
 
 #### amp_put_style #############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L267-L276
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L267-L276
 
 
 #### amp_get_bg_color ##########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L278-L285
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L278-L285
 
 
 #### amp_set_bg_color ##########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L287-L296
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L287-L296
 
 Examples:
-[ex24bit](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L106)
+[ex24bit](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L106)
 
 
 #### amp_get_fg_color ##########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L298-L305
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L298-L305
 
 
 #### amp_set_fg_color ##########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L307-L316
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L307-L316
 
 
 #### amp_map_rgb ###############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L318-L325
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L318-L325
 
 Examples:
-[ex24bit](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L108)
+[ex24bit](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L108)
 
 
 #### amp_unmap_rgb #############################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L327-L335
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L327-L335
 
 
 #### amp_lookup_color ##########################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L337-L342
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L337-L342
 
 
 #### amp_stdout ################################################################
 
-https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/amp.h#L344-L351
+https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/amp.h#L344-L351
 
 Examples:
-[exhello](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exhello.c#L17),
-[exunicode](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exunicode.c#L39),
-[exmultiline](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmultiline.c#L23),
-[ex24bit](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/ex24bit.c#L32),
-[exmemory](https://github.com/1Hyena/libamp/blob/dec100fa82c13d89e871a41b7796656f4ffb60f7/examples/src/exmemory.c#L50)
+[exhello](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exhello.c#L17),
+[exunicode](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exunicode.c#L39),
+[exmultiline](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmultiline.c#L23),
+[ex24bit](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/ex24bit.c#L32),
+[exmemory](https://github.com/1Hyena/libamp/blob/4af8f57cbf23a9dba69e7ece363a2b4308e294de/examples/src/exmemory.c#L50)
 
 
 ## License #####################################################################
