@@ -95,7 +95,7 @@ The [exunicode](examples/src/exunicode.c) example demonstrates the library's
 ability to represent unicode glyphs on the ansmap. In addition, it features text
 wrapping.
 
-https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/examples/src/exunicode.c#L21-L36
+https://github.com/1Hyena/libamp/blob/b9d829a0ed22e18b5f4570adc203e64450be999e/examples/src/exunicode.c#L21-L35
 
 ![screenshot](img/exunicode.png "console output of exunicode")
 
