@@ -128,7 +128,8 @@ https://github.com/1Hyena/libamp/blob/0eeae46a581c4aa617da6864c573077667f19aba/e
 https://github.com/1Hyena/libamp/blob/0eeae46a581c4aa617da6864c573077667f19aba/amp.h#L114-L120
 
 Examples:
-[ex24bit](#ex24bit), [exmemory](#exmemory)
+[ex24bit](https://github.com/1Hyena/libamp/blob/844a146216756cff3cff870adb64bf32236042be/examples/src/ex24bit.c#L11),
+[exmemory](https://github.com/1Hyena/libamp/blob/844a146216756cff3cff870adb64bf32236042be/examples/src/exmemory.c#L17)
 
 
 #### amp_init ##################################################################
