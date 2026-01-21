@@ -89,6 +89,17 @@ output will be written to the standard output of the program.
 
 ### Examples ###################################################################
 
+#### exunicode #################################################################
+
+The [exunicode](examples/src/exunicode.c) example demonstrates the library's
+ability to represent unicode glyphs on the ansmap. In addition, it also features
+text wrapping.
+
+https://github.com/1Hyena/libamp/blob/0eeae46a581c4aa617da6864c573077667f19aba/examples/src/exunicode.c#L21-L36
+
+![screenshot](img/exunicode.png "console output of exunicode")
+
+
 #### ex24bit ###################################################################
 
 The [ex24bit](examples/src/ex24bit.c) example demonstrates how to use the 24 bit
