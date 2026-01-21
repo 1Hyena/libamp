@@ -387,6 +387,29 @@ struct amp_mode_type {
     } bitset;
 };
 
+struct amp_mode_code_type {
+    struct {
+        uint8_t data[8]; // 6 for decoration + inverse and bold
+        uint8_t size;
+    } style;
+
+    struct {
+        struct {
+            uint8_t data[5];
+            uint8_t size;
+        } fg;
+
+        struct {
+            uint8_t data[5];
+            uint8_t size;
+        } bg;
+    } color;
+
+    struct {
+        bool reset:1; // used when returning mode updates
+    } bitset;
+};
+
 static const char *amp_number_table[] = {
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
     "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
@@ -545,102 +568,102 @@ static const struct {
 };
 
 static const struct amp_rgb16_type {
-    const char *            code;
+    uint8_t                 code;
     struct amp_color_type   color;
     AMP_COLOR               index;
     bool                    bright:1;
 } amp_rgb16_fg_table[] = {
     [AMP_COLOR_NONE] = {
         .index  = AMP_COLOR_NONE,
-        .code   = "",
+        .code   = 0,
         .color  = amp_color_table[AMP_COLOR_NONE].color
     },
     ////////////////////////////////////////////////////////////////////////////
     [AMP_BLACK] = {
         .index  = AMP_BLACK,
-        .code   = "30",
+        .code   = 30,
         .color  = amp_color_table[AMP_BLACK].color
     },
     [AMP_MAROON] = {
         .index  = AMP_MAROON,
-        .code   = "31",
+        .code   = 31,
         .color  = amp_color_table[AMP_MAROON].color
     },
     [AMP_GREEN] = {
         .index  = AMP_GREEN,
-        .code   = "32",
+        .code   = 32,
         .color  = amp_color_table[AMP_GREEN].color
     },
     [AMP_OLIVE] = {
         .index  = AMP_OLIVE,
-        .code   = "33",
+        .code   = 33,
         .color  = amp_color_table[AMP_OLIVE].color
     },
     [AMP_NAVY] = {
         .index  = AMP_NAVY,
-        .code   = "34",
+        .code   = 34,
         .color  = amp_color_table[AMP_NAVY].color
     },
     [AMP_PURPLE] = {
         .index  = AMP_PURPLE,
-        .code   = "35",
+        .code   = 35,
         .color  = amp_color_table[AMP_PURPLE].color
     },
     [AMP_TEAL] = {
         .index  = AMP_TEAL,
-        .code   = "36",
+        .code   = 36,
         .color  = amp_color_table[AMP_TEAL].color
     },
     [AMP_SILVER] = {
         .index  = AMP_SILVER,
-        .code   = "37",
+        .code   = 37,
         .color  = amp_color_table[AMP_SILVER].color
     },
     [AMP_GRAY] = {
         .index  = AMP_GRAY,
-        .code   = "30",
+        .code   = 30,
         .color  = amp_color_table[AMP_GRAY].color,
         .bright = true
     },
     [AMP_RED] = {
         .index  = AMP_RED,
-        .code   = "31",
+        .code   = 31,
         .color  = amp_color_table[AMP_RED].color,
         .bright = true
     },
     [AMP_LIME] = {
         .index  = AMP_LIME,
-        .code   = "32",
+        .code   = 32,
         .color  = amp_color_table[AMP_LIME].color,
         .bright = true
     },
     [AMP_YELLOW] = {
         .index  = AMP_YELLOW,
-        .code   = "33",
+        .code   = 33,
         .color  = amp_color_table[AMP_YELLOW].color,
         .bright = true
     },
     [AMP_BLUE] = {
         .index  = AMP_BLUE,
-        .code   = "34",
+        .code   = 34,
         .color  = amp_color_table[AMP_BLUE].color,
         .bright = true
     },
     [AMP_MAGENTA] = {
         .index  = AMP_MAGENTA,
-        .code   = "35",
+        .code   = 35,
         .color  = amp_color_table[AMP_MAGENTA].color,
         .bright = true
     },
     [AMP_CYAN] = {
         .index  = AMP_CYAN,
-        .code   = "36",
+        .code   = 36,
         .color  = amp_color_table[AMP_CYAN].color,
         .bright = true
     },
     [AMP_WHITE] = {
         .index  = AMP_WHITE,
-        .code   = "37",
+        .code   = 37,
         .color  = amp_color_table[AMP_WHITE].color,
         .bright = true
     },
@@ -651,94 +674,94 @@ static const struct amp_rgb16_type {
 static const struct amp_rgb16_type amp_rgb16_bg_table[] = {
     [AMP_COLOR_NONE] = {
         .index  = AMP_COLOR_NONE,
-        .code   = ""
+        .code   = 0
     },
     ////////////////////////////////////////////////////////////////////////////
     [AMP_BLACK] = {
         .index  = AMP_BLACK,
-        .code   = "40",
+        .code   = 40,
         .color  = amp_color_table[AMP_BLACK].color
     },
     [AMP_MAROON] = {
         .index  = AMP_MAROON,
-        .code   = "41",
+        .code   = 41,
         .color  = amp_color_table[AMP_MAROON].color
     },
     [AMP_GREEN] = {
         .index  = AMP_GREEN,
-        .code   = "42",
+        .code   = 42,
         .color  = amp_color_table[AMP_GREEN].color
     },
     [AMP_OLIVE] = {
         .index  = AMP_OLIVE,
-        .code   = "43",
+        .code   = 43,
         .color  = amp_color_table[AMP_OLIVE].color
     },
     [AMP_NAVY] = {
         .index  = AMP_NAVY,
-        .code   = "44",
+        .code   = 44,
         .color  = amp_color_table[AMP_NAVY].color
     },
     [AMP_PURPLE] = {
         .index  = AMP_PURPLE,
-        .code   = "45",
+        .code   = 45,
         .color  = amp_color_table[AMP_PURPLE].color
     },
     [AMP_TEAL] = {
         .index  = AMP_TEAL,
-        .code   = "46",
+        .code   = 46,
         .color  = amp_color_table[AMP_TEAL].color
     },
     [AMP_SILVER] = {
         .index  = AMP_SILVER,
-        .code   = "47",
+        .code   = 47,
         .color  = amp_color_table[AMP_SILVER].color
     },
     [AMP_GRAY] = {
         .index  = AMP_GRAY,
-        .code   = "40",
+        .code   = 40,
         .color  = amp_color_table[AMP_GRAY].color,
         .bright = true
     },
     [AMP_RED] = {
         .index  = AMP_RED,
-        .code   = "41",
+        .code   = 41,
         .color  = amp_color_table[AMP_RED].color,
         .bright = true
     },
     [AMP_LIME] = {
         .index  = AMP_LIME,
-        .code   = "42",
+        .code   = 42,
         .color  = amp_color_table[AMP_LIME].color,
         .bright = true
     },
     [AMP_YELLOW] = {
         .index  = AMP_YELLOW,
-        .code   = "43",
+        .code   = 43,
         .color  = amp_color_table[AMP_YELLOW].color,
         .bright = true
     },
     [AMP_BLUE] = {
         .index  = AMP_BLUE,
-        .code   = "44",
+        .code   = 44,
         .color  = amp_color_table[AMP_BLUE].color,
         .bright = true
     },
     [AMP_MAGENTA] = {
         .index  = AMP_MAGENTA,
-        .code   = "45",
+        .code   = 45,
         .color  = amp_color_table[AMP_MAGENTA].color,
         .bright = true
     },
     [AMP_CYAN] = {
         .index  = AMP_CYAN,
-        .code   = "46",
+        .code   = 46,
         .color  = amp_color_table[AMP_CYAN].color,
         .bright = true
     },
     [AMP_WHITE] = {
         .index  = AMP_WHITE,
-        .code   = "47",
+        .code   = 47,
         .color  = amp_color_table[AMP_WHITE].color,
         .bright = true
     },
@@ -778,18 +801,13 @@ static inline size_t                    amp_utf8_code_point_count(
     const char *                            utf8_str,
     size_t                                  utf8_str_size
 );
-static inline size_t                    amp_mode_to_ans(
+static inline struct amp_mode_code_type amp_mode_to_codes(
     struct amp_mode_type                    mode,
-    AMP_PALETTE                             palette,
-    char *                                  ans_dst,
-    size_t                                  ans_dst_size
+    AMP_PALETTE                             palette
 );
-static inline size_t                    amp_mode_update_to_ans(
-    struct amp_mode_type                    prev_mode,
-    struct amp_mode_type                    next_mode,
-    AMP_PALETTE                             palette,
-    char *                                  ans_dst,
-    size_t                                  ans_dst_size
+static inline struct amp_mode_code_type amp_mode_code_update(
+    struct amp_mode_code_type               next_codes,
+    struct amp_mode_code_type               prev_codes
 );
 static inline struct amp_mode_type     amp_mode_cell_deserialize(
     const uint8_t *                         src,
@@ -1456,118 +1474,48 @@ static inline size_t amp_str_append(
     );
 }
 
-static inline size_t amp_mode_to_ans(
-    struct amp_mode_type mode, AMP_PALETTE pal,
-    char *ans_dst, size_t ans_dst_size
+static inline struct amp_mode_code_type amp_mode_to_codes(
+    struct amp_mode_type mode, AMP_PALETTE pal
 ) {
-    char ans[256];
-    size_t ans_size = 0;
-
-    const char *options[] = {
-        mode.bitset.reset           ? "0" : nullptr,
-        mode.bitset.hidden          ? "8" : nullptr,
-        mode.bitset.faint           ? "2" : nullptr,
-        mode.bitset.italic          ? "3" : nullptr,
-        mode.bitset.underline       ? "4" : nullptr,
-        mode.bitset.blinking        ? "5" : nullptr,
-        mode.bitset.strikethrough   ? "9" : nullptr
+    const struct {
+        uint8_t code;
+        bool    enabled;
+    } styles[] = {
+        { 8, mode.bitset.hidden        },
+        { 2, mode.bitset.faint         },
+        { 3, mode.bitset.italic        },
+        { 4, mode.bitset.underline     },
+        { 5, mode.bitset.blinking      },
+        { 9, mode.bitset.strikethrough }
     };
 
-    for (size_t i=0; i<sizeof(options)/sizeof(options[0]); ++i) {
-        const char *value = options[i];
+    struct amp_mode_code_type codes = {};
 
-        if (!value) {
+    for (size_t i=0; i<sizeof(styles)/sizeof(styles[0]); ++i) {
+        auto const value = styles[i];
+
+        if (!value.enabled) {
             continue;
         }
 
-        ans_size += (
-            ans_size ? amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-            ) : 0
-        );
-
-        ans_size += amp_str_append(
-            ans + ans_size, amp_sub_size(sizeof(ans), ans_size), value
-        );
+        codes.style.data[codes.style.size++] = value.code;
     }
 
     if (pal == AMP_PAL_24BIT) {
         if (mode.bitset.fg) {
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), "38;2;"
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                amp_number_table[mode.fg.r]
-            );
-
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                amp_number_table[mode.fg.g]
-            );
-
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                amp_number_table[mode.fg.b]
-            );
+            codes.color.fg.data[codes.color.fg.size++] = 38;
+            codes.color.fg.data[codes.color.fg.size++] = 2;
+            codes.color.fg.data[codes.color.fg.size++] = mode.fg.r;
+            codes.color.fg.data[codes.color.fg.size++] = mode.fg.g;
+            codes.color.fg.data[codes.color.fg.size++] = mode.fg.b;
         }
 
         if (mode.bitset.bg) {
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), "48;2;"
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                amp_number_table[mode.bg.r]
-            );
-
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                amp_number_table[mode.bg.g]
-            );
-
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                amp_number_table[mode.bg.b]
-            );
+            codes.color.bg.data[codes.color.bg.size++] = 48;
+            codes.color.bg.data[codes.color.bg.size++] = 2;
+            codes.color.bg.data[codes.color.bg.size++] = mode.bg.r;
+            codes.color.bg.data[codes.color.bg.size++] = mode.bg.g;
+            codes.color.bg.data[codes.color.bg.size++] = mode.bg.b;
         }
     }
     else {
@@ -1581,15 +1529,7 @@ static inline size_t amp_mode_to_ans(
                 mode.bitset.bg = mode.bitset.fg;
                 mode.bitset.fg = true;
 
-                ans_size += (
-                    ans_size ? amp_str_append(
-                        ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                    ) : 0
-                );
-
-                ans_size += amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), "7"
-                );
+                codes.style.data[codes.style.size++] = 7; // inverse video
             }
         }
 
@@ -1597,43 +1537,175 @@ static inline size_t amp_mode_to_ans(
             auto fg_rgb_row = amp_find_rgb16(amp_rgb16_fg_table, mode.fg);
 
             if (fg_rgb_row.bright) {
-                ans_size += (
-                    ans_size ? amp_str_append(
-                        ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                    ) : 0
-                );
-
-                ans_size += amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), "1"
-                );
+                codes.style.data[codes.style.size++] = 1; // bold foreground
             }
 
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                fg_rgb_row.code
-            );
+            codes.color.fg.data[codes.color.fg.size++] = fg_rgb_row.code;
         }
 
         if (mode.bitset.bg) {
-            auto bg_rgb_row = amp_find_rgb16(amp_rgb16_bg_table, mode.bg);
-
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
-                bg_rgb_row.code
-            );
+            codes.color.bg.data[codes.color.bg.size++] = amp_find_rgb16(
+                amp_rgb16_bg_table, mode.bg
+            ).code;
         }
+    }
+
+    return codes;
+}
+
+static inline struct amp_mode_code_type amp_mode_code_update(
+    struct amp_mode_code_type next_codes, struct amp_mode_code_type prev_codes
+) {
+    struct amp_mode_code_type codes = {};
+
+    do {
+        const uint8_t n_fg = next_codes.color.fg.size;
+        const uint8_t n_bg = next_codes.color.bg.size;
+
+        if (n_fg) {
+            uint8_t *prev_fg_data = prev_codes.color.fg.data;
+            uint8_t *next_fg_data = next_codes.color.fg.data;
+
+            if (prev_codes.color.fg.size && n_fg != prev_codes.color.fg.size) {
+                // Color palette has changed. Full reset is needed.
+                break;
+            }
+
+            if (n_fg != prev_codes.color.fg.size
+            || memcmp(next_fg_data, prev_fg_data, n_fg)) {
+                memcpy(codes.color.fg.data, next_fg_data, n_fg);
+                codes.color.fg.size = n_fg;
+            }
+        }
+        else if (prev_codes.color.fg.size) {
+            // Foreground color is no longer set. Full reset is needed.
+            break;
+        }
+
+        if (n_bg) {
+            uint8_t *prev_bg_data = prev_codes.color.bg.data;
+            uint8_t *next_bg_data = next_codes.color.bg.data;
+
+            if (prev_codes.color.bg.size && n_bg != prev_codes.color.bg.size) {
+                // Color palette has changed. Full reset is needed.
+                break;
+            }
+
+            if (n_bg != prev_codes.color.bg.size
+            || memcmp(next_bg_data, prev_bg_data, n_bg)) {
+                memcpy(codes.color.bg.data, next_bg_data, n_bg);
+                codes.color.bg.size = n_bg;
+            }
+        }
+        else if (prev_codes.color.bg.size) {
+            // Background color is no longer set. Full reset is needed.
+            break;
+        }
+
+        // First, let's see if any of the style codes has gone missing.
+        bool missing = false;
+
+        for (size_t i=0; i<prev_codes.style.size; ++i) {
+            bool found = false;
+
+            for (size_t j=0; j<next_codes.style.size; ++j) {
+                if (next_codes.style.data[j] == prev_codes.style.data[i]) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                missing = true;
+                break;
+            }
+        }
+
+        if (missing) {
+            // A style code is no longer present. Full reset is needed.
+            break;
+        }
+
+        for (size_t i=0; i<next_codes.style.size; ++i) {
+            bool found = false;
+
+            for (size_t j=0; j<prev_codes.style.size; ++j) {
+                if (prev_codes.style.data[j] == next_codes.style.data[i]) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                codes.style.data[codes.style.size++] = next_codes.style.data[i];
+            }
+        }
+
+        return codes;
+    } while (false);
+
+    codes = next_codes;
+    codes.bitset.reset = true;
+
+    return codes;
+}
+
+static inline size_t amp_mode_codes_to_ans(
+    struct amp_mode_code_type codes, char *ans_dst, size_t ans_dst_size
+) {
+    char ans[256];
+    size_t ans_size = 0;
+
+    if (codes.bitset.reset) {
+        ans_size += (
+            ans_size ? amp_str_append(
+                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
+            ) : 0
+        );
+
+        ans_size += amp_str_append(
+            ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
+            amp_number_table[0]
+        );
+    }
+
+    for (size_t i=0; i<codes.style.size; ++i) {
+        ans_size += (
+            ans_size ? amp_str_append(
+                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
+            ) : 0
+        );
+
+        ans_size += amp_str_append(
+            ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
+            amp_number_table[codes.style.data[i]]
+        );
+    }
+
+    for (size_t i=0; i<codes.color.fg.size; ++i) {
+        ans_size += (
+            ans_size ? amp_str_append(
+                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
+            ) : 0
+        );
+
+        ans_size += amp_str_append(
+            ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
+            amp_number_table[codes.color.fg.data[i]]
+        );
+    }
+
+    for (size_t i=0; i<codes.color.bg.size; ++i) {
+        ans_size += (
+            ans_size ? amp_str_append(
+                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
+            ) : 0
+        );
+
+        ans_size += amp_str_append(
+            ans + ans_size, amp_sub_size(sizeof(ans), ans_size),
+            amp_number_table[codes.color.bg.data[i]]
+        );
     }
 
     size_t written = 0;
@@ -1641,202 +1713,6 @@ static inline size_t amp_mode_to_ans(
     if (ans_size) {
         written += amp_str_append(
             ans_dst + written, amp_sub_size(ans_dst_size, written), AMP_ESC "["
-        );
-
-        written += amp_str_append(
-            ans_dst + written, amp_sub_size(ans_dst_size, written), ans
-        );
-
-        written += amp_str_append(
-            ans_dst + written, amp_sub_size(ans_dst_size, written), "m"
-        );
-    }
-
-    if (written >= ans_dst_size || !written) {
-        if (ans_dst_size) {
-            *ans_dst = '\0';
-        }
-    }
-
-    return written;
-}
-
-static inline size_t amp_mode_update_to_ans(
-    struct amp_mode_type prev, struct amp_mode_type next, AMP_PALETTE pal,
-    char *ans_dst, size_t ans_dst_size
-) {
-    bool force_reset = false; // Needed to turn off inverse video mode.
-
-    if (pal == AMP_PAL_RGB16) {
-        if (prev.bitset.bg) {
-            auto prev_bg_rgb_row = amp_find_rgb16(amp_rgb16_bg_table, prev.bg);
-
-            if (prev_bg_rgb_row.bright) {
-                if (next.bitset.bg) {
-                    auto next_bg_rgb_row = amp_find_rgb16(
-                        amp_rgb16_bg_table, next.bg
-                    );
-
-                    if (!next_bg_rgb_row.bright) {
-                        force_reset = true;
-                    }
-                }
-                else force_reset = true;
-            }
-        }
-    }
-
-    if (force_reset
-    || (prev.bitset.hidden          && !next.bitset.hidden)
-    || (prev.bitset.faint           && !next.bitset.faint)
-    || (prev.bitset.italic          && !next.bitset.italic)
-    || (prev.bitset.underline       && !next.bitset.underline)
-    || (prev.bitset.blinking        && !next.bitset.blinking)
-    || (prev.bitset.strikethrough   && !next.bitset.strikethrough)
-    || (prev.bitset.fg              && !next.bitset.fg)
-    || (prev.bitset.bg              && !next.bitset.bg)) {
-        struct amp_mode_type mode = next;
-
-        mode.bitset.reset = true;
-
-        return amp_mode_to_ans(mode, pal, ans_dst, ans_dst_size);
-    }
-
-    char buf[256];
-    char ans[256];
-    size_t ans_size = 0;
-    bool force_fgbg = false;
-
-    if (pal == AMP_PAL_RGB16) {
-        // This is needed to make sure that foreground mode is enabled even
-        // if foreground color value does not change to solve a problem with
-        // the reverse video mode.
-
-        bool next_bg_bright = next_bg_bright = (
-            next.bitset.bg && (
-                amp_find_rgb16(amp_rgb16_bg_table, next.bg).bright
-            )
-        );
-
-        bool prev_bg_bright = prev_bg_bright = (
-            prev.bitset.bg && (
-                amp_find_rgb16(amp_rgb16_bg_table, prev.bg).bright
-            )
-        );
-
-        if (!prev_bg_bright && !next_bg_bright) {
-            // nop
-        }
-        else if (prev_bg_bright && next_bg_bright) {
-            force_fgbg = (
-                prev.fg.r != next.fg.r ||
-                prev.fg.g != next.fg.g ||
-                prev.fg.b != next.fg.b ||
-                prev.bg.r != next.bg.r ||
-                prev.bg.g != next.bg.g ||
-                prev.bg.b != next.bg.b
-            );
-        }
-        else {
-            force_fgbg = true;
-        }
-    }
-
-    const struct amp_mode_type modes[] = {
-        {
-            .bitset = {
-                .hidden = (
-                    !prev.bitset.hidden && next.bitset.hidden
-                )
-            }
-        },
-        {
-            .bitset = {
-                .faint = (
-                    !prev.bitset.faint && next.bitset.faint
-                )
-            }
-        },
-        {
-            .bitset = {
-                .italic = (
-                    !prev.bitset.italic && next.bitset.italic
-                )
-            }
-        },
-        {
-            .bitset = {
-                .underline = (
-                    !prev.bitset.underline && next.bitset.underline
-                )
-            }
-        },
-        {
-            .bitset = {
-                .blinking = (
-                    !prev.bitset.blinking && next.bitset.blinking
-                )
-            }
-        },
-        {
-            .bitset = {
-                .strikethrough = (
-                    !prev.bitset.strikethrough && next.bitset.strikethrough
-                )
-            }
-        },
-        {
-            .fg = next.fg,
-            .bg = next.bg,
-            .bitset = {
-                .fg = (
-                    force_fgbg ||
-                    (!prev.bitset.fg && next.bitset.fg) || (
-                        prev.bitset.fg && next.bitset.fg && (
-                            prev.fg.r != next.fg.r ||
-                            prev.fg.g != next.fg.g ||
-                            prev.fg.b != next.fg.b
-                        )
-                    )
-                ),
-                .bg = (
-                    force_fgbg ||
-                    (!prev.bitset.bg && next.bitset.bg) || (
-                        prev.bitset.bg && next.bitset.bg && (
-                            prev.bg.r != next.bg.r ||
-                            prev.bg.g != next.bg.g ||
-                            prev.bg.b != next.bg.b
-                        )
-                    )
-                )
-            }
-        }
-    };
-
-    for (size_t i=0; i<sizeof(modes)/sizeof(modes[0]); ++i) {
-        size_t buf_size = amp_mode_to_ans(modes[i], pal, buf, sizeof(buf));
-
-        if (buf_size > 3 && buf_size < sizeof(buf)) {
-            buf[buf_size - 1] = '\0'; // delete the 'm' terminator
-
-            ans_size += (
-                ans_size ? amp_str_append(
-                    ans + ans_size, amp_sub_size(sizeof(ans), ans_size), ";"
-                ) : 0
-            );
-
-            ans_size += amp_str_append(
-                ans + ans_size, amp_sub_size(sizeof(ans), ans_size), buf + 2
-            );
-        }
-    }
-
-    size_t written = 0;
-
-    if (ans_size) {
-        written += amp_str_append(
-            ans_dst + written, amp_sub_size(ans_dst_size, written),
-            AMP_ESC "["
         );
 
         written += amp_str_append(
@@ -1895,18 +1771,23 @@ static inline ssize_t amp_clip_to_ans(
 
     char glyph_data[AMP_CELL_GLYPH_SIZE];
     char mode_ans[256];
-    struct amp_mode_type prev_mode_state = {};
+    struct amp_mode_code_type prev_mode_codes = {};
     size_t ans_size = 0;
 
     for (; x < end_x; ++x) {
-        struct amp_mode_type next_mode_state = amp_get_mode(amp, x, y);
-
-        const size_t mode_ans_size = amp_mode_update_to_ans(
-            prev_mode_state, next_mode_state, amp->palette,
-            mode_ans, sizeof(mode_ans)
+        auto next_mode_codes = amp_mode_to_codes(
+            amp_get_mode(amp, x, y), amp->palette
         );
 
-        prev_mode_state = next_mode_state;
+        auto add_mode_codes = amp_mode_code_update(
+            next_mode_codes, prev_mode_codes
+        );
+
+        prev_mode_codes = next_mode_codes;
+
+        const size_t mode_ans_size = amp_mode_codes_to_ans(
+            add_mode_codes, mode_ans, sizeof(mode_ans)
+        );
 
         if (mode_ans_size >= sizeof(mode_ans)) {
             abort(); // The mode_ans buffer should fit any mode.
@@ -1969,24 +1850,29 @@ static inline ssize_t amp_clip_to_ans(
         }
     }
 
-    const char *esc_reset = AMP_ESC "[0m";
-    const size_t esc_reset_size = strlen(esc_reset);
+    if (prev_mode_codes.style.size
+    ||  prev_mode_codes.color.bg.size
+    ||  prev_mode_codes.color.fg.size) {
+        const char *esc_reset = AMP_ESC "[0m";
+        const size_t esc_reset_size = strlen(esc_reset);
 
-    if (ans_to_stdout) {
-        if (amp_stdout(esc_reset, strlen(esc_reset)) < 0) {
-            return -1;
+        if (ans_to_stdout) {
+            if (amp_stdout(esc_reset, strlen(esc_reset)) < 0) {
+                return -1;
+            }
+
+            ans_size += esc_reset_size;
         }
+        else {
+            ans_size += amp_str_append(
+                ans_dst + ans_size, amp_sub_size(ans_dst_size, ans_size),
+                esc_reset
+            );
 
-        ans_size += esc_reset_size;
-    }
-    else {
-        ans_size += amp_str_append(
-            ans_dst + ans_size, amp_sub_size(ans_dst_size, ans_size), esc_reset
-        );
-
-        if (ans_size >= ans_dst_size || !ans_size) {
-            if (ans_dst_size) {
-                *ans_dst = '\0';
+            if (ans_size >= ans_dst_size || !ans_size) {
+                if (ans_dst_size) {
+                    *ans_dst = '\0';
+                }
             }
         }
     }
@@ -2141,7 +2027,7 @@ static inline struct amp_rgb16_type amp_find_rgb16(
     long best_d = LONG_MAX;
     const struct amp_rgb16_type *best_row = nullptr;
 
-    for (; table->code; ++table) {
+    do {
         if (table->index == AMP_COLOR_NONE) {
             continue;
         }
@@ -2160,7 +2046,7 @@ static inline struct amp_rgb16_type amp_find_rgb16(
             best_d = d;
             best_row = table;
          }
-    }
+    } while ((++table)->code);
 
     return *best_row;
 }
