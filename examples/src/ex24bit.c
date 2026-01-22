@@ -40,7 +40,7 @@ static void draw_palette(struct amp_type *amp) {
     const uint32_t width = amp->width;
     const uint32_t height = amp->height;
 
-    struct amp_color_type peaks[] = {
+    struct amp_rgb_type peaks[] = {
         {   .r  = 255,  .g  =   0,  .b  =   0   },
         {   .r  = 255,  .g  = 255,  .b  =   0   },
         {   .r  =   0,  .g  = 255,  .b  =   0   },
@@ -49,7 +49,7 @@ static void draw_palette(struct amp_type *amp) {
         {   .r  = 255,  .g  =   0,  .b  = 255   }
     };
 
-    struct amp_color_type rows[height] = {};
+    struct amp_rgb_type rows[height] = {};
 
     double band = (
         (double) (sizeof(rows)/sizeof(rows[0]))

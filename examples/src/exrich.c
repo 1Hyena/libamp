@@ -22,7 +22,7 @@ int main(int, char **) {
     for (size_t i = 0, n = 0; i < rows; ++i) {
         auto const row = amp_inline_style_table[i];
 
-        if (row.glyph[0] == '\0') {
+        if (row.glyph == nullptr || row.glyph[0] == '\0') {
             continue;
         }
 

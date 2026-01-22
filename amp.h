@@ -35,6 +35,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdbit.h>
 ////////////////////////////////////////////////////////////////////////////////
 
 #define AMP_MAJOR_VERSION  1
@@ -67,7 +68,7 @@ typedef enum : uint8_t {
     AMP_MAX_COLOR
 } AMP_COLOR;
 
-struct amp_color_type {
+struct amp_rgb_type {
     uint8_t r;
     uint8_t g;
     uint8_t b;
@@ -277,7 +278,7 @@ static inline bool                      amp_put_style(
     // Returns true on success and false if the position is not on the ansmap.
 );
 
-static inline struct amp_color_type     amp_get_bg_color(
+static inline struct amp_rgb_type       amp_get_bg_color(
     struct amp_type *                       amp,
     long                                    x,
     long                                    y
@@ -288,7 +289,7 @@ static inline struct amp_color_type     amp_get_bg_color(
 
 static inline bool                      amp_set_bg_color(
     struct amp_type *                       amp,
-    struct amp_color_type                   background_color,
+    struct amp_rgb_type                     background_color,
     long                                    x,
     long                                    y
 
@@ -297,7 +298,7 @@ static inline bool                      amp_set_bg_color(
     // Returns true on success and false if the position is not on the ansmap.
 );
 
-static inline struct amp_color_type     amp_get_fg_color(
+static inline struct amp_rgb_type       amp_get_fg_color(
     struct amp_type *                       amp,
     long                                    x,
     long                                    y
@@ -308,7 +309,7 @@ static inline struct amp_color_type     amp_get_fg_color(
 
 static inline bool                      amp_set_fg_color(
     struct amp_type *                       amp,
-    struct amp_color_type                   foreground_color,
+    struct amp_rgb_type                     foreground_color,
     long                                    x,
     long                                    y
 
@@ -317,7 +318,7 @@ static inline bool                      amp_set_fg_color(
     // Returns true on success and false if the position is not on the ansmap.
 );
 
-static inline struct amp_color_type     amp_map_rgb(
+static inline struct amp_rgb_type       amp_map_rgb(
     uint8_t                                 red,
     uint8_t                                 green,
     uint8_t                                 blue
@@ -327,7 +328,7 @@ static inline struct amp_color_type     amp_map_rgb(
 );
 
 static inline void                      amp_unmap_rgb(
-    struct amp_color_type                   color,
+    struct amp_rgb_type                     color,
     uint8_t *                               red,
     uint8_t *                               green,
     uint8_t *                               blue
@@ -455,6 +456,12 @@ static inline ssize_t                   amp_snprint_linef(
     // The return value of -1 indicates that an output error was encountered in
     // the underlying call to vsnprintf.
 ) __attribute__((format (printf, 8, 9)));
+
+static inline ssize_t                   amp_serialize(
+    const struct amp_type *                 amp,
+    char *                                  buffer,
+    size_t                                  buffer_size
+);
 ////////////////////////////////////////////////////////////////////////////////
 
 struct amp_type {
@@ -476,8 +483,8 @@ struct amp_type {
 };
 
 struct amp_mode_type {
-    struct amp_color_type fg;
-    struct amp_color_type bg;
+    struct amp_rgb_type fg;
+    struct amp_rgb_type bg;
 
     struct {
         bool fg:1;
@@ -520,9 +527,14 @@ struct amp_mode_code_type {
 
 struct amp_rgb16_type {
     uint8_t                 code;
-    struct amp_color_type   color;
+    struct amp_rgb_type     rgb;
     AMP_COLOR               index;
     bool                    bright:1;
+};
+
+struct amp_style_flag_type {
+    char        glyph[AMP_CELL_GLYPH_SIZE];
+    AMP_STYLE   value;
 };
 
 // Private API: ////////////////////////////////////////////////////////////////
@@ -589,7 +601,7 @@ static inline size_t                    amp_str_append(
 );
 static inline struct amp_rgb16_type     amp_find_rgb16(
     const struct amp_rgb16_type *           table,
-    struct amp_color_type                   color
+    struct amp_rgb_type                     color
 );
 static inline const char *              amp_str_seg_first_line_size(
     const char *                            str,
@@ -693,217 +705,637 @@ static inline
 struct amp_inline_style_type            amp_lookup_inline_style(
     const char *                            glyph
 );
+static inline
+struct amp_style_flag_type              amp_lookup_style_flag(
+    AMP_STYLE
+);
+static inline ssize_t                   amp_serialize_layer(
+    const struct amp_type *                 amp,
+    AMP_STYLE                               style,
+    char *                                  buffer,
+    size_t                                  buffer_size
+);
+static inline ssize_t                   amp_serialize_layer_row(
+    const struct amp_type *                 amp,
+    AMP_STYLE                               style,
+    long                                    y,
+    char *                                  buffer,
+    size_t                                  buffer_size
+);
+static inline ssize_t                   amp_serialize_layer_cell(
+    const struct amp_type *                 amp,
+    AMP_STYLE                               style,
+    long                                    x,
+    long                                    y,
+    char *                                  buffer,
+    size_t                                  buffer_size
+);
 ////////////////////////////////////////////////////////////////////////////////
 
 
+// AMP_FLAG_INDEX is a constant expression that determines the index of a single
+// one-bit in the unsigned integer argument a. It is based on binary search and
+// is 50% slower than the stdc_first_trailing_one_ull function (stdbit.h).
+#define AMP_FLAG_INDEX(a) (                                                    \
+    (a) < (1ULL << 32) ? (                                                     \
+        (a) < (1ULL << 16) ? (                                                 \
+            (a) < (1ULL << 8) ? (                                              \
+                (a) < (1ULL << 4) ? (                                          \
+                    (a) < (1ULL << 2) ? (                                      \
+                        (a) < (1ULL << 1) ? (                                  \
+                            (a) == (1ULL << 0) ? (1) : (0)                     \
+                        ) : (                                                  \
+                            (a) == (1ULL << 1) ? (2) : (0)                     \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 3) ? (                                  \
+                            (a) == (1ULL << 2) ? (3) : (0)                     \
+                        ) : (                                                  \
+                            (a) == (1ULL << 3) ? (4) : (0)                     \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 6) ? (                                      \
+                        (a) < (1ULL << 5) ? (                                  \
+                            (a) == (1ULL << 4) ? (5) : (0)                     \
+                        ) : (                                                  \
+                            (a) == (1ULL << 5) ? (6) : (0)                     \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 7) ? (                                  \
+                            (a) == (1ULL << 6) ? (7) : (0)                     \
+                        ) : (                                                  \
+                            (a) == (1ULL << 7) ? (8) : (0)                     \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            ) : (                                                              \
+                (a) < (1ULL << 12) ? (                                         \
+                    (a) < (1ULL << 10) ? (                                     \
+                        (a) < (1ULL << 9) ? (                                  \
+                            (a) == (1ULL << 8) ? (9) : (0)                     \
+                        ) : (                                                  \
+                            (a) == (1ULL << 9) ? (10) : (0)                    \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 11) ? (                                 \
+                            (a) == (1ULL << 10) ? (11) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 11) ? (12) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 14) ? (                                     \
+                        (a) < (1ULL << 13) ? (                                 \
+                            (a) == (1ULL << 12) ? (13) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 13) ? (14) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 15) ? (                                 \
+                            (a) == (1ULL << 14) ? (15) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 15) ? (16) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            )                                                                  \
+        ) : (                                                                  \
+            (a) < (1ULL << 24) ? (                                             \
+                (a) < (1ULL << 20) ? (                                         \
+                    (a) < (1ULL << 18) ? (                                     \
+                        (a) < (1ULL << 17) ? (                                 \
+                            (a) == (1ULL << 16) ? (17) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 17) ? (18) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 19) ? (                                 \
+                            (a) == (1ULL << 18) ? (19) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 19) ? (20) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 22) ? (                                     \
+                        (a) < (1ULL << 21) ? (                                 \
+                            (a) == (1ULL << 20) ? (21) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 21) ? (22) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 23) ? (                                 \
+                            (a) == (1ULL << 22) ? (23) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 23) ? (24) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            ) : (                                                              \
+                (a) < (1ULL << 28) ? (                                         \
+                    (a) < (1ULL << 26) ? (                                     \
+                        (a) < (1ULL << 25) ? (                                 \
+                            (a) == (1ULL << 24) ? (25) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 25) ? (26) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 27) ? (                                 \
+                            (a) == (1ULL << 26) ? (27) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 27) ? (28) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 30) ? (                                     \
+                        (a) < (1ULL << 29) ? (                                 \
+                            (a) == (1ULL << 28) ? (29) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 29) ? (30) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 31) ? (                                 \
+                            (a) == (1ULL << 30) ? (31) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 31) ? (32) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            )                                                                  \
+        )                                                                      \
+    ) : (                                                                      \
+        (a) < (1ULL << 48) ? (                                                 \
+            (a) < (1ULL << 40) ? (                                             \
+                (a) < (1ULL << 36) ? (                                         \
+                    (a) < (1ULL << 34) ? (                                     \
+                        (a) < (1ULL << 33) ? (                                 \
+                            (a) == (1ULL << 32) ? (33) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 33) ? (34) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 35) ? (                                 \
+                            (a) == (1ULL << 34) ? (35) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 35) ? (36) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 38) ? (                                     \
+                        (a) < (1ULL << 37) ? (                                 \
+                            (a) == (1ULL << 36) ? (37) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 37) ? (38) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 39) ? (                                 \
+                            (a) == (1ULL << 38) ? (39) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 39) ? (40) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            ) : (                                                              \
+                (a) < (1ULL << 44) ? (                                         \
+                    (a) < (1ULL << 42) ? (                                     \
+                        (a) < (1ULL << 41) ? (                                 \
+                            (a) == (1ULL << 40) ? (41) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 41) ? (42) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 43) ? (                                 \
+                            (a) == (1ULL << 42) ? (43) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 43) ? (44) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 46) ? (                                     \
+                        (a) < (1ULL << 45) ? (                                 \
+                            (a) == (1ULL << 44) ? (45) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 45) ? (46) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 47) ? (                                 \
+                            (a) == (1ULL << 46) ? (47) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 47) ? (48) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            )                                                                  \
+        ) : (                                                                  \
+            (a) < (1ULL << 56) ? (                                             \
+                (a) < (1ULL << 52) ? (                                         \
+                    (a) < (1ULL << 50) ? (                                     \
+                        (a) < (1ULL << 49) ? (                                 \
+                            (a) == (1ULL << 48) ? (49) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 49) ? (50) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 51) ? (                                 \
+                            (a) == (1ULL << 50) ? (51) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 51) ? (52) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 54) ? (                                     \
+                        (a) < (1ULL << 53) ? (                                 \
+                            (a) == (1ULL << 52) ? (53) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 53) ? (54) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 55) ? (                                 \
+                            (a) == (1ULL << 54) ? (55) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 55) ? (56) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            ) : (                                                              \
+                (a) < (1ULL << 60) ? (                                         \
+                    (a) < (1ULL << 58) ? (                                     \
+                        (a) < (1ULL << 57) ? (                                 \
+                            (a) == (1ULL << 56) ? (57) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 57) ? (58) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 59) ? (                                 \
+                            (a) == (1ULL << 58) ? (59) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 59) ? (60) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                ) : (                                                          \
+                    (a) < (1ULL << 62) ? (                                     \
+                        (a) < (1ULL << 61) ? (                                 \
+                            (a) == (1ULL << 60) ? (61) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 61) ? (62) : (0)                   \
+                        )                                                      \
+                    ) : (                                                      \
+                        (a) < (1ULL << 63) ? (                                 \
+                            (a) == (1ULL << 62) ? (63) : (0)                   \
+                        ) : (                                                  \
+                            (a) == (1ULL << 63) ? (64) : (0)                   \
+                        )                                                      \
+                    )                                                          \
+                )                                                              \
+            )                                                                  \
+        )                                                                      \
+    )                                                                          \
+)
+
+static const struct amp_style_flag_type amp_style_flag_table[] = {
+    [AMP_FLAG_INDEX(AMP_STYLE_NONE)] = {
+        .value  = AMP_STYLE_NONE,           .glyph = ""
+    },
+    ////////////////////////////////////////////////////////////////////////////
+    [AMP_FLAG_INDEX(AMP_HIDDEN)] = {
+        .value  = AMP_HIDDEN,               .glyph = "#"
+    },
+    [AMP_FLAG_INDEX(AMP_FAINT)] = {
+        .value  = AMP_FAINT,                .glyph = "?"
+    },
+    [AMP_FLAG_INDEX(AMP_ITALIC)] = {
+        .value  = AMP_ITALIC,               .glyph = "/"
+    },
+    [AMP_FLAG_INDEX(AMP_UNDERLINE)] = {
+        .value  = AMP_UNDERLINE,            .glyph = "_"
+    },
+    [AMP_FLAG_INDEX(AMP_BLINKING)] = {
+        .value  = AMP_BLINKING,             .glyph = "*"
+    },
+    [AMP_FLAG_INDEX(AMP_STRIKETHROUGH)] = {
+        .value  = AMP_STRIKETHROUGH,        .glyph = "-"
+    },
+    ////////////////////////////////////////////////////////////////////////////
+    [AMP_FLAG_INDEX(AMP_FG_NONE)] = {
+        .value  = AMP_FG_NONE,              .glyph = ""
+    },
+    [AMP_FLAG_INDEX(AMP_FG_DARK)] = {
+        .value  = AMP_FG_DARK,              .glyph = "d"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_MAROON)] = {
+        .value  = AMP_FG_MAROON,            .glyph = "m"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_GREEN)] = {
+        .value  = AMP_FG_GREEN,             .glyph = "g"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_OLIVE)] = {
+        .value  = AMP_FG_OLIVE,             .glyph = "o"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_NAVY)] = {
+        .value  = AMP_FG_NAVY,              .glyph = "n"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_PURPLE)] = {
+        .value  = AMP_FG_PURPLE,            .glyph = "p"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_TEAL)] = {
+        .value  = AMP_FG_TEAL,              .glyph = "t"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_SILVER)] = {
+        .value  = AMP_FG_SILVER,            .glyph = "s"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_CHARCOAL)] = {
+        .value  = AMP_FG_CHARCOAL,          .glyph = "c"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_RED)] = {
+        .value  = AMP_FG_RED,               .glyph = "r"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_LIME)] = {
+        .value  = AMP_FG_LIME,              .glyph = "l"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_YELLOW)] = {
+        .value  = AMP_FG_YELLOW,            .glyph = "y"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_BLUE)] = {
+        .value  = AMP_FG_BLUE,              .glyph = "b"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_FUCHSIA)] = {
+        .value  = AMP_FG_FUCHSIA,           .glyph = "f"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_AQUA)] = {
+        .value  = AMP_FG_AQUA,              .glyph = "a"
+    },
+    [AMP_FLAG_INDEX(AMP_FG_WHITE)] = {
+        .value  = AMP_FG_WHITE,             .glyph = "w"
+    },
+    ////////////////////////////////////////////////////////////////////////////
+    [AMP_FLAG_INDEX(AMP_BG_NONE)] = {
+        .value  = AMP_BG_NONE,              .glyph = ""
+    },
+    [AMP_FLAG_INDEX(AMP_BG_DARK)] = {
+        .value  = AMP_BG_DARK,              .glyph = "D"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_MAROON)] = {
+        .value  = AMP_BG_MAROON,            .glyph = "M"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_GREEN)] = {
+        .value  = AMP_BG_GREEN,             .glyph = "G"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_OLIVE)] = {
+        .value  = AMP_BG_OLIVE,             .glyph = "O"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_NAVY)] = {
+        .value  = AMP_BG_NAVY,              .glyph = "N"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_PURPLE)] = {
+        .value  = AMP_BG_PURPLE,            .glyph = "P"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_TEAL)] = {
+        .value  = AMP_BG_TEAL,              .glyph = "T"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_SILVER)] = {
+        .value  = AMP_BG_SILVER,            .glyph = "S"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_CHARCOAL)] = {
+        .value  = AMP_BG_CHARCOAL,          .glyph = "C"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_RED)] = {
+        .value  = AMP_BG_RED,               .glyph = "R"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_LIME)] = {
+        .value  = AMP_BG_LIME,              .glyph = "L"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_YELLOW)] = {
+        .value  = AMP_BG_YELLOW,            .glyph = "Y"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_BLUE)] = {
+        .value  = AMP_BG_BLUE,              .glyph = "B"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_FUCHSIA)] = {
+        .value  = AMP_BG_FUCHSIA,           .glyph = "F"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_AQUA)] = {
+        .value  = AMP_BG_AQUA,              .glyph = "A"
+    },
+    [AMP_FLAG_INDEX(AMP_BG_WHITE)] = {
+        .value  = AMP_BG_WHITE,             .glyph = "W"
+    },
+    ////////////////////////////////////////////////////////////////////////////
+    [AMP_FLAG_INDEX(AMP_SOFT_RESET)] = {
+        .value  = AMP_SOFT_RESET,           .glyph = "x"
+    },
+    [AMP_FLAG_INDEX(AMP_HARD_RESET)] = {
+        .value  = AMP_HARD_RESET,           .glyph = "X"
+    }
+};
+
 static const struct amp_inline_style_type {
     const char *name;
-    char        glyph[AMP_CELL_GLYPH_SIZE];
+    const char *glyph;
     AMP_STYLE   style;
 } amp_inline_style_table[] = {
     [  0]   = {
-        .glyph  = "",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_STYLE_NONE)].glyph,
         .style  = AMP_STYLE_NONE,
         .name   = "none"
     },
     ////////////////////////////////////////////////////////////////////////////
     ['#']   = {
-        .glyph  = "#",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_HIDDEN)].glyph,
         .style  = AMP_HIDDEN,
         .name   = "hidden"
     },
     ['*']   = {
-        .glyph  = "*",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BLINKING)].glyph,
         .style  = AMP_BLINKING,
         .name = "blinking"
     },
     ['-']   = {
-        .glyph  = "-",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_STRIKETHROUGH)].glyph,
         .style  = AMP_STRIKETHROUGH,
         .name = "strikethrough"
     },
     ['/']   = {
-        .glyph  = "/",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_ITALIC)].glyph,
         .style  = AMP_ITALIC,
         .name   = "italic"
     },
     ['?']   = {
-        .glyph  = "?",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FAINT)].glyph,
         .style  = AMP_FAINT,
         .name   = "faint"
     },
     ['A']   = {
-        .glyph  = "A",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_AQUA)].glyph,
         .style  = AMP_BG_AQUA,
         .name   = "aqua background"
     },
     ['B']   = {
-        .glyph  = "B",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_BLUE)].glyph,
         .style  = AMP_BG_BLUE,
         .name   = "blue background"
     },
     ['C']   = {
-        .glyph  = "C",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_CHARCOAL)].glyph,
         .style  = AMP_BG_CHARCOAL,
         .name   = "charcoal background"
     },
     ['D']   = {
-        .glyph  = "D",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_DARK)].glyph,
         .style  = AMP_BG_DARK,
         .name   = "dark background"
     },
     ['F']   = {
-        .glyph  = "F",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_FUCHSIA)].glyph,
         .style  = AMP_BG_FUCHSIA,
         .name   = "fuchsia background"
     },
     ['G']   = {
-        .glyph  = "G",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_GREEN)].glyph,
         .style  = AMP_BG_GREEN,
         .name   = "green background"
     },
     ['L']   = {
-        .glyph  = "L",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_LIME)].glyph,
         .style  = AMP_BG_LIME,
         .name   = "lime background"
     },
     ['M']   = {
-        .glyph  = "M",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_MAROON)].glyph,
         .style  = AMP_BG_MAROON,
         .name   = "maroon background"
     },
     ['N']   = {
-        .glyph  = "N",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_NAVY)].glyph,
         .style  = AMP_BG_NAVY,
         .name   = "navy background"
     },
     ['O']   = {
-        .glyph  = "O",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_OLIVE)].glyph,
         .style  = AMP_BG_OLIVE,
         .name   = "olive background"
     },
     ['P']   = {
-        .glyph  = "P",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_PURPLE)].glyph,
         .style  = AMP_BG_PURPLE,
         .name   = "purple background"
     },
     ['R']   = {
-        .glyph  = "R",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_RED)].glyph,
         .style  = AMP_BG_RED,
         .name   = "red background"
     },
     ['S']   = {
-        .glyph  = "S",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_SILVER)].glyph,
         .style  = AMP_BG_SILVER,
         .name   = "silver background"
     },
     ['T']   = {
-        .glyph  = "T",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_TEAL)].glyph,
         .style  = AMP_BG_TEAL,
         .name   = "teal background"
     },
     ['W']   = {
-        .glyph  = "W",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_WHITE)].glyph,
         .style  = AMP_BG_WHITE,
         .name   = "white background"
     },
     ['X']   = {
-        .glyph  = "X",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_HARD_RESET)].glyph,
         .style  = AMP_HARD_RESET,
         .name   = "reset all"
     },
     ['Y']   = {
-        .glyph  = "Y",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_BG_YELLOW)].glyph,
         .style  = AMP_BG_YELLOW,
         .name   = "yellow background"
     },
     ['_']   = {
-        .glyph  = "_",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_UNDERLINE)].glyph,
         .style  = AMP_UNDERLINE,
         .name   = "underline"
     },
     ['a']   = {
-        .glyph  = "a",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_AQUA)].glyph,
         .style  = AMP_FG_AQUA,
         .name   = "aqua foreground"
     },
     ['b']   = {
-        .glyph  = "b",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_BLUE)].glyph,
         .style  = AMP_FG_BLUE,
         .name   = "blue foreground"
     },
     ['c']   = {
-        .glyph  = "c",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_CHARCOAL)].glyph,
         .style  = AMP_FG_CHARCOAL,
         .name   = "charcoal foreground"
     },
     ['d']   = {
-        .glyph  = "d",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_DARK)].glyph,
         .style  = AMP_FG_DARK,
         .name   = "dark foreground"
     },
     ['f']   = {
-        .glyph  = "f",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_FUCHSIA)].glyph,
         .style  = AMP_FG_FUCHSIA,
         .name   = "fuchsia foreground"
     },
     ['g']   = {
-        .glyph  = "g",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_GREEN)].glyph,
         .style  = AMP_FG_GREEN,
         .name   = "green foreground"
     },
     ['l']   = {
-        .glyph  = "l",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_LIME)].glyph,
         .style  = AMP_FG_LIME,
         .name   = "lime foreground"
     },
     ['m']   = {
-        .glyph  = "m",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_MAROON)].glyph,
         .style  = AMP_FG_MAROON,
         .name   = "maroon foreground"
     },
     ['n']   = {
-        .glyph  = "n",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_NAVY)].glyph,
         .style  = AMP_FG_NAVY,
         .name   = "navy foreground"
     },
     ['o']   = {
-        .glyph  = "o",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_OLIVE)].glyph,
         .style  = AMP_FG_OLIVE,
         .name   = "olive foreground"
     },
     ['p']   = {
-        .glyph  = "p",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_PURPLE)].glyph,
         .style  = AMP_FG_PURPLE,
         .name   = "purple foreground"
     },
     ['r']   = {
-        .glyph  = "r",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_RED)].glyph,
         .style  = AMP_FG_RED,
         .name   = "red foreground"
     },
     ['s']   = {
-        .glyph  = "s",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_SILVER)].glyph,
         .style  = AMP_FG_SILVER,
         .name   = "silver foreground"
     },
     ['t']   = {
-        .glyph  = "t",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_TEAL)].glyph,
         .style  = AMP_FG_TEAL,
         .name   = "teal foreground"
     },
     ['w']   = {
-        .glyph  = "w",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_WHITE)].glyph,
         .style  = AMP_FG_WHITE,
         .name   = "white foreground"
     },
     ['x']   = {
-        .glyph  = "x",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_SOFT_RESET)].glyph,
         .style  = AMP_SOFT_RESET,
         .name   = "reset foreground"
     },
     ['y']   = {
-        .glyph  = "y",
+        .glyph  = amp_style_flag_table[AMP_FLAG_INDEX(AMP_FG_YELLOW)].glyph,
         .style  = AMP_FG_YELLOW,
         .name   = "yellow foreground"
     },
@@ -911,128 +1343,128 @@ static const struct amp_inline_style_type {
     {}
 };
 
-static const struct {
+static const struct amp_color_type {
     struct {
         AMP_STYLE fg;
         AMP_STYLE bg;
     } style;
 
-    struct amp_color_type   color;
-    AMP_COLOR               index;
+    struct amp_rgb_type rgb;
+    AMP_COLOR           index;
 } amp_color_table[] = {
     [AMP_COLOR_NONE] = {
         .index  = AMP_COLOR_NONE,
-        .color  = {},
+        .rgb    = {},
         .style  = { .fg = AMP_FG_NONE, .bg = AMP_BG_NONE }
     },
     ////////////////////////////////////////////////////////////////////////////
     [AMP_DARK] = {
-        .index  = AMP_DARK,     .color  = { .r  = 0,    .g  = 0,    .b  = 0   },
+        .index  = AMP_DARK,     .rgb    = { .r  = 0,    .g  = 0,    .b  = 0   },
         .style  = {
             .fg = AMP_FG_DARK,
             .bg = AMP_BG_DARK
         }
     },
     [AMP_MAROON] = {
-        .index  = AMP_MAROON,   .color  = { .r  = 128,  .g  = 0,    .b  = 0   },
+        .index  = AMP_MAROON,   .rgb    = { .r  = 128,  .g  = 0,    .b  = 0   },
         .style  = {
             .fg = AMP_FG_MAROON,
             .bg = AMP_BG_MAROON
         }
     },
     [AMP_GREEN] = {
-        .index  = AMP_GREEN,    .color  = { .r  = 0,    .g  = 128,  .b  = 0   },
+        .index  = AMP_GREEN,    .rgb    = { .r  = 0,    .g  = 128,  .b  = 0   },
         .style  = {
             .fg = AMP_FG_GREEN,
             .bg = AMP_BG_GREEN
         }
     },
     [AMP_OLIVE] = {
-        .index  = AMP_OLIVE,    .color  = { .r  = 128,  .g  = 128,  .b  = 0   },
+        .index  = AMP_OLIVE,    .rgb    = { .r  = 128,  .g  = 128,  .b  = 0   },
         .style  = {
             .fg = AMP_FG_OLIVE,
             .bg = AMP_BG_OLIVE
         }
     },
     [AMP_NAVY] = {
-        .index  = AMP_NAVY,     .color  = { .r  = 0,    .g  = 0,    .b  = 128 },
+        .index  = AMP_NAVY,     .rgb    = { .r  = 0,    .g  = 0,    .b  = 128 },
         .style  = {
             .fg = AMP_FG_NAVY,
             .bg = AMP_BG_NAVY
         }
     },
     [AMP_PURPLE] = {
-        .index  = AMP_PURPLE,   .color  = { .r  = 128,  .g  = 0,    .b  = 128 },
+        .index  = AMP_PURPLE,   .rgb    = { .r  = 128,  .g  = 0,    .b  = 128 },
         .style  = {
             .fg = AMP_FG_PURPLE,
             .bg = AMP_BG_PURPLE
         }
     },
     [AMP_TEAL] = {
-        .index  = AMP_TEAL,     .color  = { .r  = 0,    .g  = 128,  .b  = 128 },
+        .index  = AMP_TEAL,     .rgb    = { .r  = 0,    .g  = 128,  .b  = 128 },
         .style  = {
             .fg = AMP_FG_TEAL,
             .bg = AMP_BG_TEAL
         }
     },
     [AMP_SILVER] = {
-        .index  = AMP_SILVER,   .color  = { .r  = 192,  .g  = 192,  .b  = 192 },
+        .index  = AMP_SILVER,   .rgb    = { .r  = 192,  .g  = 192,  .b  = 192 },
         .style  = {
             .fg = AMP_FG_SILVER,
             .bg = AMP_BG_SILVER
         }
     },
     [AMP_CHARCOAL] = {
-        .index  = AMP_CHARCOAL, .color  = { .r  = 128,  .g  = 128,   .b = 128 },
+        .index  = AMP_CHARCOAL, .rgb    = { .r  = 128,  .g  = 128,   .b = 128 },
         .style  = {
             .fg = AMP_FG_CHARCOAL,
             .bg = AMP_BG_CHARCOAL
         }
     },
     [AMP_RED] = {
-        .index  = AMP_RED,      .color  = { .r  = 255,  .g  = 0,    .b  = 0   },
+        .index  = AMP_RED,      .rgb    = { .r  = 255,  .g  = 0,    .b  = 0   },
         .style  = {
             .fg = AMP_FG_RED,
             .bg = AMP_BG_RED
         }
     },
     [AMP_LIME] = {
-        .index  = AMP_LIME,     .color  = { .r  = 0,    .g  = 255,  .b  = 0   },
+        .index  = AMP_LIME,     .rgb    = { .r  = 0,    .g  = 255,  .b  = 0   },
         .style  = {
             .fg = AMP_FG_LIME,
             .bg = AMP_BG_LIME
         }
     },
     [AMP_YELLOW] = {
-        .index  = AMP_YELLOW,   .color  = { .r  = 255,  .g  = 255,  .b  = 0   },
+        .index  = AMP_YELLOW,   .rgb    = { .r  = 255,  .g  = 255,  .b  = 0   },
         .style  = {
             .fg = AMP_FG_YELLOW,
             .bg = AMP_BG_YELLOW
         }
     },
     [AMP_BLUE] = {
-        .index  = AMP_BLUE,     .color  = { .r  = 0,    .g  = 0,    .b  = 255 },
+        .index  = AMP_BLUE,     .rgb    = { .r  = 0,    .g  = 0,    .b  = 255 },
         .style  = {
             .fg = AMP_FG_BLUE,
             .bg = AMP_BG_BLUE
         }
     },
     [AMP_FUCHSIA] = {
-        .index  = AMP_FUCHSIA,  .color  = { .r  = 255,  .g  = 0,    .b  = 255 },
+        .index  = AMP_FUCHSIA,  .rgb    = { .r  = 255,  .g  = 0,    .b  = 255 },
         .style  = {
             .fg = AMP_FG_FUCHSIA,
             .bg = AMP_BG_FUCHSIA
         }
     },
     [AMP_AQUA] = {
-        .index  = AMP_AQUA,     .color  = { .r  = 0,    .g  = 255,  .b  = 255 },
+        .index  = AMP_AQUA,     .rgb    = { .r  = 0,    .g  = 255,  .b  = 255 },
         .style  = {
             .fg = AMP_FG_AQUA,
             .bg = AMP_BG_AQUA
         }
     },
     [AMP_WHITE] = {
-        .index  = AMP_WHITE,    .color  = { .r  = 255,  .g  = 255,  .b  = 255 },
+        .index  = AMP_WHITE,    .rgb    = { .r  = 255,  .g  = 255,  .b  = 255 },
         .style  = {
             .fg = AMP_FG_WHITE,
             .bg = AMP_BG_WHITE
@@ -1046,95 +1478,95 @@ static const struct amp_rgb16_type amp_rgb16_fg_table[] = {
     [AMP_COLOR_NONE] = {
         .index  = AMP_COLOR_NONE,
         .code   = 0,
-        .color  = amp_color_table[AMP_COLOR_NONE].color
+        .rgb    = amp_color_table[AMP_COLOR_NONE].rgb
     },
     ////////////////////////////////////////////////////////////////////////////
     [AMP_DARK] = {
         .index  = AMP_DARK,
         .code   = 30,
-        .color  = amp_color_table[AMP_DARK].color
+        .rgb    = amp_color_table[AMP_DARK].rgb
     },
     [AMP_MAROON] = {
         .index  = AMP_MAROON,
         .code   = 31,
-        .color  = amp_color_table[AMP_MAROON].color
+        .rgb    = amp_color_table[AMP_MAROON].rgb
     },
     [AMP_GREEN] = {
         .index  = AMP_GREEN,
         .code   = 32,
-        .color  = amp_color_table[AMP_GREEN].color
+        .rgb    = amp_color_table[AMP_GREEN].rgb
     },
     [AMP_OLIVE] = {
         .index  = AMP_OLIVE,
         .code   = 33,
-        .color  = amp_color_table[AMP_OLIVE].color
+        .rgb    = amp_color_table[AMP_OLIVE].rgb
     },
     [AMP_NAVY] = {
         .index  = AMP_NAVY,
         .code   = 34,
-        .color  = amp_color_table[AMP_NAVY].color
+        .rgb    = amp_color_table[AMP_NAVY].rgb
     },
     [AMP_PURPLE] = {
         .index  = AMP_PURPLE,
         .code   = 35,
-        .color  = amp_color_table[AMP_PURPLE].color
+        .rgb    = amp_color_table[AMP_PURPLE].rgb
     },
     [AMP_TEAL] = {
         .index  = AMP_TEAL,
         .code   = 36,
-        .color  = amp_color_table[AMP_TEAL].color
+        .rgb    = amp_color_table[AMP_TEAL].rgb
     },
     [AMP_SILVER] = {
         .index  = AMP_SILVER,
         .code   = 37,
-        .color  = amp_color_table[AMP_SILVER].color
+        .rgb    = amp_color_table[AMP_SILVER].rgb
     },
     [AMP_CHARCOAL] = {
         .index  = AMP_CHARCOAL,
         .code   = 30,
-        .color  = amp_color_table[AMP_CHARCOAL].color,
+        .rgb    = amp_color_table[AMP_CHARCOAL].rgb,
         .bright = true
     },
     [AMP_RED] = {
         .index  = AMP_RED,
         .code   = 31,
-        .color  = amp_color_table[AMP_RED].color,
+        .rgb    = amp_color_table[AMP_RED].rgb,
         .bright = true
     },
     [AMP_LIME] = {
         .index  = AMP_LIME,
         .code   = 32,
-        .color  = amp_color_table[AMP_LIME].color,
+        .rgb    = amp_color_table[AMP_LIME].rgb,
         .bright = true
     },
     [AMP_YELLOW] = {
         .index  = AMP_YELLOW,
         .code   = 33,
-        .color  = amp_color_table[AMP_YELLOW].color,
+        .rgb    = amp_color_table[AMP_YELLOW].rgb,
         .bright = true
     },
     [AMP_BLUE] = {
         .index  = AMP_BLUE,
         .code   = 34,
-        .color  = amp_color_table[AMP_BLUE].color,
+        .rgb    = amp_color_table[AMP_BLUE].rgb,
         .bright = true
     },
     [AMP_FUCHSIA] = {
         .index  = AMP_FUCHSIA,
         .code   = 35,
-        .color  = amp_color_table[AMP_FUCHSIA].color,
+        .rgb    = amp_color_table[AMP_FUCHSIA].rgb,
         .bright = true
     },
     [AMP_AQUA] = {
         .index  = AMP_AQUA,
         .code   = 36,
-        .color  = amp_color_table[AMP_AQUA].color,
+        .rgb    = amp_color_table[AMP_AQUA].rgb,
         .bright = true
     },
     [AMP_WHITE] = {
         .index  = AMP_WHITE,
         .code   = 37,
-        .color  = amp_color_table[AMP_WHITE].color,
+        .rgb    = amp_color_table[AMP_WHITE].rgb,
         .bright = true
     },
     ////////////////////////////////////////////////////////////////////////////
@@ -1150,89 +1582,89 @@ static const struct amp_rgb16_type amp_rgb16_bg_table[] = {
     [AMP_DARK] = {
         .index  = AMP_DARK,
         .code   = 40,
-        .color  = amp_color_table[AMP_DARK].color
+        .rgb    = amp_color_table[AMP_DARK].rgb
     },
     [AMP_MAROON] = {
         .index  = AMP_MAROON,
         .code   = 41,
-        .color  = amp_color_table[AMP_MAROON].color
+        .rgb    = amp_color_table[AMP_MAROON].rgb
     },
     [AMP_GREEN] = {
         .index  = AMP_GREEN,
         .code   = 42,
-        .color  = amp_color_table[AMP_GREEN].color
+        .rgb    = amp_color_table[AMP_GREEN].rgb
     },
     [AMP_OLIVE] = {
         .index  = AMP_OLIVE,
         .code   = 43,
-        .color  = amp_color_table[AMP_OLIVE].color
+        .rgb    = amp_color_table[AMP_OLIVE].rgb
     },
     [AMP_NAVY] = {
         .index  = AMP_NAVY,
         .code   = 44,
-        .color  = amp_color_table[AMP_NAVY].color
+        .rgb    = amp_color_table[AMP_NAVY].rgb
     },
     [AMP_PURPLE] = {
         .index  = AMP_PURPLE,
         .code   = 45,
-        .color  = amp_color_table[AMP_PURPLE].color
+        .rgb    = amp_color_table[AMP_PURPLE].rgb
     },
     [AMP_TEAL] = {
         .index  = AMP_TEAL,
         .code   = 46,
-        .color  = amp_color_table[AMP_TEAL].color
+        .rgb    = amp_color_table[AMP_TEAL].rgb
     },
     [AMP_SILVER] = {
         .index  = AMP_SILVER,
         .code   = 47,
-        .color  = amp_color_table[AMP_SILVER].color
+        .rgb    = amp_color_table[AMP_SILVER].rgb
     },
     [AMP_CHARCOAL] = {
         .index  = AMP_CHARCOAL,
         .code   = 40,
-        .color  = amp_color_table[AMP_CHARCOAL].color,
+        .rgb    = amp_color_table[AMP_CHARCOAL].rgb,
         .bright = true
     },
     [AMP_RED] = {
         .index  = AMP_RED,
         .code   = 41,
-        .color  = amp_color_table[AMP_RED].color,
+        .rgb    = amp_color_table[AMP_RED].rgb,
         .bright = true
     },
     [AMP_LIME] = {
         .index  = AMP_LIME,
         .code   = 42,
-        .color  = amp_color_table[AMP_LIME].color,
+        .rgb    = amp_color_table[AMP_LIME].rgb,
         .bright = true
     },
     [AMP_YELLOW] = {
         .index  = AMP_YELLOW,
         .code   = 43,
-        .color  = amp_color_table[AMP_YELLOW].color,
+        .rgb    = amp_color_table[AMP_YELLOW].rgb,
         .bright = true
     },
     [AMP_BLUE] = {
         .index  = AMP_BLUE,
         .code   = 44,
-        .color  = amp_color_table[AMP_BLUE].color,
+        .rgb    = amp_color_table[AMP_BLUE].rgb,
         .bright = true
     },
     [AMP_FUCHSIA] = {
         .index  = AMP_FUCHSIA,
         .code   = 45,
-        .color  = amp_color_table[AMP_FUCHSIA].color,
+        .rgb    = amp_color_table[AMP_FUCHSIA].rgb,
         .bright = true
     },
     [AMP_AQUA] = {
         .index  = AMP_AQUA,
         .code   = 46,
-        .color  = amp_color_table[AMP_AQUA].color,
+        .rgb    = amp_color_table[AMP_AQUA].rgb,
         .bright = true
     },
     [AMP_WHITE] = {
         .index  = AMP_WHITE,
         .code   = 47,
-        .color  = amp_color_table[AMP_WHITE].color,
+        .rgb    = amp_color_table[AMP_WHITE].rgb,
         .bright = true
     },
     ////////////////////////////////////////////////////////////////////////////
@@ -1554,7 +1986,24 @@ static inline struct amp_mode_type amp_get_mode(
 static inline AMP_STYLE amp_get_style(
     const struct amp_type *amp, long x, long y
 ) {
+    AMP_STYLE style = AMP_STYLE_NONE;
     auto mode = amp_get_mode(amp, x, y);
+
+    if (mode.bitset.broken) {
+        return AMP_STYLE_NONE;
+    }
+
+    if (mode.bitset.bg) {
+        style |= amp_lookup_color(
+            amp_find_rgb16(amp_rgb16_bg_table, mode.bg).index
+        ).style.bg;
+    }
+
+    if (mode.bitset.fg) {
+        style |= amp_lookup_color(
+            amp_find_rgb16(amp_rgb16_fg_table, mode.fg).index
+        ).style.fg;
+    }
 
     return (
         (mode.bitset.hidden         ? AMP_HIDDEN        : 0) |
@@ -1562,7 +2011,7 @@ static inline AMP_STYLE amp_get_style(
         (mode.bitset.italic         ? AMP_ITALIC        : 0) |
         (mode.bitset.underline      ? AMP_UNDERLINE     : 0) |
         (mode.bitset.blinking       ? AMP_BLINKING      : 0) |
-        (mode.bitset.strikethrough  ? AMP_STRIKETHROUGH : 0)
+        (mode.bitset.strikethrough  ? AMP_STRIKETHROUGH : 0) | style
     );
 }
 
@@ -1590,9 +2039,9 @@ static inline bool amp_put_style(
                 auto row = amp_color_table[i];
 
                 if (row.style.bg & style) {
-                    bg_r += row.color.r;
-                    bg_g += row.color.g;
-                    bg_b += row.color.b;
+                    bg_r += row.rgb.r;
+                    bg_g += row.rgb.g;
+                    bg_b += row.rgb.b;
 
                     ++bg_colors;
                 }
@@ -1625,9 +2074,9 @@ static inline bool amp_put_style(
                 auto row = amp_color_table[i];
 
                 if (row.style.fg & style) {
-                    fg_r += row.color.r;
-                    fg_g += row.color.g;
-                    fg_b += row.color.b;
+                    fg_r += row.rgb.r;
+                    fg_g += row.rgb.g;
+                    fg_b += row.rgb.b;
 
                     ++fg_colors;
                 }
@@ -1655,7 +2104,7 @@ static inline bool amp_put_style(
 }
 
 static inline bool amp_set_bg_color(
-    struct amp_type *amp, struct amp_color_type bg_color, long x, long y
+    struct amp_type *amp, struct amp_rgb_type bg_color, long x, long y
 ) {
     auto mode = amp_get_mode(amp, x, y);
 
@@ -1665,14 +2114,14 @@ static inline bool amp_set_bg_color(
     return amp_set_mode(amp, x, y, mode);
 }
 
-static inline struct amp_color_type amp_get_bg_color(
+static inline struct amp_rgb_type amp_get_bg_color(
     struct amp_type *amp, long x, long y
 ) {
     return amp_get_mode(amp, x, y).bg;
 }
 
 static inline bool amp_set_fg_color(
-    struct amp_type *amp, struct amp_color_type fg_color, long x, long y
+    struct amp_type *amp, struct amp_rgb_type fg_color, long x, long y
 ) {
     auto mode = amp_get_mode(amp, x, y);
 
@@ -1682,7 +2131,7 @@ static inline bool amp_set_fg_color(
     return amp_set_mode(amp, x, y, mode);
 }
 
-static inline struct amp_color_type amp_get_fg_color(
+static inline struct amp_rgb_type amp_get_fg_color(
     struct amp_type *amp, long x, long y
 ) {
     return amp_get_mode(amp, x, y).fg;
@@ -2204,7 +2653,7 @@ static inline struct amp_mode_code_type amp_mode_to_codes(
             auto bg_rgb_row = amp_find_rgb16(amp_rgb16_bg_table, mode.bg);
 
             if (bg_rgb_row.bright) {
-                struct amp_color_type buf = mode.bg;
+                struct amp_rgb_type buf = mode.bg;
                 mode.bg = mode.fg;
                 mode.fg = buf;
                 mode.bitset.bg = mode.bitset.fg;
@@ -2703,7 +3152,7 @@ static inline bool amp_mode_cell_serialize(
 }
 
 static inline struct amp_rgb16_type amp_find_rgb16(
-    const struct amp_rgb16_type *table, struct amp_color_type color
+    const struct amp_rgb16_type *table, struct amp_rgb_type color
 ) {
     long best_d = LONG_MAX;
     const struct amp_rgb16_type *best_row = nullptr;
@@ -2717,9 +3166,9 @@ static inline struct amp_rgb16_type amp_find_rgb16(
         long dg = color.g;
         long db = color.b;
 
-         dr -= table->color.r;
-         dg -= table->color.g;
-         db -= table->color.b;
+         dr -= table->rgb.r;
+         dg -= table->rgb.g;
+         db -= table->rgb.b;
 
          long d = dr * dr + dg * dg + db * db;
 
@@ -2735,8 +3184,8 @@ static inline struct amp_rgb16_type amp_find_rgb16(
 static inline struct amp_color_type amp_lookup_color(AMP_COLOR index) {
     return (
         index < AMP_MAX_COLOR ? (
-            amp_color_table[index].color
-        ) : amp_color_table[AMP_COLOR_NONE].color
+            amp_color_table[index]
+        ) : amp_color_table[AMP_COLOR_NONE]
     );
 }
 
@@ -2782,14 +3231,14 @@ static inline struct amp_inline_style_type amp_lookup_inline_style(
     return amp_inline_style_table[0];
 }
 
-static inline struct amp_color_type amp_map_rgb(
+static inline struct amp_rgb_type amp_map_rgb(
     uint8_t r, uint8_t g, uint8_t b
 ) {
-    return (struct amp_color_type) { .r = r, .g = g, .b = b };
+    return (struct amp_rgb_type) { .r = r, .g = g, .b = b };
 }
 
 static inline void amp_unmap_rgb(
-    struct amp_color_type color, uint8_t * r, uint8_t * g, uint8_t * b
+    struct amp_rgb_type color, uint8_t * r, uint8_t * g, uint8_t * b
 ) {
     *r = color.r;
     *g = color.g;
@@ -3273,6 +3722,348 @@ static inline const char *amp_str_seg_skip_style_and_utf8_symbol(
     }
 
     return str;
+}
+
+static inline struct amp_style_flag_type amp_lookup_style_flag(
+    AMP_STYLE style
+) {
+    size_t index = stdc_first_trailing_one_ull(style);
+
+    if (index >= sizeof(amp_style_flag_table)/sizeof(amp_style_flag_table[0])) {
+        return amp_style_flag_table[0];
+    }
+
+    return amp_style_flag_table[index];
+}
+
+static inline ssize_t amp_serialize_layer_cell(
+    const struct amp_type *amp, AMP_STYLE style, long x, long y,
+    char *buffer, size_t buffer_size
+) {
+    const bool to_stdout = (
+        buffer == (char *) amp->buffer + sizeof(amp->buffer)
+    );
+
+    ssize_t written = 0;
+
+    if (style == AMP_STYLE_NONE) {
+        const char *glyph = amp_get_glyph(amp, x, y);
+
+        if (!glyph || *glyph == '\0') {
+            glyph = " ";
+        }
+
+        if (to_stdout) {
+            if (amp_stdout(glyph, strlen(glyph)) < 0) {
+                return -1;
+            }
+
+            written += (ssize_t) strlen(glyph);
+        }
+        else {
+            written += (ssize_t) amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, (size_t) written),
+                glyph
+            );
+        }
+
+        return written;
+    }
+
+    const char *glyph = " ";
+    AMP_STYLE cell_style = amp_get_style(amp, x, y);
+    AMP_STYLE matching_styles = cell_style & style;
+
+    if (matching_styles) {
+        auto const row = amp_lookup_style_flag(matching_styles);
+        glyph = row.glyph;
+    }
+
+    if (!glyph || *glyph == '\0') {
+        glyph = " ";
+    }
+
+    if (to_stdout) {
+        if (amp_stdout(glyph, strlen(glyph)) < 0) {
+            return -1;
+        }
+
+        written += (ssize_t) strlen(glyph);
+    }
+    else {
+        written += (ssize_t) amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, (size_t) written), glyph
+        );
+    }
+
+    return written;
+}
+
+static inline ssize_t amp_serialize_layer_row(
+    const struct amp_type *amp, AMP_STYLE style, long y, char *buffer,
+    size_t buffer_size
+) {
+    const bool to_stdout = (
+        buffer == (char *) amp->buffer + sizeof(amp->buffer)
+    );
+
+    ssize_t written = 0;
+    const char *left_border = "║";
+    const char *right_border = "║\n";
+    const size_t left_border_size = strlen(left_border);
+    const size_t right_border_size = strlen(right_border);
+
+    if (to_stdout) {
+        if (amp_stdout(left_border, left_border_size) < 0) {
+            return -1;
+        }
+
+        written += (ssize_t) left_border_size;
+    }
+    else {
+        written += (ssize_t) amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            left_border
+        );
+    }
+
+    for (long x=0; x<amp->width; ++x) {
+        ssize_t ret = amp_serialize_layer_cell(
+            amp, style, x, y, to_stdout ? buffer : buffer + written,
+            amp_sub_size(buffer_size, (size_t) written)
+        );
+
+        if (ret < 0) {
+            return ret;
+        }
+
+        written += ret;
+    }
+
+    if (to_stdout) {
+        if (amp_stdout(right_border, right_border_size) < 0) {
+            return -1;
+        }
+
+        written += (ssize_t) right_border_size;
+    }
+    else {
+        written += (ssize_t) amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            right_border
+        );
+    }
+
+    return written;
+}
+
+static inline ssize_t amp_serialize_layer(
+    const struct amp_type *amp, AMP_STYLE style, char *buffer,
+    size_t buffer_size
+) {
+    const bool to_stdout = (
+        buffer == (char *) amp->buffer + sizeof(amp->buffer)
+    );
+
+    ssize_t written = 0;
+
+    if (style != AMP_STYLE_NONE) {
+        const char *border = "═";
+        const char *left_top_corner = "╠";
+        const char *right_top_corner = "╣\n";
+        const size_t left_top_corner_size = strlen(left_top_corner);
+        const size_t right_top_corner_size = strlen(right_top_corner);
+        const size_t border_size = strlen(border);
+
+        if (to_stdout) {
+            if (amp_stdout(left_top_corner, left_top_corner_size) < 0) {
+                return -1;
+            }
+
+            written += (ssize_t) left_top_corner_size;
+
+            for (long x=0; x<amp->width; ++x) {
+                if (amp_stdout(border, border_size) < 0) {
+                    return -1;
+                }
+
+                written += (ssize_t) border_size;
+            }
+
+            if (amp_stdout(right_top_corner, right_top_corner_size) < 0) {
+                return -1;
+            }
+
+            written += (ssize_t) right_top_corner_size;
+        }
+        else {
+            written += (ssize_t) amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, (size_t) written),
+                left_top_corner
+            );
+
+            for (long x=0; x<amp->width; ++x) {
+                written += (ssize_t) amp_str_append(
+                    buffer + written,
+                    amp_sub_size(buffer_size, (size_t) written), border
+                );
+            }
+
+            written += (ssize_t) amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, (size_t) written),
+                right_top_corner
+            );
+        }
+    }
+
+    for (long y=0; y<amp->height; ++y) {
+        ssize_t ret = amp_serialize_layer_row(
+            amp, style, y, to_stdout ? buffer : buffer + written,
+            amp_sub_size(buffer_size, (size_t) written)
+        );
+
+        if (ret < 0) {
+            return ret;
+        }
+
+        written += ret;
+    }
+
+    return written;
+}
+
+static inline ssize_t amp_serialize(
+    const struct amp_type *amp, char *buffer, size_t buffer_size
+) {
+    if (buffer == nullptr) {
+        buffer = (char *) amp->buffer + sizeof(amp->buffer);
+        buffer_size = 0;
+    }
+    else {
+        if ((buffer >= (char *) amp->glyph.data
+          && buffer <  (char *) amp->glyph.data + amp->glyph.size)
+        ||  (buffer >= (char *) amp->mode.data
+          && buffer <  (char *) amp->mode.data + amp->mode.size)) {
+            abort(); // Overwriting its own memory is a fatal error.
+        }
+    }
+
+    const bool to_stdout = (
+        buffer == (char *) amp->buffer + sizeof(amp->buffer)
+    );
+
+    const char *border = "═";
+    const char *left_top_corner = "╔";
+    const char *left_bottom_corner = "╚";
+    const char *right_top_corner = "╗\n";
+    const char *right_bottom_corner = "╝";
+    const size_t left_top_corner_size = strlen(left_top_corner);
+    const size_t right_top_corner_size = strlen(right_top_corner);
+    const size_t left_bottom_corner_size = strlen(left_bottom_corner);
+    const size_t right_bottom_corner_size = strlen(right_bottom_corner);
+    const size_t border_size = strlen(border);
+
+    ssize_t written = 0;
+
+    if (to_stdout) {
+        if (amp_stdout(left_top_corner, left_top_corner_size) < 0) {
+            return -1;
+        }
+
+        written += (ssize_t) left_top_corner_size;
+
+        for (long x=0; x<amp->width; ++x) {
+            if (amp_stdout(border, border_size) < 0) {
+                return -1;
+            }
+
+            written += (ssize_t) border_size;
+        }
+
+        if (amp_stdout(right_top_corner, right_top_corner_size) < 0) {
+            return -1;
+        }
+
+        written += (ssize_t) right_top_corner_size;
+    }
+    else {
+        written += (ssize_t) amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            left_top_corner
+        );
+
+        for (long x=0; x<amp->width; ++x) {
+            written += (ssize_t) amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, (size_t) written),
+                border
+            );
+        }
+
+        written += (ssize_t) amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            right_top_corner
+        );
+    }
+
+    constexpr AMP_STYLE layers[] = {
+        AMP_STYLE_NONE,
+        amp_fg_color_styles,
+        amp_bg_color_styles
+    };
+
+    for (size_t i=0; i<sizeof(layers)/sizeof(layers[0]); ++i) {
+        ssize_t ret = amp_serialize_layer(
+            amp, layers[i], to_stdout ? buffer : buffer + written,
+            amp_sub_size(buffer_size, (size_t) written)
+        );
+
+        if (ret < 0) {
+            return ret;
+        }
+        else written += ret;
+    }
+
+    if (to_stdout) {
+        if (amp_stdout(left_bottom_corner, left_bottom_corner_size) < 0) {
+            return -1;
+        }
+
+        written += (ssize_t) left_bottom_corner_size;
+
+        for (long x=0; x<amp->width; ++x) {
+            if (amp_stdout(border, border_size) < 0) {
+                return -1;
+            }
+
+            written += (ssize_t) border_size;
+        }
+
+        if (amp_stdout(right_bottom_corner, right_bottom_corner_size) < 0) {
+            return -1;
+        }
+
+        written += (ssize_t) right_bottom_corner_size;
+    }
+    else {
+        written += (ssize_t) amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            left_bottom_corner
+        );
+
+        for (long x=0; x<amp->width; ++x) {
+            written += (ssize_t) amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, (size_t) written),
+                border
+            );
+        }
+
+        written += (ssize_t) amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            right_bottom_corner
+        );
+    }
+
+    return written;
 }
 
 #endif
