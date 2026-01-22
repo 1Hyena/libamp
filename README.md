@@ -142,6 +142,9 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
 
 ### API ########################################################################
 
+[amp_calc_size](#amp_calc_size)
+
+
 #### amp_calc_size #############################################################
 
 https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/amp.h#L116-L122
