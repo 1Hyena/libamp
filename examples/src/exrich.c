@@ -26,13 +26,12 @@ int main(int, char **) {
             continue;
         }
 
-        int written = snprintf(
-            buf, sizeof(buf), " {{%s → {%ssample{x (%s)",
-            row.glyph, row.glyph, row.name
+        ssize_t written = amp_snprint_rich_textf(
+            &amp, 0, 0, 0, 0, AMP_ALIGN_LEFT, buf, sizeof(buf),
+            " {{%s → {%ssample{x (%s)", row.glyph, row.glyph, row.name
         );
 
-        if (written < (int) sizeof(buf) && written >= 0) {
-            amp_print_rich_text(&amp, 0, 0, 0, 0, AMP_ALIGN_LEFT, buf);
+        if (written < (ssize_t) sizeof(buf) && written >= 0) {
             amp_to_ans(&amp, nullptr, 0); // Write to stdout.
             amp_clear(&amp);
 
