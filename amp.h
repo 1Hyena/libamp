@@ -403,9 +403,9 @@ static inline ssize_t                   amp_snprint_textf(
     // occurred during formatting, then nothing is printed on the ansmap.
     //
     // Returns the number of bytes that would have been written into the text
-    // format buffer (excluding the null byte used to end output to strings) if
-    // the given buffer was big enough. The return value of -1 indicates that an
-    // output error was encountered in the underlying call to vsnprintf.
+    // format buffer (excluding the null byte used to end output to strings).
+    // The return value of -1 indicates that an output error was encountered in
+    // the underlying call to vsnprintf.
 );
 
 static inline ssize_t                   amp_snprint_rich_textf(
@@ -428,9 +428,9 @@ static inline ssize_t                   amp_snprint_rich_textf(
     // occurred during formatting, then nothing is printed on the ansmap.
     //
     // Returns the number of bytes that would have been written into the text
-    // format buffer (excluding the null byte used to end output to strings) if
-    // the given buffer was big enough. The return value of -1 indicates that an
-    // output error was encountered in the underlying call to vsnprintf.
+    // format buffer (excluding the null byte used to end output to strings).
+    // The return value of -1 indicates that an output error was encountered in
+    // the underlying call to vsnprintf.
 );
 
 static inline ssize_t                   amp_snprint_linef(
@@ -451,9 +451,9 @@ static inline ssize_t                   amp_snprint_linef(
     // printed on the ansmap.
     //
     // Returns the number of bytes that would have been written into the text
-    // format buffer (excluding the null byte used to end output to strings) if
-    // the given buffer was big enough. The return value of -1 indicates that an
-    // output error was encountered in the underlying call to vsnprintf.
+    // format buffer (excluding the null byte used to end output to strings).
+    // The return value of -1 indicates that an output error was encountered in
+    // the underlying call to vsnprintf.
 );
 ////////////////////////////////////////////////////////////////////////////////
 
