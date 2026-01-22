@@ -164,11 +164,11 @@ https://github.com/1Hyena/libamp/blob/29442345bf4574727e61b4d23ec7295409174708/e
   - [amp_clear](#amp_clear) (&*ansmap*)
   - [amp_print_glyph](#amp_print_glyph) (&*ansmap*, *style*, *x*, *y*, &*string*)
   - [amp_print_line](#amp_print_line) (&*ansmap*, *style*, *x*, *y*, *alignment*, &*string*)
-  - [amp_snprint_linef](#amp_print_line) (&*ansmap*, *style*, *x*, *y*, *alignment*, &*buffer*, *buffer size*, &*format*, *...*) → `ssize_t`
+  - [amp_snprint_linef](#amp_snprint_linef) (&*amp*, *style*, *x*, *y*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
   - [amp_print_text](#amp_print_text) (&*ansmap*, *style*, *x*, *y*, *max width*, *alignment*, &*string*) → `size_t`
-  - [amp_snprint_textf](#amp_print_line) (&*ansmap*, *style*, *x*, *y*, *max width*, *alignment*, &*buffer*, *buffer size*, &*format*, *...*) → `ssize_t`
+  - [amp_snprint_textf](#amp_snprint_textf) (&*amp*, *style*, *x*, *y*, *max width*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
   - [amp_print_rich_text](#amp_print_rich_text) (&*ansmap*, *style*, *x*, *y*, *max width*, *alignment*, &*string*) → `size_t`
-  - [amp_snprint_rich_textf](#amp_print_line) (&*ansmap*, *style*, *x*, *y*, *max width*, *alignment*, &*buffer*, *buffer size*, &*format*, *...*) → `ssize_t`
+  - [amp_snprint_rich_textf](#amp_snprint_rich_textf) (&*amp*, *style*, *x*, *y*, *max width*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
   - [amp_put_glyph](#amp_put_glyph) (&*ansmap*, &*string*, *x*, *y*) → `const char *`
   - [amp_put_style](#amp_put_style) (&*ansmap*, *style*, *x*, *y*) → `bool`
   - [amp_set_bg_color](#amp_set_bg_color) (&*ansmap*, *color*, *x*, *y*) → `bool`
