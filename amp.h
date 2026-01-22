@@ -33,6 +33,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdarg.h>
+#include <stdio.h>
 ////////////////////////////////////////////////////////////////////////////////
 
 #define AMP_MAJOR_VERSION  1
@@ -380,6 +382,78 @@ static inline uint32_t                  amp_get_height(
 static inline AMP_PALETTE               amp_get_palette(
     const struct amp_type *                 amp
     // Returns the palette of the given ansmap image.
+);
+
+static inline ssize_t                   amp_snprint_textf(
+    struct amp_type *                       amp,
+    AMP_STYLE                               text_style,
+    long                                    text_x,
+    long                                    text_y,
+    uint32_t                                text_max_width,
+    AMP_ALIGN                               text_alignment,
+    char *                                  text_format_buffer,
+    size_t                                  text_format_buffer_size,
+    const char *                            text_format,
+                                            ...
+
+    // Prints the provided UTF-8 encoded formatted text on the ansmap. This
+    // function wraps the line if its width exceeds the maximum allowed width.
+    // If the maximum width is zero, then wrapping is disabled. If the provided
+    // text format buffer could not fit the text after formatting or if an error
+    // occurred during formatting, then nothing is printed on the ansmap.
+    //
+    // Returns the number of bytes that would have been written into the text
+    // format buffer (excluding the null byte used to end output to strings) if
+    // the given buffer was big enough. The return value of -1 indicates that an
+    // output error was encountered in the underlying call to vsnprintf.
+);
+
+static inline ssize_t                   amp_snprint_rich_textf(
+    struct amp_type *                       amp,
+    AMP_STYLE                               text_style,
+    long                                    text_x,
+    long                                    text_y,
+    uint32_t                                text_max_width,
+    AMP_ALIGN                               text_alignment,
+    char *                                  text_format_buffer,
+    size_t                                  text_format_buffer_size,
+    const char *                            text_format,
+                                            ...
+
+    // Prints the provided UTF-8 encoded formatted text on the ansmap. Inline
+    // embedded style markers are applied to the text as it is printed. This
+    // function wraps the line if its width exceeds the maximum allowed width.
+    // If the maximum width is zero, then wrapping is disabled. If the provided
+    // text format buffer could not fit the text after formatting or if an error
+    // occurred during formatting, then nothing is printed on the ansmap.
+    //
+    // Returns the number of bytes that would have been written into the text
+    // format buffer (excluding the null byte used to end output to strings) if
+    // the given buffer was big enough. The return value of -1 indicates that an
+    // output error was encountered in the underlying call to vsnprintf.
+);
+
+static inline ssize_t                   amp_snprint_linef(
+    struct amp_type *                       amp,
+    AMP_STYLE                               text_style,
+    long                                    text_x,
+    long                                    text_y,
+    AMP_ALIGN                               text_alignment,
+    char *                                  text_format_buffer,
+    size_t                                  text_format_buffer_size,
+    const char *                            text_format,
+                                            ...
+
+    // Prints the provided UTF-8 encoded formatted text on the ansmap. Newlines
+    // and other non-printable ASCII characters will be replaced by question
+    // marks. If the provided text format buffer could not fit the text after
+    // formatting or if an error occurred during formatting, then nothing is
+    // printed on the ansmap.
+    //
+    // Returns the number of bytes that would have been written into the text
+    // format buffer (excluding the null byte used to end output to strings) if
+    // the given buffer was big enough. The return value of -1 indicates that an
+    // output error was encountered in the underlying call to vsnprintf.
 );
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1891,6 +1965,78 @@ static inline size_t amp_print_text(
         amp, text_style, text_x, text_y, text_max_width, text_alignment,
         text_str, strlen(text_str)
     );
+}
+
+static inline ssize_t amp_snprint_linef(
+    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    AMP_ALIGN text_alignment, char *buf, size_t buf_size, const char *fmt, ...
+) {
+    va_list args;
+    va_start(args, fmt);
+    int ret = vsnprintf(buf, buf_size, fmt, args);
+    va_end(args);
+
+    if (ret < 0) {
+        return -1;
+    }
+
+    if ((size_t) ret >= buf_size) {
+        return (ssize_t) ret;
+    }
+
+    amp_print_line(amp, text_style, text_x, text_y, text_alignment, buf);
+
+    return (ssize_t) ret;
+}
+
+static inline ssize_t amp_snprint_textf(
+    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    uint32_t text_max_width, AMP_ALIGN text_alignment,
+    char *buf, size_t buf_size, const char *fmt, ...
+) {
+    va_list args;
+    va_start(args, fmt);
+    int ret = vsnprintf(buf, buf_size, fmt, args);
+    va_end(args);
+
+    if (ret < 0) {
+        return -1;
+    }
+
+    if ((size_t) ret >= buf_size) {
+        return (ssize_t) ret;
+    }
+
+    amp_print_text(
+        amp, text_style, text_x, text_y, text_max_width, text_alignment, buf
+    );
+
+    return (ssize_t) ret;
+}
+
+static inline ssize_t amp_snprint_rich_textf(
+    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    uint32_t text_max_width, AMP_ALIGN text_alignment,
+    char *buf, size_t buf_size, const char *fmt, ...
+) {
+    va_list args;
+    va_start(args, fmt);
+    int ret = vsnprintf(buf, buf_size, fmt, args);
+    va_end(args);
+
+    if (ret < 0) {
+        return -1;
+    }
+
+    if ((size_t) ret >= buf_size) {
+        return (ssize_t) ret;
+    }
+
+    amp_print_rich_text(
+        amp, text_style, text_x, text_y, text_max_width, text_alignment, buf
+    );
+
+    return (ssize_t) ret;
 }
 
 static inline size_t amp_print_rich_text(
