@@ -89,7 +89,7 @@ output will be written to the standard output of the program.
 
 ### Examples ###################################################################
 
-In order to compile all the examples, call `make` in the _examples_ directory.
+To compile all the examples, run the `make` command in the _examples_ directory.
 
 ![screenshot](img/make.png "console output of make")
 
