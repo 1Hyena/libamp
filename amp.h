@@ -366,6 +366,16 @@ static inline size_t                    amp_print_rich_text(
     //
     // Returns the number of lines printed.
 );
+
+static inline uint32_t                  amp_get_width(
+    const struct amp_type *                 amp
+    // Returns the width of the given ansmap image.
+);
+
+static inline uint32_t                  amp_get_height(
+    const struct amp_type *                 amp
+    // Returns the height of the given ansmap image.
+);
 ////////////////////////////////////////////////////////////////////////////////
 
 struct amp_type {
@@ -1150,6 +1160,14 @@ static inline size_t amp_init(
 static inline void amp_clear(struct amp_type *amp) {
     memset(amp->glyph.data, 0, amp->glyph.size);
     memset(amp->mode.data, 0, amp->mode.size);
+}
+
+static inline uint32_t amp_get_width(const struct amp_type *amp) {
+    return amp->width;
+}
+
+static inline uint32_t amp_get_height(const struct amp_type *amp) {
+    return amp->height;
 }
 
 static inline void amp_set_palette(struct amp_type *amp, AMP_PALETTE palette) {
