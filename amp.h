@@ -376,6 +376,11 @@ static inline uint32_t                  amp_get_height(
     const struct amp_type *                 amp
     // Returns the height of the given ansmap image.
 );
+
+static inline AMP_PALETTE               amp_get_palette(
+    const struct amp_type *                 amp
+    // Returns the palette of the given ansmap image.
+);
 ////////////////////////////////////////////////////////////////////////////////
 
 struct amp_type {
@@ -1168,6 +1173,10 @@ static inline uint32_t amp_get_width(const struct amp_type *amp) {
 
 static inline uint32_t amp_get_height(const struct amp_type *amp) {
     return amp->height;
+}
+
+static inline AMP_PALETTE amp_get_palette(const struct amp_type *amp) {
+    return amp->palette;
 }
 
 static inline void amp_set_palette(struct amp_type *amp, AMP_PALETTE palette) {
