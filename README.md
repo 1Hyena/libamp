@@ -37,6 +37,10 @@ designed for creating terminal applications and games like multi-user dungeons
 * **Text wrapping:** The LibAMP API allows for multiline text drawing with the
   user specified maximum line width parameter.
 
+* **Inline style markers:** In rich text printing, style information can be
+  embedded into the source text at the location where the style needs to be
+  applied.
+
 * **Portable:** LibAMP builds and functions on Linux. It should be relatively
   simple to make it run on most other platforms as long as the platform provides
   the C standard library.
