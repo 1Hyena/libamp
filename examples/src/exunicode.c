@@ -14,7 +14,7 @@ int main(int, char **) {
 
     for (long y = 1; y < amp.height; ++y) {
         for (long x = 1; x < amp.width; ++x) {
-            amp_print_glyph(&amp, AMP_BG_GRAY, x, y, "▒");
+            amp_print_glyph(&amp, AMP_BG_CHARCOAL, x, y, "▒");
         }
     }
 

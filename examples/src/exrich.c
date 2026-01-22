@@ -28,7 +28,7 @@ int main(int, char **) {
 
         ssize_t written = amp_snprint_rich_textf(
             &amp, 0, 0, 0, 0, AMP_ALIGN_LEFT, buf, sizeof(buf),
-            " {{%s → {%ssample{x (%s)", row.glyph, row.glyph, row.name
+            " {{%s → {%ssample{X (%s)", row.glyph, row.glyph, row.name
         );
 
         if (written < (ssize_t) sizeof(buf) && written >= 0) {
@@ -44,7 +44,7 @@ int main(int, char **) {
     amp_stdout("\n", 1);
     amp_print_rich_text(
         &amp, 0, 0, 0, 0, AMP_ALIGN_LEFT,
-        "{RA{rN{GS{gI {Bc{bo{Cl{co{Mr{ms {Ya{yr{We {wf{Du{xn{*!"
+        "{rA{mN{lS{gI {bc{no{al{to{fr{ps {ya{or{we {sf{cu{xn{*!"
     );
     amp_to_ans(&amp, nullptr, 0); // Write to stdout.
     amp_stdout("\n", 1);

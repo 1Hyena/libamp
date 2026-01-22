@@ -59,9 +59,9 @@ static constexpr size_t AMP_CELL_SIZE       = (
 typedef enum : uint8_t {
     AMP_COLOR_NONE = 0,
     ////////////////////////////////////////////////////////////////////////////
-    AMP_BLACK,      AMP_MAROON,     AMP_GREEN,      AMP_OLIVE,      AMP_NAVY,
-    AMP_PURPLE,     AMP_TEAL,       AMP_SILVER,     AMP_GRAY,       AMP_RED,
-    AMP_LIME,       AMP_YELLOW,     AMP_BLUE,       AMP_MAGENTA,    AMP_CYAN,
+    AMP_DARK,       AMP_MAROON,     AMP_GREEN,      AMP_OLIVE,      AMP_NAVY,
+    AMP_PURPLE,     AMP_TEAL,       AMP_SILVER,     AMP_CHARCOAL,   AMP_RED,
+    AMP_LIME,       AMP_YELLOW,     AMP_BLUE,       AMP_FUCHSIA,    AMP_AQUA,
     AMP_WHITE,
     ////////////////////////////////////////////////////////////////////////////
     AMP_MAX_COLOR
@@ -80,24 +80,24 @@ typedef enum : uint64_t {
     AMP_ITALIC          = (1ULL <<  2), AMP_UNDERLINE       = (1ULL <<  3),
     AMP_BLINKING        = (1ULL <<  4), AMP_STRIKETHROUGH   = (1ULL <<  5),
     ////////////////////////////////////////////////////////////////////////////
-    AMP_FG_NONE         = (1ULL <<  6), AMP_FG_BLACK        = (1ULL <<  7),
+    AMP_FG_NONE         = (1ULL <<  6), AMP_FG_DARK         = (1ULL <<  7),
     AMP_FG_MAROON       = (1ULL <<  8), AMP_FG_GREEN        = (1ULL <<  9),
     AMP_FG_OLIVE        = (1ULL << 10), AMP_FG_NAVY         = (1ULL << 11),
     AMP_FG_PURPLE       = (1ULL << 12), AMP_FG_TEAL         = (1ULL << 13),
-    AMP_FG_SILVER       = (1ULL << 14), AMP_FG_GRAY         = (1ULL << 15),
+    AMP_FG_SILVER       = (1ULL << 14), AMP_FG_CHARCOAL     = (1ULL << 15),
     AMP_FG_RED          = (1ULL << 16), AMP_FG_LIME         = (1ULL << 17),
     AMP_FG_YELLOW       = (1ULL << 18), AMP_FG_BLUE         = (1ULL << 19),
-    AMP_FG_MAGENTA      = (1ULL << 20), AMP_FG_CYAN         = (1ULL << 21),
+    AMP_FG_FUCHSIA      = (1ULL << 20), AMP_FG_AQUA         = (1ULL << 21),
     AMP_FG_WHITE        = (1ULL << 22),
     ////////////////////////////////////////////////////////////////////////////
-    AMP_BG_NONE         = (1ULL << 24), AMP_BG_BLACK        = (1ULL << 25),
+    AMP_BG_NONE         = (1ULL << 24), AMP_BG_DARK         = (1ULL << 25),
     AMP_BG_MAROON       = (1ULL << 26), AMP_BG_GREEN        = (1ULL << 27),
     AMP_BG_OLIVE        = (1ULL << 28), AMP_BG_NAVY         = (1ULL << 29),
     AMP_BG_PURPLE       = (1ULL << 30), AMP_BG_TEAL         = (1ULL << 31),
-    AMP_BG_SILVER       = (1ULL << 32), AMP_BG_GRAY         = (1ULL << 33),
+    AMP_BG_SILVER       = (1ULL << 32), AMP_BG_CHARCOAL     = (1ULL << 33),
     AMP_BG_RED          = (1ULL << 34), AMP_BG_LIME         = (1ULL << 35),
     AMP_BG_YELLOW       = (1ULL << 36), AMP_BG_BLUE         = (1ULL << 37),
-    AMP_BG_MAGENTA      = (1ULL << 38), AMP_BG_CYAN         = (1ULL << 39),
+    AMP_BG_FUCHSIA      = (1ULL << 38), AMP_BG_AQUA         = (1ULL << 39),
     AMP_BG_WHITE        = (1ULL << 40),
     ////////////////////////////////////////////////////////////////////////////
     AMP_SOFT_RESET      = (1ULL << 42), AMP_HARD_RESET      = (1ULL << 43)
@@ -732,90 +732,170 @@ static const struct amp_inline_style_type {
         .style  = AMP_FAINT,
         .name   = "faint"
     },
+    ['A']   = {
+        .glyph  = "A",
+        .style  = AMP_BG_AQUA,
+        .name   = "aqua background"
+    },
     ['B']   = {
         .glyph  = "B",
-        .style  = AMP_FG_BLUE,
-        .name   = "bold blue"
+        .style  = AMP_BG_BLUE,
+        .name   = "blue background"
     },
     ['C']   = {
         .glyph  = "C",
-        .style  = AMP_FG_CYAN,
-        .name   = "bold cyan"
+        .style  = AMP_BG_CHARCOAL,
+        .name   = "charcoal background"
     },
     ['D']   = {
         .glyph  = "D",
-        .style  = AMP_FG_GRAY,
-        .name   = "bold dark"
+        .style  = AMP_BG_DARK,
+        .name   = "dark background"
+    },
+    ['F']   = {
+        .glyph  = "F",
+        .style  = AMP_BG_FUCHSIA,
+        .name   = "fuchsia background"
     },
     ['G']   = {
         .glyph  = "G",
-        .style  = AMP_FG_LIME,
-        .name   = "bold green"
+        .style  = AMP_BG_GREEN,
+        .name   = "green background"
+    },
+    ['L']   = {
+        .glyph  = "L",
+        .style  = AMP_BG_LIME,
+        .name   = "lime background"
     },
     ['M']   = {
         .glyph  = "M",
-        .style  = AMP_FG_MAGENTA,
-        .name   = "bold magenta"
+        .style  = AMP_BG_MAROON,
+        .name   = "maroon background"
+    },
+    ['N']   = {
+        .glyph  = "N",
+        .style  = AMP_BG_NAVY,
+        .name   = "navy background"
+    },
+    ['O']   = {
+        .glyph  = "O",
+        .style  = AMP_BG_OLIVE,
+        .name   = "olive background"
+    },
+    ['P']   = {
+        .glyph  = "P",
+        .style  = AMP_BG_PURPLE,
+        .name   = "purple background"
     },
     ['R']   = {
         .glyph  = "R",
-        .style  = AMP_FG_RED,
-        .name   = "bold red"
+        .style  = AMP_BG_RED,
+        .name   = "red background"
+    },
+    ['S']   = {
+        .glyph  = "S",
+        .style  = AMP_BG_SILVER,
+        .name   = "silver background"
+    },
+    ['T']   = {
+        .glyph  = "T",
+        .style  = AMP_BG_TEAL,
+        .name   = "teal background"
     },
     ['W']   = {
         .glyph  = "W",
-        .style  = AMP_FG_WHITE,
-        .name   = "bold white"
+        .style  = AMP_BG_WHITE,
+        .name   = "white background"
     },
     ['X']   = {
         .glyph  = "X",
         .style  = AMP_HARD_RESET,
-        .name   = "reset"
+        .name   = "reset all"
     },
     ['Y']   = {
         .glyph  = "Y",
-        .style  = AMP_FG_YELLOW,
-        .name   = "bold yellow"
+        .style  = AMP_BG_YELLOW,
+        .name   = "yellow background"
     },
     ['_']   = {
         .glyph  = "_",
         .style  = AMP_UNDERLINE,
         .name   = "underline"
     },
+    ['a']   = {
+        .glyph  = "a",
+        .style  = AMP_FG_AQUA,
+        .name   = "aqua foreground"
+    },
     ['b']   = {
         .glyph  = "b",
-        .style  = AMP_FG_NAVY,
-        .name   = "blue"
+        .style  = AMP_FG_BLUE,
+        .name   = "blue foreground"
     },
     ['c']   = {
         .glyph  = "c",
-        .style  = AMP_FG_TEAL,
-        .name   = "cyan"
+        .style  = AMP_FG_CHARCOAL,
+        .name   = "charcoal foreground"
     },
     ['d']   = {
         .glyph  = "d",
-        .style  = AMP_FG_BLACK,
-        .name   = "dark"
+        .style  = AMP_FG_DARK,
+        .name   = "dark foreground"
+    },
+    ['f']   = {
+        .glyph  = "f",
+        .style  = AMP_FG_FUCHSIA,
+        .name   = "fuchsia foreground"
     },
     ['g']   = {
         .glyph  = "g",
         .style  = AMP_FG_GREEN,
-        .name   = "green"
+        .name   = "green foreground"
+    },
+    ['l']   = {
+        .glyph  = "l",
+        .style  = AMP_FG_LIME,
+        .name   = "lime foreground"
     },
     ['m']   = {
         .glyph  = "m",
+        .style  = AMP_FG_MAROON,
+        .name   = "maroon foreground"
+    },
+    ['n']   = {
+        .glyph  = "n",
+        .style  = AMP_FG_NAVY,
+        .name   = "navy foreground"
+    },
+    ['o']   = {
+        .glyph  = "o",
+        .style  = AMP_FG_OLIVE,
+        .name   = "olive foreground"
+    },
+    ['p']   = {
+        .glyph  = "p",
         .style  = AMP_FG_PURPLE,
-        .name   = "magenta"
+        .name   = "purple foreground"
     },
     ['r']   = {
         .glyph  = "r",
-        .style  = AMP_FG_MAROON,
-        .name   = "red"
+        .style  = AMP_FG_RED,
+        .name   = "red foreground"
+    },
+    ['s']   = {
+        .glyph  = "s",
+        .style  = AMP_FG_SILVER,
+        .name   = "silver foreground"
+    },
+    ['t']   = {
+        .glyph  = "t",
+        .style  = AMP_FG_TEAL,
+        .name   = "teal foreground"
     },
     ['w']   = {
         .glyph  = "w",
-        .style  = AMP_FG_SILVER,
-        .name   = "white"
+        .style  = AMP_FG_WHITE,
+        .name   = "white foreground"
     },
     ['x']   = {
         .glyph  = "x",
@@ -824,8 +904,8 @@ static const struct amp_inline_style_type {
     },
     ['y']   = {
         .glyph  = "y",
-        .style  = AMP_FG_OLIVE,
-        .name   = "yellow"
+        .style  = AMP_FG_YELLOW,
+        .name   = "yellow foreground"
     },
     ////////////////////////////////////////////////////////////////////////////
     {}
@@ -846,11 +926,11 @@ static const struct {
         .style  = { .fg = AMP_FG_NONE, .bg = AMP_BG_NONE }
     },
     ////////////////////////////////////////////////////////////////////////////
-    [AMP_BLACK] = {
-        .index  = AMP_BLACK,    .color  = { .r  = 0,    .g  = 0,    .b  = 0   },
+    [AMP_DARK] = {
+        .index  = AMP_DARK,     .color  = { .r  = 0,    .g  = 0,    .b  = 0   },
         .style  = {
-            .fg = AMP_FG_BLACK,
-            .bg = AMP_BG_BLACK
+            .fg = AMP_FG_DARK,
+            .bg = AMP_BG_DARK
         }
     },
     [AMP_MAROON] = {
@@ -896,17 +976,17 @@ static const struct {
         }
     },
     [AMP_SILVER] = {
-        .index  = AMP_SILVER,   .color  = { .r  = 128,  .g  = 128,  .b  = 128 },
+        .index  = AMP_SILVER,   .color  = { .r  = 192,  .g  = 192,  .b  = 192 },
         .style  = {
             .fg = AMP_FG_SILVER,
             .bg = AMP_BG_SILVER
         }
     },
-    [AMP_GRAY] = {
-        .index  = AMP_GRAY,     .color  = { .r  = 64,   .g  = 64,   .b  = 64  },
+    [AMP_CHARCOAL] = {
+        .index  = AMP_CHARCOAL, .color  = { .r  = 128,  .g  = 128,   .b = 128 },
         .style  = {
-            .fg = AMP_FG_GRAY,
-            .bg = AMP_BG_GRAY
+            .fg = AMP_FG_CHARCOAL,
+            .bg = AMP_BG_CHARCOAL
         }
     },
     [AMP_RED] = {
@@ -937,18 +1017,18 @@ static const struct {
             .bg = AMP_BG_BLUE
         }
     },
-    [AMP_MAGENTA] = {
-        .index  = AMP_MAGENTA,  .color  = { .r  = 255,  .g  = 0,    .b  = 255 },
+    [AMP_FUCHSIA] = {
+        .index  = AMP_FUCHSIA,  .color  = { .r  = 255,  .g  = 0,    .b  = 255 },
         .style  = {
-            .fg = AMP_FG_MAGENTA,
-            .bg = AMP_BG_MAGENTA
+            .fg = AMP_FG_FUCHSIA,
+            .bg = AMP_BG_FUCHSIA
         }
     },
-    [AMP_CYAN] = {
-        .index  = AMP_CYAN,     .color  = { .r  = 0,    .g  = 255,  .b  = 255 },
+    [AMP_AQUA] = {
+        .index  = AMP_AQUA,     .color  = { .r  = 0,    .g  = 255,  .b  = 255 },
         .style  = {
-            .fg = AMP_FG_CYAN,
-            .bg = AMP_BG_CYAN
+            .fg = AMP_FG_AQUA,
+            .bg = AMP_BG_AQUA
         }
     },
     [AMP_WHITE] = {
@@ -969,10 +1049,10 @@ static const struct amp_rgb16_type amp_rgb16_fg_table[] = {
         .color  = amp_color_table[AMP_COLOR_NONE].color
     },
     ////////////////////////////////////////////////////////////////////////////
-    [AMP_BLACK] = {
-        .index  = AMP_BLACK,
+    [AMP_DARK] = {
+        .index  = AMP_DARK,
         .code   = 30,
-        .color  = amp_color_table[AMP_BLACK].color
+        .color  = amp_color_table[AMP_DARK].color
     },
     [AMP_MAROON] = {
         .index  = AMP_MAROON,
@@ -1009,10 +1089,10 @@ static const struct amp_rgb16_type amp_rgb16_fg_table[] = {
         .code   = 37,
         .color  = amp_color_table[AMP_SILVER].color
     },
-    [AMP_GRAY] = {
-        .index  = AMP_GRAY,
+    [AMP_CHARCOAL] = {
+        .index  = AMP_CHARCOAL,
         .code   = 30,
-        .color  = amp_color_table[AMP_GRAY].color,
+        .color  = amp_color_table[AMP_CHARCOAL].color,
         .bright = true
     },
     [AMP_RED] = {
@@ -1039,16 +1119,16 @@ static const struct amp_rgb16_type amp_rgb16_fg_table[] = {
         .color  = amp_color_table[AMP_BLUE].color,
         .bright = true
     },
-    [AMP_MAGENTA] = {
-        .index  = AMP_MAGENTA,
+    [AMP_FUCHSIA] = {
+        .index  = AMP_FUCHSIA,
         .code   = 35,
-        .color  = amp_color_table[AMP_MAGENTA].color,
+        .color  = amp_color_table[AMP_FUCHSIA].color,
         .bright = true
     },
-    [AMP_CYAN] = {
-        .index  = AMP_CYAN,
+    [AMP_AQUA] = {
+        .index  = AMP_AQUA,
         .code   = 36,
-        .color  = amp_color_table[AMP_CYAN].color,
+        .color  = amp_color_table[AMP_AQUA].color,
         .bright = true
     },
     [AMP_WHITE] = {
@@ -1067,10 +1147,10 @@ static const struct amp_rgb16_type amp_rgb16_bg_table[] = {
         .code   = 0
     },
     ////////////////////////////////////////////////////////////////////////////
-    [AMP_BLACK] = {
-        .index  = AMP_BLACK,
+    [AMP_DARK] = {
+        .index  = AMP_DARK,
         .code   = 40,
-        .color  = amp_color_table[AMP_BLACK].color
+        .color  = amp_color_table[AMP_DARK].color
     },
     [AMP_MAROON] = {
         .index  = AMP_MAROON,
@@ -1107,10 +1187,10 @@ static const struct amp_rgb16_type amp_rgb16_bg_table[] = {
         .code   = 47,
         .color  = amp_color_table[AMP_SILVER].color
     },
-    [AMP_GRAY] = {
-        .index  = AMP_GRAY,
+    [AMP_CHARCOAL] = {
+        .index  = AMP_CHARCOAL,
         .code   = 40,
-        .color  = amp_color_table[AMP_GRAY].color,
+        .color  = amp_color_table[AMP_CHARCOAL].color,
         .bright = true
     },
     [AMP_RED] = {
@@ -1137,16 +1217,16 @@ static const struct amp_rgb16_type amp_rgb16_bg_table[] = {
         .color  = amp_color_table[AMP_BLUE].color,
         .bright = true
     },
-    [AMP_MAGENTA] = {
-        .index  = AMP_MAGENTA,
+    [AMP_FUCHSIA] = {
+        .index  = AMP_FUCHSIA,
         .code   = 45,
-        .color  = amp_color_table[AMP_MAGENTA].color,
+        .color  = amp_color_table[AMP_FUCHSIA].color,
         .bright = true
     },
-    [AMP_CYAN] = {
-        .index  = AMP_CYAN,
+    [AMP_AQUA] = {
+        .index  = AMP_AQUA,
         .code   = 46,
-        .color  = amp_color_table[AMP_CYAN].color,
+        .color  = amp_color_table[AMP_AQUA].color,
         .bright = true
     },
     [AMP_WHITE] = {
@@ -1187,19 +1267,21 @@ static const char *amp_number_table[] = {
 };
 
 static constexpr AMP_STYLE amp_fg_color_styles = (
-    AMP_FG_NONE     | AMP_FG_BLACK  | AMP_FG_MAROON | AMP_FG_GREEN  |
-    AMP_FG_OLIVE    | AMP_FG_NAVY   | AMP_FG_PURPLE | AMP_FG_TEAL   |
-    AMP_FG_SILVER   | AMP_FG_GRAY   | AMP_FG_RED    | AMP_FG_LIME   |
-    AMP_FG_YELLOW   | AMP_FG_BLUE   | AMP_FG_MAGENTA| AMP_FG_CYAN   |
-    AMP_FG_WHITE
+    AMP_FG_NONE         | AMP_FG_DARK       | AMP_FG_MAROON     |
+    AMP_FG_GREEN        | AMP_FG_OLIVE      | AMP_FG_NAVY       |
+    AMP_FG_PURPLE       | AMP_FG_TEAL       | AMP_FG_SILVER     |
+    AMP_FG_CHARCOAL     | AMP_FG_RED        | AMP_FG_LIME       |
+    AMP_FG_YELLOW       | AMP_FG_BLUE       | AMP_FG_FUCHSIA    |
+    AMP_FG_AQUA         | AMP_FG_WHITE
 );
 
 static constexpr AMP_STYLE amp_bg_color_styles = (
-    AMP_BG_NONE     | AMP_BG_BLACK  | AMP_BG_MAROON | AMP_BG_GREEN  |
-    AMP_BG_OLIVE    | AMP_BG_NAVY   | AMP_BG_PURPLE | AMP_BG_TEAL   |
-    AMP_BG_SILVER   | AMP_BG_GRAY   | AMP_BG_RED    | AMP_BG_LIME   |
-    AMP_BG_YELLOW   | AMP_BG_BLUE   | AMP_BG_MAGENTA| AMP_BG_CYAN   |
-    AMP_BG_WHITE
+    AMP_BG_NONE         | AMP_BG_DARK       | AMP_BG_MAROON     |
+    AMP_BG_GREEN        | AMP_BG_OLIVE      | AMP_BG_NAVY       |
+    AMP_BG_PURPLE       | AMP_BG_TEAL       | AMP_BG_SILVER     |
+    AMP_BG_CHARCOAL     | AMP_BG_RED        | AMP_BG_LIME       |
+    AMP_BG_YELLOW       | AMP_BG_BLUE       | AMP_BG_FUCHSIA    |
+    AMP_BG_AQUA         | AMP_BG_WHITE
 );
 
 
