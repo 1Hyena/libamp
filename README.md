@@ -143,9 +143,9 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
 ### API ########################################################################
 
 * [Colors](#colors)
-  - [amp_map_rgb](#amp_map_rgb)
-  - [amp_unmap_rgb](#amp_unmap_rgb)
-  - [amp_lookup_color](#amp_lookup_color)
+  - [amp_map_rgb](#amp_map_rgb)(`red`, `green`, `blue`)
+  - [amp_unmap_rgb](#amp_unmap_rgb)(`color`, &`red`, &`green`, &`blue`)
+  - [amp_lookup_color](#amp_lookup_color)(`color_index`)
 
 * [Ansmap creation](#ansmap-creation)
   - [amp_calc_size](#amp_calc_size)
