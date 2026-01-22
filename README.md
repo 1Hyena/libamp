@@ -144,12 +144,12 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
 
 * [Colors](#colors)
   - [amp_map_rgb](#amp_map_rgb) (*red*, *green*, *blue*) → `struct amp_color_type`
-  - [amp_unmap_rgb](#amp_unmap_rgb) (*color*, &*red*, &*green*, &*blue*) → `void`
+  - [amp_unmap_rgb](#amp_unmap_rgb) (*color*, &*red*, &*green*, &*blue*)
   - [amp_lookup_color](#amp_lookup_color) (*color_index*) → `struct amp_color_type`
 
 * [Ansmap creation](#ansmap-creation)
-  - [amp_calc_size](#amp_calc_size)
-  - [amp_init](#amp_init)
+  - [amp_calc_size](#amp_calc_size) (*width*, *height*) → `size_t`
+  - [amp_init](#amp_init) (&*amp*, *width*, *height*, &*data*, *data_size*) → `size_t`
 
 * [Ansmap properties](#ansmap-properties)
   - [amp_get_palette](#amp_get_palette)
