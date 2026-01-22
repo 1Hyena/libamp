@@ -172,7 +172,7 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
   - [amp_set_bg_color](#amp_set_bg_color)
   - [amp_set_fg_color](#amp_set_fg_color)
 
-* [Image I/O](#image-i-o)
+* [Image I/O](#image-io)
   - [amp_to_ans](#amp_to_ans)
   - [amp_row_to_ans](#amp_row_to_ans)
   - [amp_clip_to_ans](#amp_clip_to_ans)
