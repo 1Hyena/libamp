@@ -406,7 +406,7 @@ static inline ssize_t                   amp_snprint_textf(
     // format buffer (excluding the null byte used to end output to strings).
     // The return value of -1 indicates that an output error was encountered in
     // the underlying call to vsnprintf.
-);
+) __attribute__((format (printf, 9, 10)));
 
 static inline ssize_t                   amp_snprint_rich_textf(
     struct amp_type *                       amp,
@@ -431,7 +431,7 @@ static inline ssize_t                   amp_snprint_rich_textf(
     // format buffer (excluding the null byte used to end output to strings).
     // The return value of -1 indicates that an output error was encountered in
     // the underlying call to vsnprintf.
-);
+) __attribute__((format (printf, 9, 10)));
 
 static inline ssize_t                   amp_snprint_linef(
     struct amp_type *                       amp,
@@ -454,7 +454,7 @@ static inline ssize_t                   amp_snprint_linef(
     // format buffer (excluding the null byte used to end output to strings).
     // The return value of -1 indicates that an output error was encountered in
     // the underlying call to vsnprintf.
-);
+) __attribute__((format (printf, 8, 9)));
 ////////////////////////////////////////////////////////////////////////////////
 
 struct amp_type {
