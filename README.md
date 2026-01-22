@@ -142,7 +142,41 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
 
 ### API ########################################################################
 
-[amp_calc_size](#amp_calc_size)
+* Colors
+  - [amp_map_rgb](#amp_map_rgb)
+  - [amp_unmap_rgb](#amp_unmap_rgb)
+  - [amp_lookup_color](#amp_lookup_color)
+
+* Ansmap creation
+  - [amp_calc_size](#amp_calc_size)
+  - [amp_init](#amp_init)
+
+* Ansmap properties
+  - [amp_get_palette](#amp_get_palette)
+  - [amp_get_width](#amp_get_width)
+  - [amp_get_height](#amp_get_height)
+  - [amp_get_glyph](#amp_get_glyph)
+  - [amp_get_style](#amp_get_style)
+  - [amp_get_bg_color](#amp_get_bg_color)
+  - [amp_get_fg_color](#amp_get_fg_color)
+
+* Printing operations
+  - [amp_set_palette](#amp_set_palette)
+  - [amp_clear](#amp_clear)
+  - [amp_print_glyph](#amp_print_glyph)
+  - [amp_print_line](#amp_print_line)
+  - [amp_print_text](#amp_print_text)
+  - [amp_print_rich_text](#amp_print_rich_text)
+  - [amp_put_glyph](#amp_put_glyph)
+  - [amp_put_style](#amp_put_style)
+  - [amp_set_bg_color](#amp_set_bg_color)
+  - [amp_set_fg_color](#amp_set_fg_color)
+
+* Image I/O
+  - [amp_to_ans](#amp_to_ans)
+  - [amp_row_to_ans](#amp_row_to_ans)
+  - [amp_clip_to_ans](#amp_clip_to_ans)
+  - [amp_stdout](#amp_stdout)
 
 
 #### amp_calc_size #############################################################
