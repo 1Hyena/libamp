@@ -145,38 +145,38 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
 * [Colors](#colors)
   - [amp_map_rgb](#amp_map_rgb) (*red*, *green*, *blue*) → `struct amp_color_type`
   - [amp_unmap_rgb](#amp_unmap_rgb) (*color*, &*red*, &*green*, &*blue*)
-  - [amp_lookup_color](#amp_lookup_color) (*color_index*) → `struct amp_color_type`
+  - [amp_lookup_color](#amp_lookup_color) (*color index*) → `struct amp_color_type`
 
 * [Ansmap creation](#ansmap-creation)
   - [amp_calc_size](#amp_calc_size) (*width*, *height*) → `size_t`
-  - [amp_init](#amp_init) (&*amp*, *width*, *height*, &*data*, *data_size*) → `size_t`
+  - [amp_init](#amp_init) (&*amp*, *width*, *height*, &*data*, *data size*) → `size_t`
 
 * [Ansmap properties](#ansmap-properties)
-  - [amp_get_palette](#amp_get_palette)
-  - [amp_get_width](#amp_get_width)
-  - [amp_get_height](#amp_get_height)
-  - [amp_get_glyph](#amp_get_glyph)
-  - [amp_get_style](#amp_get_style)
-  - [amp_get_bg_color](#amp_get_bg_color)
-  - [amp_get_fg_color](#amp_get_fg_color)
+  - [amp_get_palette](#amp_get_palette) (&*amp*) → `AMP_PALETTE`
+  - [amp_get_width](#amp_get_width) (&*amp*) → `uint32_t`
+  - [amp_get_height](#amp_get_height) (&*amp*) → `uint32_t`
+  - [amp_get_glyph](#amp_get_glyph) (&*amp*, *x*, *y*) → `const char *`
+  - [amp_get_style](#amp_get_style) (&*amp*, *x*, *y*) → `AMP_STYLE`
+  - [amp_get_bg_color](#amp_get_bg_color) (&*amp*, *x*, *y*) → `struct amp_color_type`
+  - [amp_get_fg_color](#amp_get_fg_color) (&*amp*, *x*, *y*) → `struct amp_color_type`
 
 * [Printing operations](#printing-operations)
-  - [amp_set_palette](#amp_set_palette)
-  - [amp_clear](#amp_clear)
-  - [amp_print_glyph](#amp_print_glyph)
-  - [amp_print_line](#amp_print_line)
-  - [amp_print_text](#amp_print_text)
-  - [amp_print_rich_text](#amp_print_rich_text)
-  - [amp_put_glyph](#amp_put_glyph)
-  - [amp_put_style](#amp_put_style)
-  - [amp_set_bg_color](#amp_set_bg_color)
-  - [amp_set_fg_color](#amp_set_fg_color)
+  - [amp_set_palette](#amp_set_palette) (&*amp*, palette)
+  - [amp_clear](#amp_clear) (&*amp*)
+  - [amp_print_glyph](#amp_print_glyph) (&*amp*, *style*, *x*, *y*, &*string*)
+  - [amp_print_line](#amp_print_line) (&*amp*, *style*, *x*, *y*, *alignment*, &*string*)
+  - [amp_print_text](#amp_print_text) (&*amp*, *style*, *x*, *y*, *max width*, *alignment*, &*string*) → `size_t`
+  - [amp_print_rich_text](#amp_print_rich_text) (&*amp*, *style*, *x*, *y*, *max width*, *alignment*, &*string*) → `size_t`
+  - [amp_put_glyph](#amp_put_glyph) (&*amp*, &*string*, *x*, *y*) → `const char *`
+  - [amp_put_style](#amp_put_style) (&*amp*, *style*, *x*, *y*) → `bool`
+  - [amp_set_bg_color](#amp_set_bg_color) (&*amp*, *color*, *x*, *y*) → `bool`
+  - [amp_set_fg_color](#amp_set_fg_color) (&*amp*, *color*, *x*, *y*) → `bool`
 
 * [Image I/O](#image-io)
-  - [amp_to_ans](#amp_to_ans)
-  - [amp_row_to_ans](#amp_row_to_ans)
-  - [amp_clip_to_ans](#amp_clip_to_ans)
-  - [amp_stdout](#amp_stdout)
+  - [amp_to_ans](#amp_to_ans) (&*amp*, &*data*, *data size*) → `ssize_t`
+  - [amp_row_to_ans](#amp_row_to_ans) (&*amp*, *y*, &*data*, *data size*) → `ssize_t`
+  - [amp_clip_to_ans](#amp_clip_to_ans) (&*amp*, *x*, *y*, *width*, &*data*, *data size*) → `ssize_t`
+  - [amp_stdout](#amp_stdout) (&*string*, *string size*) → `ssize_t`
 
 
 #### Colors ####################################################################
