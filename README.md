@@ -164,7 +164,7 @@ Examples:
 https://github.com/1Hyena/libamp/blob/088c3b751731107fddd33ab61d45b4695a907a55/amp.h#L137-L140
 
 Examples:
-[exhello](https://github.com/1Hyena/libamp/blob/088c3b751731107fddd33ab61d45b4695a907a55/examples/src/exrich.c#L37)
+[exrich](https://github.com/1Hyena/libamp/blob/088c3b751731107fddd33ab61d45b4695a907a55/examples/src/exrich.c#L37)
 
 
 #### amp_set_palette ###########################################################
