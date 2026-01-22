@@ -161,7 +161,6 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
   - [amp_get_fg_color](#amp_get_fg_color) (&*ansmap*, *x*, *y*) → `struct amp_color_type`
 
 * [Printing operations](#printing-operations)
-  - [amp_set_palette](#amp_set_palette) (&*ansmap*, palette)
   - [amp_clear](#amp_clear) (&*ansmap*)
   - [amp_print_glyph](#amp_print_glyph) (&*ansmap*, *style*, *x*, *y*, &*string*)
   - [amp_print_line](#amp_print_line) (&*ansmap*, *style*, *x*, *y*, *alignment*, &*string*)
@@ -173,6 +172,7 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/e
   - [amp_set_fg_color](#amp_set_fg_color) (&*ansmap*, *color*, *x*, *y*) → `bool`
 
 * [Image I/O](#image-io)
+  - [amp_set_palette](#amp_set_palette) (&*ansmap*, palette)
   - [amp_to_ans](#amp_to_ans) (&*ansmap*, &*data*, *data size*) → `ssize_t`
   - [amp_row_to_ans](#amp_row_to_ans) (&*ansmap*, *y*, &*data*, *data size*) → `ssize_t`
   - [amp_clip_to_ans](#amp_clip_to_ans) (&*ansmap*, *x*, *y*, *width*, &*data*, *data size*) → `ssize_t`
@@ -261,14 +261,6 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/a
 
 #### Printing operations #######################################################
 
-##### amp_set_palette ##########################################################
-
-https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/amp.h#L142-L148
-
-Examples:
-[ex24bit](https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/examples/src/ex24bit.c#L30)
-
-
 ##### amp_clear ################################################################
 
 https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/amp.h#L137-L140
@@ -334,6 +326,14 @@ https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/a
 
 
 #### Image I/O #################################################################
+
+##### amp_set_palette ##########################################################
+
+https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/amp.h#L142-L148
+
+Examples:
+[ex24bit](https://github.com/1Hyena/libamp/blob/bd41b077f472a99e9f66f23d7d12feb89461ef46/examples/src/ex24bit.c#L30)
+
 
 ##### amp_to_ans ###############################################################
 
