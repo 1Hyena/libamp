@@ -457,8 +457,15 @@ static inline ssize_t                   amp_snprint_linef(
     // the underlying call to vsnprintf.
 ) __attribute__((format (printf, 8, 9)));
 
+typedef enum : uint64_t {
+    AMP_SETTINGS_NONE   = 0,
+    ////////////////////////////////////////////////////////////////////////////
+    AMP_DEFLATE         = (1ULL <<  0), AMP_FLATTEN         = (1ULL <<  1)
+} AMP_SETTINGS;
+
 static inline ssize_t                   amp_serialize(
     const struct amp_type *                 amp,
+    AMP_SETTINGS                            flags,
     char *                                  buffer,
     size_t                                  buffer_size
 );
@@ -711,6 +718,7 @@ struct amp_style_flag_type              amp_lookup_style_flag(
 );
 static inline ssize_t                   amp_serialize_layer(
     const struct amp_type *                 amp,
+    AMP_SETTINGS                            settings,
     AMP_STYLE                               style,
     char *                                  buffer,
     size_t                                  buffer_size
@@ -729,6 +737,10 @@ static inline ssize_t                   amp_serialize_layer_cell(
     long                                    y,
     char *                                  buffer,
     size_t                                  buffer_size
+);
+static inline AMP_STYLE                 amp_styles_to_layer(
+    const struct amp_type *                 amp,
+    AMP_STYLE                               whitelist
 );
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -3858,8 +3870,8 @@ static inline ssize_t amp_serialize_layer_row(
 }
 
 static inline ssize_t amp_serialize_layer(
-    const struct amp_type *amp, AMP_STYLE style, char *buffer,
-    size_t buffer_size
+    const struct amp_type *amp, AMP_SETTINGS settings, AMP_STYLE style,
+    char *buffer, size_t buffer_size
 ) {
     const bool to_stdout = (
         buffer == (char *) amp->buffer + sizeof(amp->buffer)
@@ -3916,7 +3928,31 @@ static inline ssize_t amp_serialize_layer(
         }
     }
 
-    for (long y=0; y<amp->height; ++y) {
+    long max_height = amp->height;
+
+    if (style != AMP_STYLE_NONE && (settings & AMP_DEFLATE)) {
+        for (long y=amp->height - 1; y >= 0; --y) {
+            // Let's trim trailing empty rows for style layers.
+            bool found = false;
+
+            for (long x=0; x<amp->width; ++x) {
+                AMP_STYLE cell_style = amp_get_style(amp, x, y);
+                AMP_STYLE matching_styles = cell_style & style;
+
+                if (matching_styles) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                max_height = y + 1;
+                break;
+            }
+        }
+    }
+
+    for (long y=0; y<max_height; ++y) {
         ssize_t ret = amp_serialize_layer_row(
             amp, style, y, to_stdout ? buffer : buffer + written,
             amp_sub_size(buffer_size, (size_t) written)
@@ -3932,8 +3968,48 @@ static inline ssize_t amp_serialize_layer(
     return written;
 }
 
+static inline AMP_STYLE amp_styles_to_layer(
+    const struct amp_type *amp, AMP_STYLE whitelist
+) {
+    if (whitelist == AMP_STYLE_NONE) {
+        return AMP_STYLE_NONE;
+    }
+
+    AMP_STYLE layer_styles = 0;
+
+    for (long y = 0; y < amp->height; ++y) {
+        for (long x = 0; x < amp->width; ++x) {
+            AMP_STYLE style = amp_get_style(amp, x, y);
+            AMP_STYLE match = style & whitelist;
+
+            if (stdc_count_ones_ull(match) <= 1) {
+                layer_styles |= match;
+                continue;
+            }
+
+            // Ambiguity detected.
+
+            if (layer_styles & match) {
+                // Prefer the flag that we have already assigned for this layer.
+                continue;
+            }
+
+            // Prefer the flag with the greatest value.
+            size_t index = stdc_first_leading_one_ull(match);
+
+            if (index) {
+                constexpr AMP_STYLE most_significant_bit = 1ULL << 63;
+                layer_styles |= most_significant_bit >> (index - 1);
+            }
+        }
+    }
+
+    return layer_styles;
+}
+
 static inline ssize_t amp_serialize(
-    const struct amp_type *amp, char *buffer, size_t buffer_size
+    const struct amp_type *amp, AMP_SETTINGS settings,
+    char *buffer, size_t buffer_size
 ) {
     if (buffer == nullptr) {
         buffer = (char *) amp->buffer + sizeof(amp->buffer);
@@ -4005,22 +4081,38 @@ static inline ssize_t amp_serialize(
         );
     }
 
-    constexpr AMP_STYLE layers[] = {
+    const AMP_STYLE style_groups[] = {
         AMP_STYLE_NONE,
-        amp_fg_color_styles,
-        amp_bg_color_styles
+        (settings & AMP_FLATTEN) ? AMP_STYLE_NONE : amp_fg_color_styles,
+        (settings & AMP_FLATTEN) ? AMP_STYLE_NONE : amp_bg_color_styles,
+        ~AMP_STYLE_NONE
     };
 
-    for (size_t i=0; i<sizeof(layers)/sizeof(layers[0]); ++i) {
-        ssize_t ret = amp_serialize_layer(
-            amp, layers[i], to_stdout ? buffer : buffer + written,
-            amp_sub_size(buffer_size, (size_t) written)
-        );
+    AMP_STYLE style_pool = ~AMP_STYLE_NONE;
 
-        if (ret < 0) {
-            return ret;
-        }
-        else written += ret;
+    for (size_t i=0; i<sizeof(style_groups)/sizeof(style_groups[0]); ++i) {
+        AMP_STYLE layer_style;
+        AMP_STYLE style_group = style_groups[i] & style_pool;
+
+        do {
+            layer_style = amp_styles_to_layer(amp, style_group);
+
+            if (layer_style || i == 0) {
+                ssize_t ret = amp_serialize_layer(
+                    amp, settings, layer_style,
+                    to_stdout ? buffer : buffer + written,
+                    amp_sub_size(buffer_size, (size_t) written)
+                );
+
+                if (ret < 0) {
+                    return ret;
+                }
+                else written += ret;
+            }
+
+            style_group &= ~layer_style;
+            style_pool &= ~layer_style;
+        } while (layer_style);
     }
 
     if (to_stdout) {

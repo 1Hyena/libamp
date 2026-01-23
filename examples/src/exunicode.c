@@ -12,8 +12,8 @@ int main(int, char **) {
         return EXIT_FAILURE;
     }
 
-    for (long y = 1; y < amp.height; ++y) {
-        for (long x = 1; x < amp.width; ++x) {
+    for (long y = 1; y < amp_get_height(&amp); ++y) {
+        for (long x = 1; x < amp_get_width(&amp); ++x) {
             amp_print_glyph(&amp, AMP_BG_CHARCOAL, x, y, "▒");
         }
     }
@@ -31,8 +31,8 @@ int main(int, char **) {
     );
 
     amp_print_text(
-        &amp, AMP_FG_YELLOW|AMP_BG_NAVY, 1, 1, amp.width - 3, AMP_ALIGN_LEFT,
-        "In this example, we also see text wrapping in action."
+        &amp, AMP_FG_YELLOW|AMP_BG_NAVY, 1, 1, amp_get_width(&amp) - 3,
+        AMP_ALIGN_LEFT, "In this example, we also see text wrapping in action."
     );
 
     amp_to_ans(&amp, nullptr, 0); // Write to stdout.
