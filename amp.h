@@ -458,9 +458,10 @@ static inline ssize_t                   amp_snprint_linef(
 ) __attribute__((format (printf, 8, 9)));
 
 typedef enum : uint64_t {
-    AMP_SETTINGS_NONE   = 0,
+    AMP_SETTINGS_NONE = 0,
     ////////////////////////////////////////////////////////////////////////////
-    AMP_DEFLATE         = (1ULL <<  0), AMP_FLATTEN         = (1ULL <<  1)
+    AMP_DEFLATE = (1ULL <<  0), // Unrequired empty lines are trimmed.
+    AMP_FLATTEN = (1ULL <<  1)  // Merge as many style layers as possible.
 } AMP_SETTINGS;
 
 static inline ssize_t                   amp_serialize(
@@ -468,6 +469,17 @@ static inline ssize_t                   amp_serialize(
     AMP_SETTINGS                            flags,
     char *                                  buffer,
     size_t                                  buffer_size
+
+    // Exports the specified ansmap as a human-readable plaintext document. The
+    // file content is written into the provided buffer, given that the buffer
+    // is large enough for complete storage. If the buffer pointer is a null
+    // pointer, then the output will be written into the program's standard
+    // output.
+    //
+    // Returns the number of bytes that was written or would have been written
+    // (excluding the null byte used to end output to strings). If the buffer is
+    // too small, then its first byte is set to zero. The return value of -1
+    // indicates an error.
 );
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -3756,7 +3768,7 @@ static inline ssize_t amp_serialize_layer_cell(
         buffer == (char *) amp->buffer + sizeof(amp->buffer)
     );
 
-    ssize_t written = 0;
+    size_t written = 0;
 
     if (style == AMP_STYLE_NONE) {
         const char *glyph = amp_get_glyph(amp, x, y);
@@ -3770,16 +3782,15 @@ static inline ssize_t amp_serialize_layer_cell(
                 return -1;
             }
 
-            written += (ssize_t) strlen(glyph);
+            written += strlen(glyph);
         }
         else {
-            written += (ssize_t) amp_str_append(
-                buffer + written, amp_sub_size(buffer_size, (size_t) written),
-                glyph
+            written += amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, written), glyph
             );
         }
 
-        return written;
+        return written > SSIZE_MAX ? -1 : (ssize_t) written;
     }
 
     const char *glyph = " ";
@@ -3800,15 +3811,15 @@ static inline ssize_t amp_serialize_layer_cell(
             return -1;
         }
 
-        written += (ssize_t) strlen(glyph);
+        written += strlen(glyph);
     }
     else {
-        written += (ssize_t) amp_str_append(
-            buffer + written, amp_sub_size(buffer_size, (size_t) written), glyph
+        written += amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, written), glyph
         );
     }
 
-    return written;
+    return written > SSIZE_MAX ? -1 : (ssize_t) written;
 }
 
 static inline ssize_t amp_serialize_layer_row(
@@ -3819,7 +3830,7 @@ static inline ssize_t amp_serialize_layer_row(
         buffer == (char *) amp->buffer + sizeof(amp->buffer)
     );
 
-    ssize_t written = 0;
+    size_t written = 0;
     const char *left_border = "║";
     const char *right_border = "║\n";
     const size_t left_border_size = strlen(left_border);
@@ -3830,26 +3841,25 @@ static inline ssize_t amp_serialize_layer_row(
             return -1;
         }
 
-        written += (ssize_t) left_border_size;
+        written += left_border_size;
     }
     else {
-        written += (ssize_t) amp_str_append(
-            buffer + written, amp_sub_size(buffer_size, (size_t) written),
-            left_border
+        written += amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, written), left_border
         );
     }
 
     for (long x=0; x<amp->width; ++x) {
         ssize_t ret = amp_serialize_layer_cell(
             amp, style, x, y, to_stdout ? buffer : buffer + written,
-            amp_sub_size(buffer_size, (size_t) written)
+            amp_sub_size(buffer_size, written)
         );
 
         if (ret < 0) {
-            return ret;
+            return -1;
         }
 
-        written += ret;
+        written += (size_t) ret;
     }
 
     if (to_stdout) {
@@ -3857,16 +3867,15 @@ static inline ssize_t amp_serialize_layer_row(
             return -1;
         }
 
-        written += (ssize_t) right_border_size;
+        written += right_border_size;
     }
     else {
-        written += (ssize_t) amp_str_append(
-            buffer + written, amp_sub_size(buffer_size, (size_t) written),
-            right_border
+        written += amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, written), right_border
         );
     }
 
-    return written;
+    return written > SSIZE_MAX ? -1 : (ssize_t) written;
 }
 
 static inline ssize_t amp_serialize_layer(
@@ -3877,7 +3886,7 @@ static inline ssize_t amp_serialize_layer(
         buffer == (char *) amp->buffer + sizeof(amp->buffer)
     );
 
-    ssize_t written = 0;
+    size_t written = 0;
 
     if (style != AMP_STYLE_NONE) {
         const char *border = "═";
@@ -3892,37 +3901,36 @@ static inline ssize_t amp_serialize_layer(
                 return -1;
             }
 
-            written += (ssize_t) left_top_corner_size;
+            written += left_top_corner_size;
 
             for (long x=0; x<amp->width; ++x) {
                 if (amp_stdout(border, border_size) < 0) {
                     return -1;
                 }
 
-                written += (ssize_t) border_size;
+                written += border_size;
             }
 
             if (amp_stdout(right_top_corner, right_top_corner_size) < 0) {
                 return -1;
             }
 
-            written += (ssize_t) right_top_corner_size;
+            written += right_top_corner_size;
         }
         else {
-            written += (ssize_t) amp_str_append(
-                buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            written += amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, written),
                 left_top_corner
             );
 
             for (long x=0; x<amp->width; ++x) {
-                written += (ssize_t) amp_str_append(
-                    buffer + written,
-                    amp_sub_size(buffer_size, (size_t) written), border
+                written += amp_str_append(
+                    buffer + written, amp_sub_size(buffer_size, written), border
                 );
             }
 
-            written += (ssize_t) amp_str_append(
-                buffer + written, amp_sub_size(buffer_size, (size_t) written),
+            written += amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, written),
                 right_top_corner
             );
         }
@@ -3955,17 +3963,17 @@ static inline ssize_t amp_serialize_layer(
     for (long y=0; y<max_height; ++y) {
         ssize_t ret = amp_serialize_layer_row(
             amp, style, y, to_stdout ? buffer : buffer + written,
-            amp_sub_size(buffer_size, (size_t) written)
+            amp_sub_size(buffer_size, written)
         );
 
         if (ret < 0) {
-            return ret;
+            return -1;
         }
 
-        written += ret;
+        written += (size_t) ret;
     }
 
-    return written;
+    return written > SSIZE_MAX ? -1 : (ssize_t) written;
 }
 
 static inline AMP_STYLE amp_styles_to_layer(
@@ -4039,44 +4047,43 @@ static inline ssize_t amp_serialize(
     const size_t right_bottom_corner_size = strlen(right_bottom_corner);
     const size_t border_size = strlen(border);
 
-    ssize_t written = 0;
+    size_t written = 0;
 
     if (to_stdout) {
         if (amp_stdout(left_top_corner, left_top_corner_size) < 0) {
             return -1;
         }
 
-        written += (ssize_t) left_top_corner_size;
+        written += left_top_corner_size;
 
         for (long x=0; x<amp->width; ++x) {
             if (amp_stdout(border, border_size) < 0) {
                 return -1;
             }
 
-            written += (ssize_t) border_size;
+            written += border_size;
         }
 
         if (amp_stdout(right_top_corner, right_top_corner_size) < 0) {
             return -1;
         }
 
-        written += (ssize_t) right_top_corner_size;
+        written += right_top_corner_size;
     }
     else {
-        written += (ssize_t) amp_str_append(
-            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+        written += amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, written),
             left_top_corner
         );
 
         for (long x=0; x<amp->width; ++x) {
-            written += (ssize_t) amp_str_append(
-                buffer + written, amp_sub_size(buffer_size, (size_t) written),
-                border
+            written += amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, written), border
             );
         }
 
-        written += (ssize_t) amp_str_append(
-            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+        written += amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, written),
             right_top_corner
         );
     }
@@ -4101,13 +4108,13 @@ static inline ssize_t amp_serialize(
                 ssize_t ret = amp_serialize_layer(
                     amp, settings, layer_style,
                     to_stdout ? buffer : buffer + written,
-                    amp_sub_size(buffer_size, (size_t) written)
+                    amp_sub_size(buffer_size, written)
                 );
 
                 if (ret < 0) {
-                    return ret;
+                    return -1;
                 }
-                else written += ret;
+                else written += (size_t) ret;
             }
 
             style_group &= ~layer_style;
@@ -4120,42 +4127,49 @@ static inline ssize_t amp_serialize(
             return -1;
         }
 
-        written += (ssize_t) left_bottom_corner_size;
+        written += left_bottom_corner_size;
 
         for (long x=0; x<amp->width; ++x) {
             if (amp_stdout(border, border_size) < 0) {
                 return -1;
             }
 
-            written += (ssize_t) border_size;
+            written += border_size;
         }
 
         if (amp_stdout(right_bottom_corner, right_bottom_corner_size) < 0) {
             return -1;
         }
 
-        written += (ssize_t) right_bottom_corner_size;
+        written += right_bottom_corner_size;
     }
     else {
-        written += (ssize_t) amp_str_append(
-            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+        written += amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, written),
             left_bottom_corner
         );
 
         for (long x=0; x<amp->width; ++x) {
-            written += (ssize_t) amp_str_append(
-                buffer + written, amp_sub_size(buffer_size, (size_t) written),
-                border
+            written += amp_str_append(
+                buffer + written, amp_sub_size(buffer_size, written), border
             );
         }
 
-        written += (ssize_t) amp_str_append(
-            buffer + written, amp_sub_size(buffer_size, (size_t) written),
+        written += amp_str_append(
+            buffer + written, amp_sub_size(buffer_size, written),
             right_bottom_corner
         );
     }
 
-    return written;
+    if (!to_stdout) {
+        if (written >= buffer_size || !written) {
+            if (buffer_size) {
+                *buffer = '\0';
+            }
+        }
+    }
+
+    return written > SSIZE_MAX ? -1 : (ssize_t) written;
 }
 
 #endif
