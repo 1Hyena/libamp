@@ -404,7 +404,7 @@ https://github.com/1Hyena/libamp/blob/6ec29c9a0bd8b8e00b94e9973e908238be9b2815/a
 https://github.com/1Hyena/libamp/blob/6ec29c9a0bd8b8e00b94e9973e908238be9b2815/amp.h#L490-L504
 
 Examples:
-[exdeserialize](https://github.com/1Hyena/libamp/blob/6ec29c9a0bd8b8e00b94e9973e908238be9b2815/examples/src/exdeserialize.c#L21)
+[exdeserialize](https://github.com/1Hyena/libamp/blob/6ec29c9a0bd8b8e00b94e9973e908238be9b2815/examples/src/exdeserialize.c#L20)
 
 
 ##### amp_deserialize ##########################################################
@@ -412,7 +412,7 @@ Examples:
 https://github.com/1Hyena/libamp/blob/6ec29c9a0bd8b8e00b94e9973e908238be9b2815/amp.h#L506-L517
 
 Examples:
-[exdeserialize](https://github.com/1Hyena/libamp/blob/6ec29c9a0bd8b8e00b94e9973e908238be9b2815/examples/src/exdeserialize.c#L48)
+[exdeserialize](https://github.com/1Hyena/libamp/blob/6ec29c9a0bd8b8e00b94e9973e908238be9b2815/examples/src/exdeserialize.c#L30)
 
 
 ##### amp_serialize ############################################################
