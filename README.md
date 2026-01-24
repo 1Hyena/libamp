@@ -401,7 +401,7 @@ Examples:
 
 ##### amp_serialize ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L469-L489
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L468-L488
 
 Examples:
 [exserialize](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exserialize.c#L25)
