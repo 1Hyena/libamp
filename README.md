@@ -198,7 +198,7 @@ https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/e
 
 ##### amp_map_rgb ##############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L328-L335
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L329-L336
 
 Examples:
 [ex24bit](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/ex24bit.c#L108)
@@ -206,19 +206,19 @@ Examples:
 
 ##### amp_unmap_rgb ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L337-L345
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L338-L346
 
 
 ##### amp_lookup_color #########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L347-L352
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L348-L353
 
 
 #### Ansmap creation ###########################################################
 
 ##### amp_calc_size ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L126-L132
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L127-L133
 
 Examples:
 [ex24bit](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/ex24bit.c#L11),
@@ -227,7 +227,7 @@ Examples:
 
 ##### amp_init #################################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L134-L145
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L135-L146
 
 Examples:
 [exhello](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exhello.c#L9),
@@ -241,44 +241,44 @@ Examples:
 
 ##### amp_get_palette ##########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L390-L393
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L391-L394
 
 
 ##### amp_get_width ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L380-L383
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L381-L384
 
 
 ##### amp_get_height ###########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L385-L388
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L386-L389
 
 
 ##### amp_get_glyph ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L247-L255
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L248-L256
 
 
 ##### amp_get_style ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L269-L275
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L270-L276
 
 
 ##### amp_get_bg_color #########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L288-L295
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L289-L296
 
 
 ##### amp_get_fg_color #########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L308-L315
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L309-L316
 
 
 #### Printing operations #######################################################
 
 ##### amp_clear ################################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L147-L150
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L148-L151
 
 Examples:
 [exrich](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exrich.c#L36)
@@ -286,7 +286,7 @@ Examples:
 
 ##### amp_print_glyph ##########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L160-L168
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L161-L169
 
 Examples:
 [exmemory](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exmemory.c#L42)
@@ -294,7 +294,7 @@ Examples:
 
 ##### amp_print_line ###########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L170-L180
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L171-L181
 
 Examples:
 [exhello](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exhello.c#L15)
@@ -302,12 +302,12 @@ Examples:
 
 ##### amp_snprint_linef ########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L446-L467
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L445-L466
 
 
 ##### amp_print_text ###########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L182-L196
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L183-L197
 
 Examples:
 [exmultiline](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exmultiline.c#L15),
@@ -316,17 +316,17 @@ Examples:
 
 ##### amp_snprint_textf ########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L397-L419
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L396-L418
 
 
 ##### amp_print_rich_text ######################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L363-L378
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L364-L379
 
 
 ##### amp_snprint_rich_textf ###################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L421-L444
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L420-L443
 
 Examples:
 [exrich](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exrich.c#L29)
@@ -334,17 +334,17 @@ Examples:
 
 ##### amp_put_glyph ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L257-L267
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L258-L268
 
 
 ##### amp_put_style ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L277-L286
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L278-L287
 
 
 ##### amp_set_bg_color #########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L297-L306
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L298-L307
 
 Examples:
 [ex24bit](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/ex24bit.c#L106)
@@ -352,14 +352,14 @@ Examples:
 
 ##### amp_set_fg_color #########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L317-L326
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L318-L327
 
 
 #### Image I/O #################################################################
 
 ##### amp_set_palette ##########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L152-L158
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L153-L159
 
 Examples:
 [ex24bit](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/ex24bit.c#L30)
@@ -367,7 +367,7 @@ Examples:
 
 ##### amp_to_ans ###############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L198-L211
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L199-L212
 
 Examples:
 [exhello](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exhello.c#L16),
@@ -379,17 +379,17 @@ Examples:
 
 ##### amp_row_to_ans ###########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L213-L227
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L214-L228
 
 
 ##### amp_clip_to_ans ##########################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L229-L245
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L230-L246
 
 
 ##### amp_stdout ###############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L354-L361
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L355-L362
 
 Examples:
 [exhello](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exhello.c#L17),
@@ -401,7 +401,7 @@ Examples:
 
 ##### amp_serialize ############################################################
 
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L477-L493
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L469-L489
 
 Examples:
 [exserialize](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exserialize.c#L25)
