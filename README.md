@@ -190,6 +190,8 @@ https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/e
   - [amp_to_ans](#amp_to_ans) (&*ansmap*, &*data*, *data size*) → `ssize_t`
   - [amp_row_to_ans](#amp_row_to_ans) (&*ansmap*, *y*, &*data*, *data size*) → `ssize_t`
   - [amp_clip_to_ans](#amp_clip_to_ans) (&*ansmap*, *x*, *y*, *width*, &*data*, *data size*) → `ssize_t`
+  - [amp_parse_size](#amp_parse_size) (&*data*, *data size*, &*width*, &*height*) → `size_t`
+  - [amp_deserialize](#amp_deserialize) (&*ansmap*, &*data*, *data size*) → `size_t`
   - [amp_serialize](#amp_serialize) (&*ansmap*, settings, &*data*, *data size*) → `ssize_t`
   - [amp_stdout](#amp_stdout) (&*string*, *string size*) → `ssize_t`
 
@@ -387,6 +389,30 @@ https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/a
 https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L230-L246
 
 
+##### amp_parse_size ###########################################################
+
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L490-L504
+
+Examples:
+[exdeserialize](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exdeserialize.c#L12)
+
+
+##### amp_deserialize ##########################################################
+
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L506-L517
+
+Examples:
+[exdeserialize](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exdeserialize.c#L39)
+
+
+##### amp_serialize ############################################################
+
+https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L468-L488
+
+Examples:
+[exserialize](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exserialize.c#L25)
+
+
 ##### amp_stdout ###############################################################
 
 https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L355-L362
@@ -397,14 +423,6 @@ Examples:
 [exmultiline](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exmultiline.c#L23),
 [ex24bit](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/ex24bit.c#L32),
 [exmemory](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exmemory.c#L50)
-
-
-##### amp_serialize ############################################################
-
-https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/amp.h#L468-L488
-
-Examples:
-[exserialize](https://github.com/1Hyena/libamp/blob/269bb74e83f0b5222674d99a622b7864a81bbc3f/examples/src/exserialize.c#L25)
 
 
 ## License #####################################################################
