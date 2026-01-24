@@ -4245,8 +4245,11 @@ static inline size_t amp_parse_size(
     const size_t str_sz = data_size;
     const char *s = str;
 
-    size_t width = 0;
-    size_t height = 0;
+    long width = 0;
+    long height = 0;
+    long layer_height = 0;
+    size_t layer = 0;
+    long y = 0;
 
     if (canvas_w) *canvas_w = 0;
     if (canvas_h) *canvas_h = 0;
@@ -4276,22 +4279,31 @@ static inline size_t amp_parse_size(
                     next_char = amp_str_seg_skip_str(
                         prev_char, str_sz - (size_t) (prev_char - str), "╚"
                     );
+
+                    if (next_char > prev_char) {
+                        height = height < layer_height ? layer_height : height;
+
+                        if (canvas_w) *canvas_w = (uint32_t) width;
+                        if (canvas_h) *canvas_h = (uint32_t) height;
+
+                        return amp_calc_size(
+                            (uint32_t) width, (uint32_t) height
+                        );
+                    }
                 }
-
-                if (next_char > prev_char) {
-                    if (canvas_w) {
-                        *canvas_w = (uint32_t) width;
-                    }
-
-                    if (canvas_h) {
-                        *canvas_h = (uint32_t) height;
-                    }
-
-                    return amp_calc_size((uint32_t) width, (uint32_t) height);
+                else {
+                    height = height < layer_height ? layer_height : height;
+                    ++layer;
+                    y = 0;
+                    layer_height = 0;
                 }
             }
             else {
-                if (++height > UINT32_MAX) return 0;
+                if (++layer_height > UINT32_MAX) {
+                    return 0;
+                }
+
+                ++y;
             }
 
             if (next_char == prev_char) {
@@ -4344,6 +4356,7 @@ static inline size_t amp_deserialize(
 
     long width = 0;
     long height = 0;
+    long layer_height = 0;
     size_t layer = 0;
     long y = 0;
 
@@ -4376,19 +4389,23 @@ static inline size_t amp_deserialize(
                     );
 
                     if (next_char > prev_char) {
+                        height = height < layer_height ? layer_height : height;
+
                         return amp_calc_size(
                             (uint32_t) width, (uint32_t) height
                         );
                     }
                 }
                 else {
+                    height = height < layer_height ? layer_height : height;
                     ++layer;
                     y = 0;
+                    layer_height = 0;
                 }
             }
             else {
-                if (layer == 0) {
-                    if (++height > UINT32_MAX) return 0;
+                if (++layer_height > UINT32_MAX) {
+                    return 0;
                 }
 
                 long x = 0;
