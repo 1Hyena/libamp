@@ -289,7 +289,7 @@ Examples:
 https://github.com/1Hyena/libamp/blob/9031b390b5b3743bd090d313aacd6b040402766a/amp.h#L150-L158
 
 Examples:
-[exmemory](https://github.com/1Hyena/libamp/blob/9031b390b5b3743bd090d313aacd6b040402766a/examples/src/exmemory.c#L41)
+[exmemory](https://github.com/1Hyena/libamp/blob/9031b390b5b3743bd090d313aacd6b040402766a/examples/src/exmemory.c#L42)
 
 
 ##### amp_print_line ###########################################################

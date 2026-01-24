@@ -125,25 +125,25 @@ static inline size_t                    amp_calc_size(
 );
 
 static inline size_t                    amp_init(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     uint32_t                                ansmap_width,
     uint32_t                                ansmap_height,
-    void *                                  data,
-    size_t                                  data_size
+    void *                                  canvas_data,
+    size_t                                  canvas_data_size
 
-    // Initializes the given ansmap data structure. If the data buffer is not
-    // big enough for the image, then the end of the image will be cut off.
+    // Initializes the given ansmap data structure. If the canvas data array is
+    // not big enough for the image, then the end of the image will be cut off.
     //
     // Returns the size of the data buffer needed for the given resolution.
 );
 
 static inline void                      amp_clear(
-    struct amp_type *                       amp
+    struct amp_type *                       ansmap
     // Fills the ansmap with empty string glyphs and resets their style.
 );
 
 static inline void                      amp_set_palette(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_PALETTE                             palette
 
     // Sets the color palette for the given ansmap. It is effective only during
@@ -151,7 +151,7 @@ static inline void                      amp_set_palette(
 );
 
 static inline void                      amp_print_glyph(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               glyph_style,
     long                                    glyph_x,
     long                                    glyph_y,
@@ -161,7 +161,7 @@ static inline void                      amp_print_glyph(
 );
 
 static inline void                      amp_print_line(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -173,7 +173,7 @@ static inline void                      amp_print_line(
 );
 
 static inline size_t                    amp_print_text(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -189,7 +189,7 @@ static inline size_t                    amp_print_text(
 );
 
 static inline ssize_t                   amp_to_ans(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     char *                                  ans_dst,
     size_t                                  ans_dst_size
 
@@ -204,7 +204,7 @@ static inline ssize_t                   amp_to_ans(
 );
 
 static inline ssize_t                   amp_row_to_ans(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     long                                    row_y,
     char *                                  ans_dst,
     size_t                                  ans_dst_size
@@ -220,7 +220,7 @@ static inline ssize_t                   amp_row_to_ans(
 );
 
 static inline ssize_t                   amp_clip_to_ans(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     long                                    clip_x,
     long                                    clip_y,
     uint32_t                                width,
@@ -238,7 +238,7 @@ static inline ssize_t                   amp_clip_to_ans(
 );
 
 static inline const char *              amp_get_glyph(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     long                                    x,
     long                                    y
 
@@ -248,7 +248,7 @@ static inline const char *              amp_get_glyph(
 );
 
 static inline const char *              amp_put_glyph(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     const char *                            glyph,
     long                                    x,
     long                                    y
@@ -260,7 +260,7 @@ static inline const char *              amp_put_glyph(
 );
 
 static inline AMP_STYLE                 amp_get_style(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     long                                    x,
     long                                    y
 
@@ -268,7 +268,7 @@ static inline AMP_STYLE                 amp_get_style(
 );
 
 static inline bool                      amp_put_style(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               style,
     long                                    x,
     long                                    y
@@ -279,7 +279,7 @@ static inline bool                      amp_put_style(
 );
 
 static inline struct amp_rgb_type       amp_get_bg_color(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     long                                    x,
     long                                    y
 
@@ -288,7 +288,7 @@ static inline struct amp_rgb_type       amp_get_bg_color(
 );
 
 static inline bool                      amp_set_bg_color(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     struct amp_rgb_type                     background_color,
     long                                    x,
     long                                    y
@@ -299,7 +299,7 @@ static inline bool                      amp_set_bg_color(
 );
 
 static inline struct amp_rgb_type       amp_get_fg_color(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     long                                    x,
     long                                    y
 
@@ -308,7 +308,7 @@ static inline struct amp_rgb_type       amp_get_fg_color(
 );
 
 static inline bool                      amp_set_fg_color(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     struct amp_rgb_type                     foreground_color,
     long                                    x,
     long                                    y
@@ -354,7 +354,7 @@ static inline ssize_t                   amp_stdout(
 );
 
 static inline size_t                    amp_print_rich_text(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -386,7 +386,7 @@ static inline AMP_PALETTE               amp_get_palette(
 );
 
 static inline ssize_t                   amp_snprint_textf(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -410,7 +410,7 @@ static inline ssize_t                   amp_snprint_textf(
 ) __attribute__((format (printf, 9, 10)));
 
 static inline ssize_t                   amp_snprint_rich_textf(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -435,7 +435,7 @@ static inline ssize_t                   amp_snprint_rich_textf(
 ) __attribute__((format (printf, 9, 10)));
 
 static inline ssize_t                   amp_snprint_linef(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -465,7 +465,7 @@ typedef enum : uint64_t {
 } AMP_SETTINGS;
 
 static inline ssize_t                   amp_serialize(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     AMP_SETTINGS                            flags,
     char *                                  buffer,
     size_t                                  buffer_size
@@ -476,12 +476,46 @@ static inline ssize_t                   amp_serialize(
     // pointer, then the output will be written into the program's standard
     // output.
     //
+    // AMP_SETTINGS flags:
+    //   * AMP_DEFLATE - Unrequired empty lines are trimmed.
+    //   * AMP_FLATTEN - Merge as many style layers as possible.
+    //
     // Returns the number of bytes that was written or would have been written
     // (excluding the null byte used to end output to strings). If the buffer is
     // too small, then its first byte is set to zero. The return value of -1
     // indicates an error.
 );
+
+static inline size_t                    amp_parse_size(
+    const void *                            data,
+    size_t                                  data_size,
+    uint32_t *                              width,
+    uint32_t *                              height
+
+    // Parses the provided data as an AMP document and attempts to determine the
+    // size of a buffer required for the deserialization of the document. If the
+    // size was found, then the width and height of the parsed ansmap are
+    // written to the memory addresses specified by the width and height pointer
+    // arguments respectively.
+    //
+    // Returns the size of the buffer required for ansmap deserialization. The
+    // return value of zero indicates a parsing error.
+);
+
+static inline size_t                    amp_deserialize(
+    struct amp_type *                       ansmap,
+    const void *                            data,
+    size_t                                  data_size
+
+    // Imports a human-readable plaintext document from the data array into the
+    // referenced ansmap. If the ansmap could not fit the image, then the image
+    // will be cropped to fit.
+    //
+    // Returns the original canvas size of the deserialized ansmap. The return
+    // value of zero indicates a parsing error.
+);
 ////////////////////////////////////////////////////////////////////////////////
+
 
 struct amp_type {
     uint8_t buffer[AMP_BUF_SIZE];
@@ -491,12 +525,17 @@ struct amp_type {
     struct {
         size_t size;
         uint8_t *data;
-    } glyph;
 
-    struct {
-        size_t size;
-        uint8_t *data;
-    } mode;
+        struct {
+            size_t size;
+            uint8_t *data;
+        } glyph;
+
+        struct {
+            size_t size;
+            uint8_t *data;
+        } mode;
+    } canvas;
 
     AMP_PALETTE palette;
 };
@@ -558,25 +597,25 @@ struct amp_style_flag_type {
 
 // Private API: ////////////////////////////////////////////////////////////////
 static inline ssize_t                   amp_copy_glyph(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     long                                    x,
     long                                    y,
     uint8_t *                               glyph_dst,
     size_t                                  glyph_dst_size
 );
 static inline bool                      amp_set_mode(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     long                                    x,
     long                                    y,
     struct amp_mode_type                    mode
 );
 static inline struct amp_mode_type      amp_get_mode(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     long                                    x,
     long                                    y
 );
 static inline ssize_t                   amp_get_cell_index(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     long                                    x,
     long                                    y
 );
@@ -627,9 +666,14 @@ static inline const char *              amp_str_seg_first_line_size(
     size_t                                  str_size,
     size_t *                                line_size
 );
-static inline const char *              amp_str_seg_skip_utf8_symbol(
+static inline const char *              amp_str_seg_skip_any_utf8_symbol(
     const char *                            str,
     size_t                                  str_size
+);
+static inline const char *              amp_str_seg_skip_str(
+    const char *                            str_seg,
+    size_t                                  str_seg_size,
+    const char *                            str
 );
 static inline size_t                    amp_str_seg_width(
     const char *                            str,
@@ -640,7 +684,7 @@ static inline size_t                    amp_rich_str_seg_width(
     size_t                                  rich_str_size
 );
 static inline void                      amp_print_line_clip(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -649,7 +693,7 @@ static inline void                      amp_print_line_clip(
     size_t                                  text_str_size
 );
 static inline void                      amp_print_rich_line_clip(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE *                             text_style,
     long                                    text_x,
     long                                    text_y,
@@ -658,7 +702,7 @@ static inline void                      amp_print_rich_line_clip(
     size_t                                  text_str_size
 );
 static inline size_t                    amp_print_text_clip(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
@@ -668,7 +712,7 @@ static inline size_t                    amp_print_text_clip(
     size_t                                  text_str_size
 );
 static inline size_t                    amp_print_rich_text_clip(
-    struct amp_type *                       amp,
+    struct amp_type *                       ansmap,
     AMP_STYLE *                             text_style,
     long                                    text_x,
     long                                    text_y,
@@ -729,21 +773,21 @@ struct amp_style_flag_type              amp_lookup_style_flag(
     AMP_STYLE
 );
 static inline ssize_t                   amp_serialize_layer(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     AMP_SETTINGS                            settings,
     AMP_STYLE                               style,
     char *                                  buffer,
     size_t                                  buffer_size
 );
 static inline ssize_t                   amp_serialize_layer_row(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     AMP_STYLE                               style,
     long                                    y,
     char *                                  buffer,
     size_t                                  buffer_size
 );
 static inline ssize_t                   amp_serialize_layer_cell(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     AMP_STYLE                               style,
     long                                    x,
     long                                    y,
@@ -751,7 +795,7 @@ static inline ssize_t                   amp_serialize_layer_cell(
     size_t                                  buffer_size
 );
 static inline AMP_STYLE                 amp_styles_to_layer(
-    const struct amp_type *                 amp,
+    const struct amp_type *                 ansmap,
     AMP_STYLE                               whitelist
 );
 ////////////////////////////////////////////////////////////////////////////////
@@ -1746,25 +1790,29 @@ static inline size_t amp_calc_size(uint32_t w, uint32_t h) {
 }
 
 static inline size_t amp_init(
-    struct amp_type *amp, uint32_t w, uint32_t h, void *buf, size_t buf_size
+    struct amp_type *amp, uint32_t w, uint32_t h, void *data, size_t data_size
 ) {
-    if (buf == nullptr) {
-        buf = (char *) amp->buffer;
-        buf_size = sizeof(amp->buffer);
+    if (data == nullptr) {
+        data = (char *) amp->buffer;
+        data_size = sizeof(amp->buffer);
     }
 
     const size_t bytes_required = amp_calc_size(w, h);
     const size_t cell_count = (
-        (buf_size < bytes_required ? buf_size : bytes_required) / AMP_CELL_SIZE
+        (data_size < bytes_required ? data_size : bytes_required) /
+        AMP_CELL_SIZE
     );
     const size_t glyph_size = cell_count * AMP_CELL_GLYPH_SIZE;
     const size_t mode_size = cell_count * AMP_CELL_MODE_SIZE;
 
-    amp->glyph.data = (uint8_t *) buf;
-    amp->glyph.size = glyph_size;
+    amp->canvas.data = data;
+    amp->canvas.size = data_size;
 
-    amp->mode.data = (uint8_t *) buf + amp->glyph.size;
-    amp->mode.size = mode_size;
+    amp->canvas.glyph.data = (uint8_t *) data;
+    amp->canvas.glyph.size = glyph_size;
+
+    amp->canvas.mode.data = (uint8_t *) data + amp->canvas.glyph.size;
+    amp->canvas.mode.size = mode_size;
 
     amp->width = w;
     amp->height = h;
@@ -1775,8 +1823,8 @@ static inline size_t amp_init(
 }
 
 static inline void amp_clear(struct amp_type *amp) {
-    memset(amp->glyph.data, 0, amp->glyph.size);
-    memset(amp->mode.data, 0, amp->mode.size);
+    memset(amp->canvas.glyph.data, 0, amp->canvas.glyph.size);
+    memset(amp->canvas.mode.data, 0, amp->canvas.mode.size);
 }
 
 static inline uint32_t amp_get_width(const struct amp_type *amp) {
@@ -1876,12 +1924,12 @@ static inline const char *amp_get_glyph(
         return nullptr;
     }
 
-    if ((size_t) cell_index * AMP_CELL_GLYPH_SIZE >= amp->glyph.size) {
+    if ((size_t) cell_index * AMP_CELL_GLYPH_SIZE >= amp->canvas.glyph.size) {
         return nullptr;
     }
 
     return (
-        (const char *) amp->glyph.data +
+        (const char *) amp->canvas.glyph.data +
         (size_t) cell_index * AMP_CELL_GLYPH_SIZE
     );
 }
@@ -1930,7 +1978,7 @@ static inline const char *amp_put_glyph(
         return nullptr;
     }
 
-    if ((size_t) cell_index * AMP_CELL_GLYPH_SIZE >= amp->glyph.size) {
+    if ((size_t) cell_index * AMP_CELL_GLYPH_SIZE >= amp->canvas.glyph.size) {
         return nullptr;
     }
 
@@ -1957,7 +2005,7 @@ static inline const char *amp_put_glyph(
     glyph_data_size = (uint8_t) code_point_size;
 
     char *dst = (char *) (
-        amp->glyph.data + (size_t) cell_index * AMP_CELL_GLYPH_SIZE
+        amp->canvas.glyph.data + (size_t) cell_index * AMP_CELL_GLYPH_SIZE
     );
 
     memcpy(dst, glyph_data, glyph_data_size + 1);
@@ -1974,12 +2022,12 @@ static inline bool amp_set_mode(
         return false;
     }
 
-    if ((size_t) cell_index * AMP_CELL_MODE_SIZE >= amp->mode.size) {
+    if ((size_t) cell_index * AMP_CELL_MODE_SIZE >= amp->canvas.mode.size) {
         return false;
     }
 
     return amp_mode_cell_serialize(
-        mode, amp->mode.data + (size_t) cell_index * AMP_CELL_MODE_SIZE,
+        mode, amp->canvas.mode.data + (size_t) cell_index * AMP_CELL_MODE_SIZE,
         AMP_CELL_MODE_SIZE
     );
 }
@@ -1997,12 +2045,12 @@ static inline struct amp_mode_type amp_get_mode(
         return broken_cell;
     }
 
-    if ((size_t) cell_index * AMP_CELL_MODE_SIZE >= amp->mode.size) {
+    if ((size_t) cell_index * AMP_CELL_MODE_SIZE >= amp->canvas.mode.size) {
         return broken_cell;
     }
 
     return amp_mode_cell_deserialize(
-        amp->mode.data + (size_t) cell_index * AMP_CELL_MODE_SIZE,
+        amp->canvas.mode.data + (size_t) cell_index * AMP_CELL_MODE_SIZE,
         AMP_CELL_MODE_SIZE
     );
 }
@@ -2281,7 +2329,7 @@ static inline void amp_print_rich_line_clip(
         }
 
         if (s == next) { // no style sign detected
-            next = amp_str_seg_skip_utf8_symbol(
+            next = amp_str_seg_skip_any_utf8_symbol(
                 s, text_size - (size_t) (s - text)
             );
 
@@ -2907,10 +2955,10 @@ static inline ssize_t amp_clip_to_ans(
     const struct amp_type *amp, long x, long y, uint32_t width,
     char *ans_dst, size_t ans_dst_size
 ) {
-    if ((ans_dst >= (char *) amp->glyph.data
-      && ans_dst <  (char *) amp->glyph.data + amp->glyph.size)
-    ||  (ans_dst >= (char *) amp->mode.data
-      && ans_dst <  (char *) amp->mode.data + amp->mode.size)) {
+    if ((ans_dst >= (char *) amp->canvas.glyph.data
+      && ans_dst <  (char *) amp->canvas.glyph.data + amp->canvas.glyph.size)
+    ||  (ans_dst >= (char *) amp->canvas.mode.data
+      && ans_dst <  (char *) amp->canvas.mode.data + amp->canvas.mode.size)) {
         abort(); // Overwriting its own memory is a fatal error.
     }
 
@@ -3063,10 +3111,12 @@ static inline ssize_t amp_to_ans(
         ans_dst_size = 0;
     }
     else {
-        if ((ans_dst >= (char *) amp->glyph.data
-          && ans_dst <  (char *) amp->glyph.data + amp->glyph.size)
-        ||  (ans_dst >= (char *) amp->mode.data
-          && ans_dst <  (char *) amp->mode.data + amp->mode.size)) {
+        uint8_t *dst = (uint8_t *) ans_dst;
+
+        if ((dst >= amp->canvas.glyph.data
+          && dst <  amp->canvas.glyph.data + amp->canvas.glyph.size)
+        ||  (dst >= amp->canvas.mode.data
+          && dst <  amp->canvas.mode.data + amp->canvas.mode.size)) {
             abort(); // Overwriting its own memory is a fatal error.
         }
     }
@@ -3309,7 +3359,7 @@ static inline const char *amp_str_seg_first_line_size(
     return s;
 }
 
-static inline const char *amp_str_seg_skip_utf8_symbol(
+static inline const char *amp_str_seg_skip_any_utf8_symbol(
     const char *str, size_t str_sz
 ) {
     if (!str_sz) {
@@ -3326,6 +3376,19 @@ static inline const char *amp_str_seg_skip_utf8_symbol(
     }
 
     return str + sz;
+}
+
+static inline const char *amp_str_seg_skip_str(
+    const char *str_seg, size_t str_seg_sz, const char *str
+) {
+    const size_t str_sz = strlen(str);
+    const size_t min_sz = str_seg_sz < str_sz ? str_seg_sz : str_sz;
+
+    if (strncmp(str_seg, str, min_sz) == 0) {
+        return str_seg + str_sz;
+    }
+
+    return str_seg;
 }
 
 static inline size_t amp_str_seg_style_sign_count(
@@ -3346,7 +3409,7 @@ static inline size_t amp_str_seg_style_sign_count(
         }
 
         if (s == next) { // no style sign detected
-            next = amp_str_seg_skip_utf8_symbol(
+            next = amp_str_seg_skip_any_utf8_symbol(
                 s, segment_sz - (size_t) (s - str)
             );
 
@@ -3435,7 +3498,7 @@ static inline const char *amp_str_seg_skip_spaces(
     const char *s = str;
 
     while (*s && s < str + str_sz) {
-        const char *next = amp_str_seg_skip_utf8_symbol(
+        const char *next = amp_str_seg_skip_any_utf8_symbol(
             s, str_sz - (size_t) (s - str)
         );
 
@@ -3465,7 +3528,7 @@ static inline const char *amp_str_seg_skip_word(
     }
 
     while (*s && s < str + str_sz) {
-        const char *next = amp_str_seg_skip_utf8_symbol(
+        const char *next = amp_str_seg_skip_any_utf8_symbol(
             s, str_sz - (size_t) (s - str)
         );
 
@@ -3496,7 +3559,7 @@ static inline const char *amp_str_seg_skip_width(
             break;
         }
 
-        const char *next = amp_str_seg_skip_utf8_symbol(
+        const char *next = amp_str_seg_skip_any_utf8_symbol(
             s, str_sz - (size_t) (s - str)
         );
 
@@ -3613,7 +3676,7 @@ static inline const char *amp_str_seg_skip_style_sign(
                 return s;
             }
 
-            const char *end = amp_str_seg_skip_utf8_symbol(
+            const char *end = amp_str_seg_skip_any_utf8_symbol(
                 s, str_sz - (size_t) (s - str)
             );
 
@@ -3717,7 +3780,7 @@ static inline const char *amp_str_seg_skip_style_and_utf8_symbol(
         );
 
         if (next == s) {
-            next = amp_str_seg_skip_utf8_symbol(
+            next = amp_str_seg_skip_any_utf8_symbol(
                 next, str_sz - (size_t) (next - str)
             );
 
@@ -3727,7 +3790,7 @@ static inline const char *amp_str_seg_skip_style_and_utf8_symbol(
             else return next;
         }
         else if ((next - s) == 1) {
-            const char *after_braces = amp_str_seg_skip_utf8_symbol(
+            const char *after_braces = amp_str_seg_skip_any_utf8_symbol(
                 next, str_sz - (size_t) (next - str)
             );
 
@@ -4024,10 +4087,12 @@ static inline ssize_t amp_serialize(
         buffer_size = 0;
     }
     else {
-        if ((buffer >= (char *) amp->glyph.data
-          && buffer <  (char *) amp->glyph.data + amp->glyph.size)
-        ||  (buffer >= (char *) amp->mode.data
-          && buffer <  (char *) amp->mode.data + amp->mode.size)) {
+        uint8_t *buf = (uint8_t *) buffer;
+
+        if ((buf >= amp->canvas.glyph.data
+          && buf <  amp->canvas.glyph.data + amp->canvas.glyph.size)
+        ||  (buf >= amp->canvas.mode.data
+          && buf <  amp->canvas.mode.data + amp->canvas.mode.size)) {
             abort(); // Overwriting its own memory is a fatal error.
         }
     }
@@ -4170,6 +4235,232 @@ static inline ssize_t amp_serialize(
     }
 
     return written > SSIZE_MAX ? -1 : (ssize_t) written;
+}
+
+static inline size_t amp_parse_size(
+    const void *data, size_t data_size, uint32_t *canvas_w, uint32_t *canvas_h
+) {
+    const char *str = (const char *) data;
+    const size_t str_sz = data_size;
+    const char *s = str;
+
+    size_t width = 0;
+    size_t height = 0;
+
+    if (canvas_w) *canvas_w = 0;
+    if (canvas_h) *canvas_h = 0;
+
+    while (*s && s < str + str_sz) {
+        size_t linesz;
+        const char *next_line = amp_str_seg_first_line_size(
+            s, str_sz - (size_t) (s - str), &linesz
+        );
+
+        if (next_line <= s) {
+            break;
+        }
+
+        if (width) {
+            const char *prev_char = s;
+            const char *next_char = amp_str_seg_skip_str(
+                prev_char, str_sz - (size_t) (prev_char - str), "║"
+            );
+
+            if (next_char == prev_char) {
+                next_char = amp_str_seg_skip_str(
+                    prev_char, str_sz - (size_t) (prev_char - str), "╠"
+                );
+
+                if (next_char == prev_char) {
+                    next_char = amp_str_seg_skip_str(
+                        prev_char, str_sz - (size_t) (prev_char - str), "╚"
+                    );
+                }
+
+                if (next_char > prev_char) {
+                    if (canvas_w) {
+                        *canvas_w = (uint32_t) width;
+                    }
+
+                    if (canvas_h) {
+                        *canvas_h = (uint32_t) height;
+                    }
+
+                    return amp_calc_size((uint32_t) width, (uint32_t) height);
+                }
+            }
+            else {
+                if (++height > UINT32_MAX) return 0;
+            }
+
+            if (next_char == prev_char) {
+                return 0;
+            }
+        }
+        else {
+            const char *prev_char = s;
+            const char *next_char = amp_str_seg_skip_str(
+                prev_char, str_sz - (size_t) (prev_char - str), "╔═"
+            );
+
+            if (next_char > prev_char) {
+                while (next_char > prev_char) {
+                    if (++width > UINT32_MAX) return 0;
+
+                    prev_char = next_char;
+                    next_char = amp_str_seg_skip_str(
+                        prev_char, str_sz - (size_t) (prev_char - str), "═"
+                    );
+                }
+
+                prev_char = next_char;
+                next_char = amp_str_seg_skip_str(
+                    prev_char, str_sz - (size_t) (prev_char - str), "╗"
+                );
+
+                if (next_char <= prev_char) {
+                    width = 0;
+                }
+            }
+
+            if (!width) {
+                return 0;
+            }
+        }
+
+        s = next_line;
+    }
+
+    return 0;
+}
+
+static inline size_t amp_deserialize(
+    struct amp_type *amp, const void *data, size_t data_size
+) {
+    const char *str = (const char *) data;
+    const size_t str_sz = data_size;
+    const char *s = str;
+
+    long width = 0;
+    long height = 0;
+    size_t layer = 0;
+    long y = 0;
+
+    amp_clear(amp);
+
+    while (*s && s < str + str_sz) {
+        size_t linesz;
+        const char *next_line = amp_str_seg_first_line_size(
+            s, str_sz - (size_t) (s - str), &linesz
+        );
+
+        if (next_line <= s) {
+            break;
+        }
+
+        if (width) {
+            const char *prev_char = s;
+            const char *next_char = amp_str_seg_skip_str(
+                prev_char, str_sz - (size_t) (prev_char - str), "║"
+            );
+
+            if (next_char == prev_char) {
+                next_char = amp_str_seg_skip_str(
+                    prev_char, str_sz - (size_t) (prev_char - str), "╠"
+                );
+
+                if (next_char == prev_char) {
+                    next_char = amp_str_seg_skip_str(
+                        prev_char, str_sz - (size_t) (prev_char - str), "╚"
+                    );
+
+                    if (next_char > prev_char) {
+                        return amp_calc_size(
+                            (uint32_t) width, (uint32_t) height
+                        );
+                    }
+                }
+                else {
+                    ++layer;
+                    y = 0;
+                }
+            }
+            else {
+                if (layer == 0) {
+                    if (++height > UINT32_MAX) return 0;
+                }
+
+                long x = 0;
+
+                while (x < width) {
+                    prev_char = next_char;
+                    next_char = amp_str_seg_skip_any_utf8_symbol(
+                        prev_char, str_sz - (size_t) (prev_char - str)
+                    );
+
+                    if (next_char <= prev_char) {
+                        break;
+                    }
+
+                    if (layer == 0) {
+                        amp_put_glyph(amp, prev_char, x, y);
+                    }
+                    else if (*prev_char != ' ') {
+                        AMP_STYLE new_style = (
+                            amp_lookup_inline_style(prev_char).style
+                        );
+
+                        if (new_style != AMP_STYLE_NONE) {
+                            AMP_STYLE old_style = amp_get_style(amp, x, y);
+                            amp_put_style(amp, old_style|new_style, x, y);
+                        }
+                    }
+
+                    ++x;
+                }
+
+                ++y;
+            }
+
+            if (next_char == prev_char) {
+                return 0;
+            }
+        }
+        else {
+            const char *prev_char = s;
+            const char *next_char = amp_str_seg_skip_str(
+                prev_char, str_sz - (size_t) (prev_char - str), "╔═"
+            );
+
+            if (next_char > prev_char) {
+                while (next_char > prev_char) {
+                    if (++width > UINT32_MAX) return 0;
+
+                    prev_char = next_char;
+                    next_char = amp_str_seg_skip_str(
+                        prev_char, str_sz - (size_t) (prev_char - str), "═"
+                    );
+                }
+
+                prev_char = next_char;
+                next_char = amp_str_seg_skip_str(
+                    prev_char, str_sz - (size_t) (prev_char - str), "╗"
+                );
+
+                if (next_char <= prev_char) {
+                    width = 0;
+                }
+            }
+
+            if (!width) {
+                return 0;
+            }
+        }
+
+        s = next_line;
+    }
+
+    return 0;
 }
 
 #endif

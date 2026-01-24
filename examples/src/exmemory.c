@@ -28,6 +28,7 @@ int main(int, char **) {
     if (amp_init(&amp, width, height, buffer, buffer_size) > buffer_size) {
         static const char message[] = "amp_init: not enough memory provided\n";
         write(2, message, strlen(message));
+        free(buffer);
         return EXIT_FAILURE;
     }
 
