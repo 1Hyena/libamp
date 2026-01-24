@@ -105,8 +105,8 @@ typedef enum : uint64_t {
 } AMP_STYLE;
 
 typedef enum : uint8_t {
-    AMP_PAL_RGB16 = 0,
-    AMP_PAL_24BIT
+    AMP_PAL_RGB16 = 0,  // Standard 16 colors (most portable).
+    AMP_PAL_24BIT       // True color mode (24 bit color depth).
 } AMP_PALETTE;
 
 typedef enum : uint8_t {
@@ -114,6 +114,14 @@ typedef enum : uint8_t {
     AMP_ALIGN_CENTER,
     AMP_ALIGN_RIGHT
 } AMP_ALIGN;
+
+typedef enum : uint64_t {
+    AMP_SETTINGS_NONE = 0,
+    ////////////////////////////////////////////////////////////////////////////
+    AMP_DEFLATE = (1ULL <<  0), // Unrequired empty lines are trimmed.
+    AMP_FLATTEN = (1ULL <<  1)  // Merge as many style layers as possible.
+} AMP_SETTINGS;
+
 
 // Public API: /////////////////////////////////////////////////////////////////
 static inline size_t                    amp_calc_size(
@@ -456,13 +464,6 @@ static inline ssize_t                   amp_snprint_linef(
     // The return value of -1 indicates that an output error was encountered in
     // the underlying call to vsnprintf.
 ) __attribute__((format (printf, 8, 9)));
-
-typedef enum : uint64_t {
-    AMP_SETTINGS_NONE = 0,
-    ////////////////////////////////////////////////////////////////////////////
-    AMP_DEFLATE = (1ULL <<  0), // Unrequired empty lines are trimmed.
-    AMP_FLATTEN = (1ULL <<  1)  // Merge as many style layers as possible.
-} AMP_SETTINGS;
 
 static inline ssize_t                   amp_serialize(
     const struct amp_type *                 ansmap,
