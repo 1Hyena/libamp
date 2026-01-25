@@ -51,6 +51,7 @@ int main(int, char **) {
     else error_message = "amp_parse_size: parse error\n";
 
     if (!error_message) {
+        amp_set_palette(&canvas, AMP_PAL_24BIT);
         amp_to_ans(&canvas, nullptr, 0); // Write to stdout.
         amp_stdout("\n", 1);
     }
