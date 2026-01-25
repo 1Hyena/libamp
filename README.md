@@ -50,35 +50,34 @@ designed for creating terminal applications and games like multi-user dungeons
 
 ### The AMP file format ########################################################
 
-LibAMP comes with a unique file format designed for easy human readability,
-allowing convenient image editing using a standard text editor that supports a
-fixed-width font. The recommended file extension for AMP files is `.amp`.
+LibAMP uses a unique file format that is easily readable by humans, allowing for
+convenient image editing using a standard text editor with a fixed-width font.
+The recommended file extension for AMP files is `.amp`.
 
-An AMP file is divided into segments called layers. The first layer is only for
-the text content and must be present, even if its height is zero (indicating no
+An AMP file is divided into layers, with the first layer dedicated to text
+content and required to be present, even if it has zero height (indicating no
 text to be printed on the ansmap). Subsequent layers are optional and contain
 style markers such as foreground color, background color, and text decoration
 specifications. Each style marker occupying the same cell must be represented by
 a different layer.
 
-A valid AMP file starts with Unicode box-drawing characters `╔` and `═`. The
-number of `═` characters following the first character determines
-**the width of the ansmap**. The sequence is terminated by `╗`.
+A valid AMP file begins with Unicode box-drawing characters `╔` and `═`. The
+number of `═` characters following the first character determines the width of
+the ansmap. The sequence is terminated by `╗`.
 
 Subsequent lines must start with `║`, `╠`, or `╚`. If a line starts with `║`,
-the count of `║` characters in the beginning of subsequent lines determines the
-height of that layer. The layer with the greatest height defines
-**the ansmap's height**.
+the count of `║` characters at the beginning of subsequent lines determines the
+height of that layer. The layer with the greatest height defines the ansmap's
+overall height.
 
-If `║` is in the beginning of a line, then it must be followed by Unicode
-characters equal to the ansmap's width, then another `║`. This sequence defines
-the contents of one row in a given layer. Lines starting with `╠` indicate the
-end of a layer and the start of a new one if `╠` is followed by `═` characters
-equal to the  ansmap's width and a `╣`. Lines starting with `╚` mark the end of
-a layer and the end of the AMP file if `═` characters equal to the ansmap's
-width and a `╝` follow.
+If a line starts with `║`, it must be followed by Unicode characters equal to
+the ansmap's width, then another `║`. This sequence defines the contents of one
+row in a given layer. Lines starting with `╠` indicate the end of a layer and
+the start of a new one if followed by ═ characters equal to the ansmap's width
+and a `╣`. Lines starting with `╚` mark the end of a layer and the end of the
+AMP file if followed by `═` characters equal to the ansmap's width and a `╝`.
 
-For example, here are the contents of a valid AMP document:
+Here is an example of the contents of a valid AMP document:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
