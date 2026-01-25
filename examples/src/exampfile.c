@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     const char *error_message = nullptr;
 
     if (argc < 2) {
-        error_message = "this program requires a file name argument\n";
+        error_message = "this program requires an AMP file argument\n";
         write(2, error_message, strlen(error_message));
         return EXIT_FAILURE;
     }
@@ -76,7 +76,7 @@ static struct blob_type load_file(const char *fname) {
     for (;;) {
         size_t bytes_read, bytes_to_read;
 
-        data = realloc( data, data_capacity );
+        data = realloc(data, data_capacity);
 
         if (data == nullptr) {
             const char *error_message = "realloc: memory allocation failed\n";
@@ -85,22 +85,14 @@ static struct blob_type load_file(const char *fname) {
             return (struct blob_type) {};
         }
 
-        //calculate number of bytes to read in next read operation
         bytes_to_read = data_capacity - data_size;
-
-        //attempt to fill the read buffer
-        bytes_read = fread( data + data_size, 1, bytes_to_read, fp );
-
-        //update size of data
+        bytes_read = fread(data + data_size, 1, bytes_to_read, fp);
         data_size += bytes_read;
 
-        //break out of the infinite loop if the read buffer could
-        //not be filled entirely
         if (bytes_read != bytes_to_read) {
             break;
         }
 
-        //change desired capacity for next loop iteration
         data_capacity *= 2;
     }
 
