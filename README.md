@@ -34,7 +34,7 @@ designed for creating terminal applications and games like multi-user dungeons
   either specific to the standard 16 color palette or to the 24 bit true color
   mode.
 
-* **Text wrapping:** The LibAMP API allows for multiline text drawing with the
+* **Text wrapping:** The LibAMP API allows for multiline text printing with the
   user specified maximum line width parameter.
 
 * **Inline style markers:** In rich text printing, style information can be
@@ -108,20 +108,20 @@ a C compiler (C23 or later required).
 
 ## Using LibAMP ################################################################
 
-The usage of the library can be divided into two main parts: drawing and
-rendering. The following sections provide a brief overview of each.
+The usage of the library can be divided into two main parts: creating and
+viewing. The following sections provide a brief overview of each.
 
 
-### Drawing ansmap images ######################################################
+### Creating ansmap images #####################################################
 
 To create an ansmap image, you can include the [amp.h](amp.h) header file
 directly in your codebase. The library is implemented in a single C header file
 for easy integration.
 
-The main functions to use for drawing are `amp_init()` and `amp_draw_text()`.
-The initialization function is necessary to specify the image resolution and
-data buffer. The text drawing function takes the initialized ansmap pointer as
-an argument and prints the desired text on it.
+The main functions to use are `amp_init()` and `amp_print_text()`. The
+initialization function is necessary to specify the image resolution and data
+buffer. The text printing function takes the initialized ansmap pointer as an
+argument and prints the desired text on it.
 
 While the initialization of the ansmap data structure typically requires an
 external data buffer for storing the image state in memory, it can be omitted.
@@ -135,12 +135,13 @@ provides the `amp_calc_size()` function, which takes the image resolution as its
 arguments.
 
 
-### Rendering ansmap images ####################################################
+### Viewing ansmap images ######################################################
 
 To display an ansmap in the terminal, use the `amp_to_ans()` function. It
 requires a pointer to the ansmap image structure and a pointer to the memory
-location to copy the result. If `nullptr` is used for the memory location, the
-output will be written to the standard output of the program.
+location to copy the resulting ANSI escape code sequences that the terminal
+could render. If `nullptr` is used for the memory location, the output will be
+written to the standard output of the program.
 
 
 ### Examples ###################################################################
