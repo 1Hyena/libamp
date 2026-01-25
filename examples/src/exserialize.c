@@ -13,7 +13,7 @@ int main(int, char **) {
     }
 
     amp_print_rich_text(
-        &amp, AMP_STYLE_NONE, amp_get_width(&amp) / 2, 0, 0, AMP_ALIGN_CENTER,
+        &amp, amp_get_width(&amp) / 2, 0, AMP_STYLE_NONE, 0, AMP_ALIGN_CENTER,
         "{Nnavy background{X, {rred foreground{x, {/italic{x, {/{?faint italic"
     );
 

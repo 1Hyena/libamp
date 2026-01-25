@@ -14,12 +14,12 @@ int main(int, char **) {
 
     for (long y = 1; y < amp_get_height(&amp); ++y) {
         for (long x = 1; x < amp_get_width(&amp); ++x) {
-            amp_print_glyph(&amp, AMP_BG_CHARCOAL, x, y, "▒");
+            amp_print_glyph(&amp, x, y, AMP_BG_CHARCOAL, "▒");
         }
     }
 
     amp_print_text(
-        &amp, AMP_BG_BLUE|AMP_FG_WHITE, 0, 0, 0, AMP_ALIGN_LEFT,
+        &amp, 0, 0, AMP_BG_BLUE|AMP_FG_WHITE, 0, AMP_ALIGN_LEFT,
         "╔═════════════╗\n"
         "║             ║\n"
         "║             ║\n"
@@ -31,7 +31,7 @@ int main(int, char **) {
     );
 
     amp_print_text(
-        &amp, AMP_FG_YELLOW|AMP_BG_NAVY, 1, 1, amp_get_width(&amp) - 3,
+        &amp, 1, 1, AMP_FG_YELLOW|AMP_BG_NAVY, amp_get_width(&amp) - 3,
         AMP_ALIGN_LEFT, "In this example, we also see text wrapping in action."
     );
 

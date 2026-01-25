@@ -160,9 +160,9 @@ static inline void                      amp_set_palette(
 
 static inline void                      amp_print_glyph(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               glyph_style,
     long                                    glyph_x,
     long                                    glyph_y,
+    AMP_STYLE                               glyph_style,
     const char *                            glyph_str
 
     // Prints a single glyph on the given ansmap.
@@ -170,9 +170,9 @@ static inline void                      amp_print_glyph(
 
 static inline void                      amp_print_line(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str
 
@@ -182,9 +182,9 @@ static inline void                      amp_print_line(
 
 static inline size_t                    amp_print_text(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     uint32_t                                text_max_width,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str
@@ -247,8 +247,8 @@ static inline ssize_t                   amp_clip_to_ans(
 
 static inline const char *              amp_get_glyph(
     const struct amp_type *                 ansmap,
-    long                                    x,
-    long                                    y
+    long                                    glyph_x,
+    long                                    glyph_y
 
     // Returns a pointer to the null-terminated UTF-8 encoded string of the
     // glyph on the given position of the ansmap. If the specified position is
@@ -257,9 +257,9 @@ static inline const char *              amp_get_glyph(
 
 static inline const char *              amp_put_glyph(
     struct amp_type *                       ansmap,
-    const char *                            glyph,
-    long                                    x,
-    long                                    y
+    long                                    glyph_x,
+    long                                    glyph_y,
+    const char *                            glyph
 
     // Overwrites a single glyph in the ansmap on the given position and returns
     // a pointer to the null-terminated UTF-8 encoded string of the new glyph.
@@ -269,17 +269,17 @@ static inline const char *              amp_put_glyph(
 
 static inline AMP_STYLE                 amp_get_style(
     const struct amp_type *                 ansmap,
-    long                                    x,
-    long                                    y
+    long                                    style_x,
+    long                                    style_y
 
     // Returns the style bits of a glyph on the ansmap from the given position.
 );
 
 static inline bool                      amp_put_style(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               style,
-    long                                    x,
-    long                                    y
+    long                                    style_x,
+    long                                    style_y,
+    AMP_STYLE                               style
 
     // Sets the style of a glyph on the ansmap at the given position.
     //
@@ -288,8 +288,8 @@ static inline bool                      amp_put_style(
 
 static inline struct amp_rgb_type       amp_get_bg_color(
     struct amp_type *                       ansmap,
-    long                                    x,
-    long                                    y
+    long                                    cell_x,
+    long                                    cell_y
 
     // Returns a color data structure holding the background color information
     // of a glyph on the ansmap at the given position.
@@ -297,9 +297,9 @@ static inline struct amp_rgb_type       amp_get_bg_color(
 
 static inline bool                      amp_set_bg_color(
     struct amp_type *                       ansmap,
-    struct amp_rgb_type                     background_color,
-    long                                    x,
-    long                                    y
+    long                                    cell_x,
+    long                                    cell_y,
+    struct amp_rgb_type                     background_color
 
     // Sets the background color of a glyph on the ansmap at the given position.
     //
@@ -308,8 +308,8 @@ static inline bool                      amp_set_bg_color(
 
 static inline struct amp_rgb_type       amp_get_fg_color(
     struct amp_type *                       ansmap,
-    long                                    x,
-    long                                    y
+    long                                    cell_x,
+    long                                    cell_y
 
     // Returns a color data structure holding the foreground color information
     // of a glyph on the ansmap at the given position.
@@ -317,9 +317,9 @@ static inline struct amp_rgb_type       amp_get_fg_color(
 
 static inline bool                      amp_set_fg_color(
     struct amp_type *                       ansmap,
-    struct amp_rgb_type                     foreground_color,
-    long                                    x,
-    long                                    y
+    long                                    cell_x,
+    long                                    cell_y,
+    struct amp_rgb_type                     foreground_color
 
     // Sets the foreground color of a glyph on the ansmap at the given position.
     //
@@ -363,9 +363,9 @@ static inline ssize_t                   amp_stdout(
 
 static inline size_t                    amp_print_rich_text(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     uint32_t                                text_max_width,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str
@@ -379,25 +379,25 @@ static inline size_t                    amp_print_rich_text(
 );
 
 static inline uint32_t                  amp_get_width(
-    const struct amp_type *                 amp
+    const struct amp_type *                 ansmap
     // Returns the width of the given ansmap image.
 );
 
 static inline uint32_t                  amp_get_height(
-    const struct amp_type *                 amp
+    const struct amp_type *                 ansmap
     // Returns the height of the given ansmap image.
 );
 
 static inline AMP_PALETTE               amp_get_palette(
-    const struct amp_type *                 amp
+    const struct amp_type *                 ansmap
     // Returns the palette of the given ansmap image.
 );
 
 static inline ssize_t                   amp_snprint_textf(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     uint32_t                                text_max_width,
     AMP_ALIGN                               text_alignment,
     char *                                  text_format_buffer,
@@ -419,9 +419,9 @@ static inline ssize_t                   amp_snprint_textf(
 
 static inline ssize_t                   amp_snprint_rich_textf(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     uint32_t                                text_max_width,
     AMP_ALIGN                               text_alignment,
     char *                                  text_format_buffer,
@@ -444,9 +444,9 @@ static inline ssize_t                   amp_snprint_rich_textf(
 
 static inline ssize_t                   amp_snprint_linef(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     AMP_ALIGN                               text_alignment,
     char *                                  text_format_buffer,
     size_t                                  text_format_buffer_size,
@@ -515,6 +515,13 @@ static inline size_t                    amp_deserialize(
     // Returns the original canvas size of the deserialized ansmap. The return
     // value of zero indicates a parsing error.
 );
+/*
+static inline void                      amp_draw_sprite(
+    struct amp_type *                       ansmap,
+    long                                    x,
+    long                                    y,
+    const struct amp_type *                 sprite
+);*/
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -686,27 +693,27 @@ static inline size_t                    amp_rich_str_seg_width(
 );
 static inline void                      amp_print_line_clip(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str,
     size_t                                  text_str_size
 );
 static inline void                      amp_print_rich_line_clip(
     struct amp_type *                       ansmap,
-    AMP_STYLE *                             text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE *                             text_style,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str,
     size_t                                  text_str_size
 );
 static inline size_t                    amp_print_text_clip(
     struct amp_type *                       ansmap,
-    AMP_STYLE                               text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE                               text_style,
     uint32_t                                text_max_width,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str,
@@ -714,9 +721,9 @@ static inline size_t                    amp_print_text_clip(
 );
 static inline size_t                    amp_print_rich_text_clip(
     struct amp_type *                       ansmap,
-    AMP_STYLE *                             text_style,
     long                                    text_x,
     long                                    text_y,
+    AMP_STYLE *                             text_style,
     uint32_t                                text_max_width,
     AMP_ALIGN                               text_alignment,
     const char *                            text_str,
@@ -782,16 +789,16 @@ static inline ssize_t                   amp_serialize_layer(
 );
 static inline ssize_t                   amp_serialize_layer_row(
     const struct amp_type *                 ansmap,
+    long                                    row_y,
     AMP_STYLE                               style,
-    long                                    y,
     char *                                  buffer,
     size_t                                  buffer_size
 );
 static inline ssize_t                   amp_serialize_layer_cell(
     const struct amp_type *                 ansmap,
-    AMP_STYLE                               style,
     long                                    x,
     long                                    y,
+    AMP_STYLE                               style,
     char *                                  buffer,
     size_t                                  buffer_size
 );
@@ -1969,7 +1976,7 @@ static inline ssize_t amp_copy_glyph(
 }
 
 static inline const char *amp_put_glyph(
-    struct amp_type *amp, const char *glyph, long x, long y
+    struct amp_type *amp, long x, long y, const char *glyph
 ) {
     // If glyph contains multiple UTF8 code points, then use only the first one.
 
@@ -2089,7 +2096,7 @@ static inline AMP_STYLE amp_get_style(
 }
 
 static inline bool amp_put_style(
-    struct amp_type *amp, AMP_STYLE style, long x, long y
+    struct amp_type *amp, long x, long y, AMP_STYLE style
 ) {
     auto mode = amp_get_mode(amp, x, y);
 
@@ -2177,7 +2184,7 @@ static inline bool amp_put_style(
 }
 
 static inline bool amp_set_bg_color(
-    struct amp_type *amp, struct amp_rgb_type bg_color, long x, long y
+    struct amp_type *amp, long x, long y, struct amp_rgb_type bg_color
 ) {
     auto mode = amp_get_mode(amp, x, y);
 
@@ -2194,7 +2201,7 @@ static inline struct amp_rgb_type amp_get_bg_color(
 }
 
 static inline bool amp_set_fg_color(
-    struct amp_type *amp, struct amp_rgb_type fg_color, long x, long y
+    struct amp_type *amp, long x, long y, struct amp_rgb_type fg_color
 ) {
     auto mode = amp_get_mode(amp, x, y);
 
@@ -2211,7 +2218,7 @@ static inline struct amp_rgb_type amp_get_fg_color(
 }
 
 static inline void amp_print_glyph(
-    struct amp_type *amp, AMP_STYLE style, long x, long y, const char *glyph_str
+    struct amp_type *amp, long x, long y, AMP_STYLE style, const char *glyph_str
 ) {
     if (x < 0 || x >= amp->width || y < 0 || y >= amp->height
     ||  x > UINT32_MAX || y > UINT32_MAX) {
@@ -2239,7 +2246,7 @@ static inline void amp_print_glyph(
         glyph[0] = '?';
     }
 
-    amp_put_glyph(amp, glyph, x, y);
+    amp_put_glyph(amp, x, y, glyph);
 
     if ((style & amp_bg_color_styles) == false) {
         // If the new style does not include any background colors, then the
@@ -2247,7 +2254,7 @@ static inline void amp_print_glyph(
 
         auto old_mode = amp_get_mode(amp, x, y);
 
-        amp_put_style(amp, style, x, y);
+        amp_put_style(amp, x, y, style);
 
         auto new_mode = amp_get_mode(amp, x, y);
 
@@ -2257,12 +2264,12 @@ static inline void amp_print_glyph(
         amp_set_mode(amp, x, y, new_mode);
     }
     else {
-        amp_put_style(amp, style, x, y);
+        amp_put_style(amp, x, y, style);
     }
 }
 
 static inline void amp_print_line_clip(
-    struct amp_type *amp, AMP_STYLE style, long x, long y, AMP_ALIGN align,
+    struct amp_type *amp, long x, long y, AMP_STYLE style, AMP_ALIGN align,
     const char *text, size_t text_size
 ) {
     if (y < 0 || y >= amp->height || y > UINT32_MAX) {
@@ -2287,7 +2294,7 @@ static inline void amp_print_line_clip(
             break;
         }
 
-        amp_print_glyph(amp, style, x, y, s);
+        amp_print_glyph(amp, x, y, style, s);
 
         if (++x >= amp->width) {
             break;
@@ -2298,7 +2305,7 @@ static inline void amp_print_line_clip(
 }
 
 static inline void amp_print_rich_line_clip(
-    struct amp_type *amp, AMP_STYLE *text_style, long x, long y,
+    struct amp_type *amp, long x, long y, AMP_STYLE *text_style,
     AMP_ALIGN align, const char *text, size_t text_size
 ) {
     if (y < 0 || y >= amp->height || y > UINT32_MAX) {
@@ -2347,7 +2354,7 @@ static inline void amp_print_rich_line_clip(
                     break;
                 }
 
-                amp_print_glyph(amp, *text_style, x++, y, s);
+                amp_print_glyph(amp, x++, y, *text_style, s);
             }
 
             s = next;
@@ -2360,7 +2367,7 @@ static inline void amp_print_rich_line_clip(
                 abort();
             }
 
-            amp_print_glyph(amp, *text_style, x++, y, "{");
+            amp_print_glyph(amp, x++, y, *text_style, "{");
 
             s = next + 1;
             continue;
@@ -2399,14 +2406,14 @@ static inline void amp_print_rich_line_clip(
 }
 
 static inline void amp_print_line(
-    struct amp_type *amp, AMP_STYLE style, long x, long y, AMP_ALIGN align,
+    struct amp_type *amp, long x, long y, AMP_STYLE style, AMP_ALIGN align,
     const char *text
 ) {
-    amp_print_line_clip(amp, style, x, y, align, text, strlen(text));
+    amp_print_line_clip(amp, x, y, style, align, text, strlen(text));
 }
 
 static inline size_t amp_print_rich_text_clip(
-    struct amp_type *amp, AMP_STYLE *text_style, long text_x, long text_y,
+    struct amp_type *amp, long text_x, long text_y, AMP_STYLE *text_style,
     uint32_t text_max_width, AMP_ALIGN text_alignment, const char *text_str,
     size_t text_str_size
 ) {
@@ -2435,7 +2442,7 @@ static inline size_t amp_print_rich_text_clip(
             const size_t clip_size = (size_t) (clip_end - line);
 
             amp_print_rich_line_clip(
-                amp, text_style, text_x, text_y + y, text_alignment,
+                amp, text_x, text_y + y, text_style, text_alignment,
                 line, clip_size
             );
 
@@ -2454,7 +2461,7 @@ static inline size_t amp_print_rich_text_clip(
 
                 if (trail_size) {
                     size_t extra_lines = amp_print_rich_text_clip(
-                        amp, text_style, text_x, text_y + y, text_max_width,
+                        amp, text_x, text_y + y, text_style, text_max_width,
                         text_alignment, space_end, trail_size
                     );
 
@@ -2465,7 +2472,7 @@ static inline size_t amp_print_rich_text_clip(
         }
         else {
             amp_print_rich_line_clip(
-                amp, text_style, text_x, text_y + y, text_alignment,
+                amp, text_x, text_y + y, text_style, text_alignment,
                 line, line_size
             );
 
@@ -2484,7 +2491,7 @@ static inline size_t amp_print_rich_text_clip(
 }
 
 static inline size_t amp_print_text_clip(
-    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    struct amp_type *amp, long text_x, long text_y, AMP_STYLE text_style,
     uint32_t text_max_width, AMP_ALIGN text_alignment, const char *text_str,
     size_t text_str_size
 ) {
@@ -2513,7 +2520,7 @@ static inline size_t amp_print_text_clip(
             const size_t clip_size = (size_t) (clip_end - line);
 
             amp_print_line_clip(
-                amp, text_style, text_x, text_y + y, text_alignment,
+                amp, text_x, text_y + y, text_style, text_alignment,
                 line, clip_size
             );
 
@@ -2532,7 +2539,7 @@ static inline size_t amp_print_text_clip(
 
                 if (trail_size) {
                     size_t extra_lines = amp_print_text_clip(
-                        amp, text_style, text_x, text_y + y, text_max_width,
+                        amp, text_x, text_y + y, text_style, text_max_width,
                         text_alignment, space_end, trail_size
                     );
 
@@ -2543,7 +2550,7 @@ static inline size_t amp_print_text_clip(
         }
         else {
             amp_print_line_clip(
-                amp, text_style, text_x, text_y + y, text_alignment,
+                amp, text_x, text_y + y, text_style, text_alignment,
                 line, line_size
             );
 
@@ -2562,17 +2569,17 @@ static inline size_t amp_print_text_clip(
 }
 
 static inline size_t amp_print_text(
-    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    struct amp_type *amp, long text_x, long text_y, AMP_STYLE text_style,
     uint32_t text_max_width, AMP_ALIGN text_alignment, const char *text_str
 ) {
     return amp_print_text_clip(
-        amp, text_style, text_x, text_y, text_max_width, text_alignment,
+        amp, text_x, text_y, text_style, text_max_width, text_alignment,
         text_str, strlen(text_str)
     );
 }
 
 static inline ssize_t amp_snprint_linef(
-    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    struct amp_type *amp, long text_x, long text_y, AMP_STYLE text_style,
     AMP_ALIGN text_alignment, char *buf, size_t buf_size, const char *fmt, ...
 ) {
     va_list args;
@@ -2588,13 +2595,13 @@ static inline ssize_t amp_snprint_linef(
         return (ssize_t) ret;
     }
 
-    amp_print_line(amp, text_style, text_x, text_y, text_alignment, buf);
+    amp_print_line(amp, text_x, text_y, text_style, text_alignment, buf);
 
     return (ssize_t) ret;
 }
 
 static inline ssize_t amp_snprint_textf(
-    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    struct amp_type *amp, long text_x, long text_y, AMP_STYLE text_style,
     uint32_t text_max_width, AMP_ALIGN text_alignment,
     char *buf, size_t buf_size, const char *fmt, ...
 ) {
@@ -2612,14 +2619,14 @@ static inline ssize_t amp_snprint_textf(
     }
 
     amp_print_text(
-        amp, text_style, text_x, text_y, text_max_width, text_alignment, buf
+        amp, text_x, text_y, text_style, text_max_width, text_alignment, buf
     );
 
     return (ssize_t) ret;
 }
 
 static inline ssize_t amp_snprint_rich_textf(
-    struct amp_type *amp, AMP_STYLE text_style, long text_x, long text_y,
+    struct amp_type *amp, long text_x, long text_y, AMP_STYLE text_style,
     uint32_t text_max_width, AMP_ALIGN text_alignment,
     char *buf, size_t buf_size, const char *fmt, ...
 ) {
@@ -2637,18 +2644,18 @@ static inline ssize_t amp_snprint_rich_textf(
     }
 
     amp_print_rich_text(
-        amp, text_style, text_x, text_y, text_max_width, text_alignment, buf
+        amp, text_x, text_y, text_style, text_max_width, text_alignment, buf
     );
 
     return (ssize_t) ret;
 }
 
 static inline size_t amp_print_rich_text(
-    struct amp_type *amp, AMP_STYLE style, long text_x, long text_y,
+    struct amp_type *amp, long text_x, long text_y, AMP_STYLE style,
     uint32_t text_max_width, AMP_ALIGN text_alignment, const char *text_str
 ) {
     return amp_print_rich_text_clip(
-        amp, &style, text_x, text_y, text_max_width, text_alignment,
+        amp, text_x, text_y, &style, text_max_width, text_alignment,
         text_str, strlen(text_str)
     );
 }
@@ -3825,7 +3832,7 @@ static inline struct amp_style_flag_type amp_lookup_style_flag(
 }
 
 static inline ssize_t amp_serialize_layer_cell(
-    const struct amp_type *amp, AMP_STYLE style, long x, long y,
+    const struct amp_type *amp, long x, long y, AMP_STYLE style,
     char *buffer, size_t buffer_size
 ) {
     const bool to_stdout = (
@@ -3887,7 +3894,7 @@ static inline ssize_t amp_serialize_layer_cell(
 }
 
 static inline ssize_t amp_serialize_layer_row(
-    const struct amp_type *amp, AMP_STYLE style, long y, char *buffer,
+    const struct amp_type *amp, long y, AMP_STYLE style, char *buffer,
     size_t buffer_size
 ) {
     const bool to_stdout = (
@@ -3915,7 +3922,7 @@ static inline ssize_t amp_serialize_layer_row(
 
     for (long x=0; x<amp->width; ++x) {
         ssize_t ret = amp_serialize_layer_cell(
-            amp, style, x, y, to_stdout ? buffer : buffer + written,
+            amp, x, y, style, to_stdout ? buffer : buffer + written,
             amp_sub_size(buffer_size, written)
         );
 
@@ -4026,7 +4033,7 @@ static inline ssize_t amp_serialize_layer(
 
     for (long y=0; y<max_height; ++y) {
         ssize_t ret = amp_serialize_layer_row(
-            amp, style, y, to_stdout ? buffer : buffer + written,
+            amp, y, style, to_stdout ? buffer : buffer + written,
             amp_sub_size(buffer_size, written)
         );
 
@@ -4421,7 +4428,7 @@ static inline size_t amp_deserialize(
                     }
 
                     if (layer == 0) {
-                        amp_put_glyph(amp, prev_char, x, y);
+                        amp_put_glyph(amp, x, y, prev_char);
                     }
                     else if (*prev_char != ' ') {
                         AMP_STYLE new_style = (
@@ -4430,7 +4437,7 @@ static inline size_t amp_deserialize(
 
                         if (new_style != AMP_STYLE_NONE) {
                             AMP_STYLE old_style = amp_get_style(amp, x, y);
-                            amp_put_style(amp, old_style|new_style, x, y);
+                            amp_put_style(amp, x, y, old_style|new_style);
                         }
                     }
 

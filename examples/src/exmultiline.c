@@ -13,7 +13,7 @@ int main(int, char **) {
     }
 
     amp_print_text(
-        &amp, 0, amp_get_width(&amp)/2, 0, 0, AMP_ALIGN_CENTER,
+        &amp, amp_get_width(&amp)/2, 0, 0, 0, AMP_ALIGN_CENTER,
         "In the beginning was the Word,\n"
         "and the Word was with God,\n"
         "and the Word was God."

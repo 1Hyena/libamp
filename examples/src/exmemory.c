@@ -40,9 +40,9 @@ int main(int, char **) {
             };
 
             amp_print_glyph(
-                &amp,
+                &amp, x, y,
                 random_uint64(), // Let's enable random styles.
-                x, y, glyph
+                glyph
             );
         }
     }

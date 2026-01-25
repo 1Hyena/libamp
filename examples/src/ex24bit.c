@@ -104,12 +104,12 @@ static void draw_palette(struct amp_type *amp) {
             }
 
             amp_set_bg_color(
-                amp,
+                amp, x, y,
                 amp_map_rgb(
                     r < 0 ? 0 : r > UINT8_MAX ? 255 : (uint8_t) r,
                     g < 0 ? 0 : g > UINT8_MAX ? 255 : (uint8_t) g,
                     b < 0 ? 0 : b > UINT8_MAX ? 255 : (uint8_t) b
-                ), x, y
+                )
             );
         }
     }

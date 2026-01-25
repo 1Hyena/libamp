@@ -246,17 +246,17 @@ https://github.com/1Hyena/libamp/blob/c9d45a1099b8784d06523c6246223e28028ebe84/e
 
 * [Printing operations](#printing-operations)
   - [amp_clear](#amp_clear) (&*ansmap*)
-  - [amp_print_glyph](#amp_print_glyph) (&*ansmap*, *style*, *x*, *y*, &*string*)
-  - [amp_print_line](#amp_print_line) (&*ansmap*, *style*, *x*, *y*, *alignment*, &*string*)
-  - [amp_snprint_linef](#amp_snprint_linef) (&*amp*, *style*, *x*, *y*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
-  - [amp_print_text](#amp_print_text) (&*ansmap*, *style*, *x*, *y*, *max width*, *alignment*, &*string*) → `size_t`
-  - [amp_snprint_textf](#amp_snprint_textf) (&*amp*, *style*, *x*, *y*, *max width*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
-  - [amp_print_rich_text](#amp_print_rich_text) (&*ansmap*, *style*, *x*, *y*, *max width*, *alignment*, &*string*) → `size_t`
-  - [amp_snprint_rich_textf](#amp_snprint_rich_textf) (&*amp*, *style*, *x*, *y*, *max width*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
-  - [amp_put_glyph](#amp_put_glyph) (&*ansmap*, &*string*, *x*, *y*) → `const char *`
-  - [amp_put_style](#amp_put_style) (&*ansmap*, *style*, *x*, *y*) → `bool`
-  - [amp_set_bg_color](#amp_set_bg_color) (&*ansmap*, *color*, *x*, *y*) → `bool`
-  - [amp_set_fg_color](#amp_set_fg_color) (&*ansmap*, *color*, *x*, *y*) → `bool`
+  - [amp_print_glyph](#amp_print_glyph) (&*ansmap*, *x*, *y*, *style*, &*string*)
+  - [amp_print_line](#amp_print_line) (&*ansmap*, *x*, *y*, *style*, *alignment*, &*string*)
+  - [amp_snprint_linef](#amp_snprint_linef) (&*amp*, *x*, *y*, *style*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
+  - [amp_print_text](#amp_print_text) (&*ansmap*, *x*, *y*, *style*, *max width*, *alignment*, &*string*) → `size_t`
+  - [amp_snprint_textf](#amp_snprint_textf) (&*amp*, *x*, *y*, *style*, *max width*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
+  - [amp_print_rich_text](#amp_print_rich_text) (&*ansmap*, *x*, *y*, *style*, *max width*, *alignment*, &*string*) → `size_t`
+  - [amp_snprint_rich_textf](#amp_snprint_rich_textf) (&*amp*, *x*, *y*, *style*, *max width*, *align*, &*buf*, *buf size*, &*fmt*, *...*) → `ssize_t`
+  - [amp_put_glyph](#amp_put_glyph) (&*ansmap*, *x*, *y*, &*string*) → `const char *`
+  - [amp_put_style](#amp_put_style) (&*ansmap*, *x*, *y*, *style*) → `bool`
+  - [amp_set_bg_color](#amp_set_bg_color) (&*ansmap*, *x*, *y*, *color*) → `bool`
+  - [amp_set_fg_color](#amp_set_fg_color) (&*ansmap*, *x*, *y*, *color*) → `bool`
 
 * [Image I/O](#image-io)
   - [amp_set_palette](#amp_set_palette) (&*ansmap*, palette)
