@@ -139,9 +139,9 @@ arguments.
 
 To display an ansmap in the terminal, use the `amp_to_ans()` function. It
 requires a pointer to the ansmap image structure and a pointer to the memory
-location to copy the resulting ANSI escape code sequences that the terminal
-could render. If `nullptr` is used for the memory location, the output will be
-written to the standard output of the program.
+location to copy the resulting ANSI escape code sequences that the terminal can
+render. If `nullptr` is used for the memory location, the output will be written
+to the standard output of the program.
 
 
 ### Examples ###################################################################
