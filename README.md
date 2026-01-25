@@ -50,43 +50,33 @@ designed for creating terminal applications and games like multi-user dungeons
 
 ### The AMP file format ########################################################
 
-LibAMP comes with a novel file format specifically designed to be human-readable
-for convenient image editing using a standard text editor that supports a fixed
-width font. The recommended file name extension for AMP files is `.amp`.
+LibAMP comes with a unique file format designed for easy human readability,
+allowing convenient image editing using a standard text editor that supports a
+fixed-width font. The recommended file extension for AMP files is `.amp`.
 
-An AMP file is "vertically" partitioned into a number of segments called layers.
-The first layer is always the container for glyphs and must be present even if
-its height is zero (there are no glyps on the ansmap). The following layers are
-optional and contain style markers (foreground color, background color and text
-decoration specifiers). If multiple style markers occupy the same cell, then
-each of such marker has to be represented by a different layer.
+An AMP file is divided into segments called layers. The first layer is only for
+the text content and must be present, even if its height is zero (indicating no
+text to be printed on the ansmap). Subsequent layers are optional and contain
+style markers such as foreground color, background color, and text decoration
+specifications. Each style marker occupying the same cell must be represented by
+a different layer.
 
-A valid AMP file always begins with a pair of Unicode box-drawing characters `╔`
-and `═`. Then, any number of `═` characters may follow. The number of `═`
-characters on the first line specifies the **width of the ansmap**. The only
-valid terminator for this sequence is `╗`. Anything after that until the end of
-line is unspecified.
+A valid AMP file starts with Unicode box-drawing characters `╔` and `═`. The
+number of `═` characters following the first character determines
+**the width of the ansmap**. The sequence is terminated by `╗`.
 
-All of the following lines must begin either with the `║`, `╠` or `╚` character.
-If the `║` character is in the beginning of a line, then their count in the
-beginning of subsequent lines determins the height of the particular layer. The
-layer with the greatest height also defines the **height of the ansmap**.
+Subsequent lines must start with `║`, `╠`, or `╚`. If a line starts with `║`,
+the count of `║` characters in the beginning of subsequent lines determines the
+height of that layer. The layer with the greatest height defines
+**the ansmap's height**.
 
-The `║` character itself must be immediately followed by a number of Unicode
-characters where their count equals to the width of the ansmap. After that,
-another `║` character must follow. Anything after that until the end of line is
-unspecified.
-
-The `╠` character in the beginning of a line specifies the end of the layer and
-the beginning of a new layer. It is followed by the number of `═` characters
-where their total count is equal to width of the ansmap. After that, a `╣`
-character must follow. Anything after that until the end of line is unspecified.
-
-If a line in the AMP file begins with the `╚` character, then it must be
-followed by the number of `═` characters where their total count is equal to
-width of the ansmap. After that, a `╝` character must follow. Anything after
-that is unspecified. Such a line marks the end of the layer and also the end of
-the AMP file.
+If `║` is in the beginning of a line, then it must be followed by Unicode
+characters equal to the ansmap's width, then another `║`. This sequence defines
+the contents of one row in a given layer. Lines starting with `╠` indicate the
+end of a layer and the start of a new one if `╠` is followed by `═` characters
+equal to the  ansmap's width and a `╣`. Lines starting with `╚` mark the end of
+a layer and the end of the AMP file if `═` characters equal to the ansmap's
+width and a `╝` follow.
 
 For example, here are the contents of a valid AMP document:
 
