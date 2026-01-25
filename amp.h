@@ -515,13 +515,19 @@ static inline size_t                    amp_deserialize(
     // Returns the original canvas size of the deserialized ansmap. The return
     // value of zero indicates a parsing error.
 );
-/*
+
 static inline void                      amp_draw_sprite(
     struct amp_type *                       ansmap,
-    long                                    x,
-    long                                    y,
+    long                                    x_on_ansmap,
+    long                                    y_on_ansmap,
     const struct amp_type *                 sprite
-);*/
+
+    // Draws a copy of the sprite ansmap onto the destination ansmap at the
+    // specified position. It uses a masked drawing mode where transparent cells
+    // are skipped, so the background image will show through the masked parts
+    // of the sprite. Transparent cells are marked by their glyphs containing
+    // either a space or an empty string, having no style specified.
+);
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -4486,6 +4492,35 @@ static inline size_t amp_deserialize(
     }
 
     return 0;
+}
+
+static inline void amp_draw_sprite(
+    struct amp_type *amp, long x_on_amp, long y_on_amp,
+    const struct amp_type *sprite
+) {
+    for (long dy=0; dy<sprite->height; ++dy) {
+        if (y_on_amp + dy >= amp->height) {
+            break;
+        }
+
+        for (long dx=0; dx<sprite->width; ++dx) {
+            if (x_on_amp + dx >= amp->width) {
+                break;
+            }
+
+            auto const mode = amp_get_mode(sprite, dx, dy);
+            const char *glyph = amp_get_glyph(sprite, dx, dy);
+
+            if (mode.bitset.bg == false) {
+                if (!glyph || *glyph == '\0') {
+                    continue;
+                }
+            }
+
+            amp_set_mode(amp, x_on_amp + dx, y_on_amp + dy, mode);
+            amp_put_glyph(amp, x_on_amp + dx, y_on_amp + dy, glyph);
+        }
+    }
 }
 
 #endif
