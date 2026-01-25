@@ -48,6 +48,69 @@ designed for creating terminal applications and games like multi-user dungeons
 * **Permissive license:** LibAMP is available under the [MIT license](LICENSE).
 
 
+### The AMP file format ########################################################
+
+LibAMP comes with a novel file format specifically designed to be human-readable
+for convenient image editing using a standard text editor that supports a fixed
+width font. The recommended file name extension for AMP files is `.amp`.
+
+An AMP file is "vertically" partitioned into a number of segments called layers.
+The first layer is always the container for glyphs and must be present even if
+its height is zero (there are no glyps on the ansmap). The following layers are
+optional and contain style markers (foreground color, background color and text
+decoration specifiers). If multiple style markers occupy the same cell, then
+each of such marker has to be represented by a different layer.
+
+A valid AMP file always begins with a pair of Unicode box-drawing characters `╔`
+and `═`. Then, any number of `═` characters may follow. The number of `═`
+characters on the first line specifies the **width of the ansmap**. The only
+valid terminator for this sequence is `╗`. Anything after that until the end of
+line is unspecified.
+
+All of the following lines must begin either with the `║`, `╠` or `╚` character.
+If the `║` character is in the beginning of a line, then their count in the
+beginning of subsequent lines determins the height of the particular layer. The
+layer with the greatest height also defines the **height of the ansmap**.
+
+The `║` character itself must be immediately followed by a number of Unicode
+characters where their count equals to the width of the ansmap. After that,
+another `║` character must follow. Anything after that until the end of line is
+unspecified.
+
+The `╠` character in the beginning of a line specifies the end of the layer and
+the beginning of a new layer. It is followed by the number of `═` characters
+where their total count is equal to width of the ansmap. After that, a `╣`
+character must follow. Anything after that until the end of line is unspecified.
+
+If a line in the AMP file begins with the `╚` character, then it must be
+followed by the number of `═` characters where their total count is equal to
+width of the ansmap. After that, a `╝` character must follow. Anything after
+that is unspecified. Such a line marks the end of the layer and also the end of
+the AMP file.
+
+For example, here are the contents of a valid AMP document:
+
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║             navy background, red foreground, italic, faint italic            ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║             NNNNNNNNNNNNNNN  rrrrrrrrrrrrrr  //////  ////////////            ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                      ????????????            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+The letters and symbols in the second and third box in the example above serve
+as style markers for the cells in the first box. Each style marker applies to a
+single cell, and their effects can be combined by using multiple style layers.
+The position of a style marker on the first layer is determined by its placement
+when the style layer is superimposed on the first layer.
+
+For the key of style markers, please refer to the [ExRich](#exrich) example as
+it includes the list of available style markers and their definitions.
+
+
 ## Installation ################################################################
 
 Clone the repository and include the header file in your project. Compile using
