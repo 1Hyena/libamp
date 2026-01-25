@@ -73,7 +73,7 @@ overall height.
 If a line starts with `║`, it must be followed by Unicode characters equal to
 the ansmap's width, then another `║`. This sequence defines the contents of one
 row in a given layer. Lines starting with `╠` indicate the end of a layer and
-the start of a new one if followed by ═ characters equal to the ansmap's width
+the start of a new one if followed by `═` characters equal to the ansmap's width
 and a `╣`. Lines starting with `╚` mark the end of a layer and the end of the
 AMP file if followed by `═` characters equal to the ansmap's width and a `╝`.
 
