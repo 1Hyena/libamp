@@ -36,11 +36,11 @@ int main(int argc, char **argv) {
             struct amp_type amp;
 
             if (amp_init(&amp, w, h, canvas_data, canvas_size) <= canvas_size) {
-                if (amp_deserialize(&amp, input_data, input_size)) {
+                if (amp_decode(&amp, input_data, input_size)) {
                     amp_to_ans(&amp, nullptr, 0);
                     amp_stdout("\n", 1);
                 }
-                else error_message = "amp_deserialize: parse error\n";
+                else error_message = "amp_decode: parse error\n";
             }
             else error_message = "amp_init: not enough memory provided\n";
         }

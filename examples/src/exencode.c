@@ -22,7 +22,7 @@ int main(int, char **) {
     const char *comment = "\n\nConverted to a plaintext AMP container:\n";
     amp_stdout(comment, strlen(comment));
 
-    amp_serialize(&amp, AMP_FLATTEN|AMP_DEFLATE, nullptr, 0);
+    amp_encode(&amp, AMP_FLATTEN|AMP_DEFLATE, nullptr, 0);
     amp_stdout("\n", 1);
 
     return EXIT_SUCCESS;

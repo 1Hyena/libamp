@@ -39,10 +39,10 @@ int main(int, char **) {
             struct amp_type spr;
 
             if (amp_init(&spr, spr_w, spr_h, spr_data, spr_size) <= spr_size) {
-                if (amp_deserialize(&spr, spr_file, sizeof(spr_file))) {
+                if (amp_decode(&spr, spr_file, sizeof(spr_file))) {
                     amp_draw_sprite(&canvas, 0, 0, &spr);
                 }
-                else error_message = "amp_deserialize: parse error\n";
+                else error_message = "amp_decode: parse error\n";
             }
             else error_message = "amp_init: not enough memory provided\n";
         }

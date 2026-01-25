@@ -465,7 +465,7 @@ static inline ssize_t                   amp_snprint_linef(
     // the underlying call to vsnprintf.
 ) __attribute__((format (printf, 8, 9)));
 
-static inline ssize_t                   amp_serialize(
+static inline ssize_t                   amp_encode(
     const struct amp_type *                 ansmap,
     AMP_SETTINGS                            flags,
     char *                                  buffer,
@@ -503,7 +503,7 @@ static inline size_t                    amp_parse_size(
     // return value of zero indicates a parsing error.
 );
 
-static inline size_t                    amp_deserialize(
+static inline size_t                    amp_decode(
     struct amp_type *                       ansmap,
     const void *                            data,
     size_t                                  data_size
@@ -512,7 +512,7 @@ static inline size_t                    amp_deserialize(
     // referenced ansmap. If the ansmap could not fit the image, then the image
     // will be cropped to fit.
     //
-    // Returns the original canvas size of the deserialized ansmap. The return
+    // Returns the original canvas size of the decoded ansmap. The return
     // value of zero indicates a parsing error.
 );
 
@@ -786,21 +786,21 @@ static inline
 struct amp_style_flag_type              amp_lookup_style_flag(
     AMP_STYLE
 );
-static inline ssize_t                   amp_serialize_layer(
+static inline ssize_t                   amp_encode_layer(
     const struct amp_type *                 ansmap,
     AMP_SETTINGS                            settings,
     AMP_STYLE                               style,
     char *                                  buffer,
     size_t                                  buffer_size
 );
-static inline ssize_t                   amp_serialize_layer_row(
+static inline ssize_t                   amp_encode_layer_row(
     const struct amp_type *                 ansmap,
     long                                    row_y,
     AMP_STYLE                               style,
     char *                                  buffer,
     size_t                                  buffer_size
 );
-static inline ssize_t                   amp_serialize_layer_cell(
+static inline ssize_t                   amp_encode_layer_cell(
     const struct amp_type *                 ansmap,
     long                                    x,
     long                                    y,
@@ -3837,7 +3837,7 @@ static inline struct amp_style_flag_type amp_lookup_style_flag(
     return amp_style_flag_table[index];
 }
 
-static inline ssize_t amp_serialize_layer_cell(
+static inline ssize_t amp_encode_layer_cell(
     const struct amp_type *amp, long x, long y, AMP_STYLE style,
     char *buffer, size_t buffer_size
 ) {
@@ -3899,7 +3899,7 @@ static inline ssize_t amp_serialize_layer_cell(
     return written > SSIZE_MAX ? -1 : (ssize_t) written;
 }
 
-static inline ssize_t amp_serialize_layer_row(
+static inline ssize_t amp_encode_layer_row(
     const struct amp_type *amp, long y, AMP_STYLE style, char *buffer,
     size_t buffer_size
 ) {
@@ -3927,7 +3927,7 @@ static inline ssize_t amp_serialize_layer_row(
     }
 
     for (long x=0; x<amp->width; ++x) {
-        ssize_t ret = amp_serialize_layer_cell(
+        ssize_t ret = amp_encode_layer_cell(
             amp, x, y, style, to_stdout ? buffer : buffer + written,
             amp_sub_size(buffer_size, written)
         );
@@ -3955,7 +3955,7 @@ static inline ssize_t amp_serialize_layer_row(
     return written > SSIZE_MAX ? -1 : (ssize_t) written;
 }
 
-static inline ssize_t amp_serialize_layer(
+static inline ssize_t amp_encode_layer(
     const struct amp_type *amp, AMP_SETTINGS settings, AMP_STYLE style,
     char *buffer, size_t buffer_size
 ) {
@@ -4038,7 +4038,7 @@ static inline ssize_t amp_serialize_layer(
     }
 
     for (long y=0; y<max_height; ++y) {
-        ssize_t ret = amp_serialize_layer_row(
+        ssize_t ret = amp_encode_layer_row(
             amp, y, style, to_stdout ? buffer : buffer + written,
             amp_sub_size(buffer_size, written)
         );
@@ -4092,7 +4092,7 @@ static inline AMP_STYLE amp_styles_to_layer(
     return layer_styles;
 }
 
-static inline ssize_t amp_serialize(
+static inline ssize_t amp_encode(
     const struct amp_type *amp, AMP_SETTINGS settings,
     char *buffer, size_t buffer_size
 ) {
@@ -4184,7 +4184,7 @@ static inline ssize_t amp_serialize(
             layer_style = amp_styles_to_layer(amp, style_group);
 
             if (layer_style || i == 0) {
-                ssize_t ret = amp_serialize_layer(
+                ssize_t ret = amp_encode_layer(
                     amp, settings, layer_style,
                     to_stdout ? buffer : buffer + written,
                     amp_sub_size(buffer_size, written)
@@ -4360,7 +4360,7 @@ static inline size_t amp_parse_size(
     return 0;
 }
 
-static inline size_t amp_deserialize(
+static inline size_t amp_decode(
     struct amp_type *amp, const void *data, size_t data_size
 ) {
     const char *str = (const char *) data;

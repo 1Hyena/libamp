@@ -27,11 +27,11 @@ int main(int, char **) {
             struct amp_type amp;
 
             if (amp_init(&amp, w, h, data, data_size) <= data_size) {
-                if (amp_deserialize(&amp, input_data, sizeof(input_data))) {
+                if (amp_decode(&amp, input_data, sizeof(input_data))) {
                     amp_to_ans(&amp, nullptr, 0);
                     amp_stdout("\n", 1);
                 }
-                else error_message = "amp_deserialize: parse error\n";
+                else error_message = "amp_decode: parse error\n";
             }
             else error_message = "amp_init: not enough memory provided\n";
         }

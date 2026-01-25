@@ -172,31 +172,31 @@ https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/e
 ![screenshot](img/exrich.png "console output of exrich")
 
 
-#### ExSerialize ###############################################################
+#### ExEncode ##################################################################
 
-The [exserialize](examples/src/exserialize.c) program generates rich text on an
+The [exencode](examples/src/exencode.c) program generates rich text on an
 ansmap, displays the result in the terminal, and exports the ansmap image as an
 AMP document, which is also displayed in the terminal.
 
-https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exserialize.c#L15-L25
+https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exencode.c#L15-L25
 
-![screenshot](img/exserialize.png "console output of exserialize")
+![screenshot](img/exencode.png "console output of exencode")
 
 
-#### ExDeserialize #############################################################
+#### ExDecode ##################################################################
 
-The [exdeserialize](examples/src/exdeserialize.c) example demonstrates how the
+The [exdecode](examples/src/exdecode.c) example demonstrates how the
 human-readable AMP documents can be imported from memory.
 
-https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exdeserialize.c#L7-L40
+https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exdecode.c#L7-L40
 
-![screenshot](img/exdeserialize.png "console output of exdeserialize")
+![screenshot](img/exdecode.png "console output of exdecode")
 
 
 #### ExAmpFile #################################################################
 
 The [exampfile](examples/src/exampfile.c) example is very similar to
-[ExDeserialize](#exdeserialize). The only difference is that instead of
+[ExDecode](#exdecode). The only difference is that instead of
 deserializing a hardcoded AMP document, the program loads a user specified AMP
 file from the file system.
 
@@ -264,8 +264,8 @@ https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/e
   - [amp_row_to_ans](#amp_row_to_ans) (&*ansmap*, *y*, &*data*, *data size*) → `ssize_t`
   - [amp_clip_to_ans](#amp_clip_to_ans) (&*ansmap*, *x*, *y*, *width*, &*data*, *data size*) → `ssize_t`
   - [amp_parse_size](#amp_parse_size) (&*data*, *data size*, &*width*, &*height*) → `size_t`
-  - [amp_deserialize](#amp_deserialize) (&*ansmap*, &*data*, *data size*) → `size_t`
-  - [amp_serialize](#amp_serialize) (&*ansmap*, settings, &*data*, *data size*) → `ssize_t`
+  - [amp_decode](#amp_decode) (&*ansmap*, &*data*, *data size*) → `size_t`
+  - [amp_encode](#amp_encode) (&*ansmap*, settings, &*data*, *data size*) → `ssize_t`
   - [amp_stdout](#amp_stdout) (&*string*, *string size*) → `ssize_t`
 
 
@@ -467,23 +467,23 @@ https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/a
 https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/amp.h#L490-L504
 
 Examples:
-[exdeserialize](https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exdeserialize.c#L20)
+[exdecode](https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exdecode.c#L20)
 
 
-##### amp_deserialize ##########################################################
+##### amp_decode ###############################################################
 
 https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/amp.h#L506-L517
 
 Examples:
-[exdeserialize](https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exdeserialize.c#L30)
+[exdecode](https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exdecode.c#L30)
 
 
-##### amp_serialize ############################################################
+##### amp_encode ###############################################################
 
 https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/amp.h#L468-L488
 
 Examples:
-[exserialize](https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exserialize.c#L25)
+[exencode](https://github.com/1Hyena/libamp/blob/581db1fa1c50e942bf840a3ed133cde3434fa821/examples/src/exencode.c#L25)
 
 
 ##### amp_stdout ###############################################################
