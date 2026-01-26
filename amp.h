@@ -516,17 +516,17 @@ static inline size_t                    amp_decode(
     // value of zero indicates a parsing error.
 );
 
-static inline void                      amp_draw_sprite(
-    struct amp_type *                       ansmap,
-    long                                    x_on_ansmap,
-    long                                    y_on_ansmap,
-    const struct amp_type *                 sprite
+static inline void                      amp_draw_ansmap(
+    struct amp_type *                       dst_ansmap,
+    long                                    x_on_dst_ansmap,
+    long                                    y_on_dst_ansmap,
+    const struct amp_type *                 src_ansmap
 
-    // Draws a copy of the sprite ansmap onto the destination ansmap at the
+    // Draws a copy of the source ansmap onto the destination ansmap at the
     // specified position. It uses a masked drawing mode where transparent cells
     // are skipped, so the background image will show through the masked parts
-    // of the sprite. Transparent cells are marked by their glyphs containing
-    // either a space or an empty string, having no style specified.
+    // of the source image. Transparent cells are marked by their glyphs
+    // containing either a space or an empty string, having no style specified.
 );
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -3258,7 +3258,7 @@ static inline struct amp_rgb16_type amp_find_rgb16(
          dg -= table->rgb.g;
          db -= table->rgb.b;
 
-         long d = dr * dr + dg * dg + db * db;
+         long d = 2 * dr * dr + 4 * dg * dg + 3 * db * db;
 
          if (d < best_d) {
             best_d = d;
@@ -4494,7 +4494,7 @@ static inline size_t amp_decode(
     return 0;
 }
 
-static inline void amp_draw_sprite(
+static inline void amp_draw_ansmap(
     struct amp_type *amp, long x_on_amp, long y_on_amp,
     const struct amp_type *sprite
 ) {

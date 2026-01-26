@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
             break;
         }
 
-        amp_draw_sprite(&canvas, 0, 0, &spr);
+        amp_draw_ansmap(&canvas, 0, 0, &spr);
     } while (false);
 
     if (!error_message) {
