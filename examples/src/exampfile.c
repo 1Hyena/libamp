@@ -1,11 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include "../../amp.h"
-
-
-static struct blob_type {
-    char *data;
-    size_t size;
-} load_file(const char *fname);
+#include "utils.h"
 
 
 int main(int argc, char **argv) {
@@ -58,45 +53,4 @@ int main(int argc, char **argv) {
     }
 
     return EXIT_SUCCESS;
-}
-
-static struct blob_type load_file(const char *fname) {
-    static constexpr size_t INITIAL_BUFFER_CAPACITY = 512;
-    size_t data_size = 0, data_capacity = INITIAL_BUFFER_CAPACITY;
-    char *data = nullptr;
-    FILE *fp = fopen(fname, "r");
-
-    if (fp == nullptr) {
-        const char *error_message = "fopen: error opening file\n";
-        write(2, error_message, strlen(error_message));
-
-        return (struct blob_type) {};
-    }
-
-    for (;;) {
-        size_t bytes_read, bytes_to_read;
-
-        data = realloc(data, data_capacity);
-
-        if (data == nullptr) {
-            const char *error_message = "realloc: memory allocation failed\n";
-            write(2, error_message, strlen(error_message));
-
-            return (struct blob_type) {};
-        }
-
-        bytes_to_read = data_capacity - data_size;
-        bytes_read = fread(data + data_size, 1, bytes_to_read, fp);
-        data_size += bytes_read;
-
-        if (bytes_read != bytes_to_read) {
-            break;
-        }
-
-        data_capacity *= 2;
-    }
-
-    fclose(fp);
-
-    return (struct blob_type) { .data = data, .size = data_size };
 }
