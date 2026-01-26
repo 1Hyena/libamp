@@ -22,10 +22,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        //
 // DEALINGS IN THE SOFTWARE.                                                  //
 ////////////////////////////////////////////////////////////////////////////////
-
 #ifndef AMP_H_12_01_2026
 #define AMP_H_12_01_2026
 ////////////////////////////////////////////////////////////////////////////////
+#include <math.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdckdint.h>
@@ -609,6 +609,10 @@ struct amp_style_flag_type {
     AMP_STYLE   value;
 };
 
+struct amp_color_combo_type {
+    AMP_COLOR colors[5];
+};
+
 // Private API: ////////////////////////////////////////////////////////////////
 static inline ssize_t                   amp_copy_glyph(
     const struct amp_type *                 ansmap,
@@ -785,6 +789,12 @@ struct amp_inline_style_type            amp_lookup_inline_style(
 static inline
 struct amp_style_flag_type              amp_lookup_style_flag(
     AMP_STYLE
+);
+static inline
+struct amp_color_combo_type             amp_lookup_color_combo(
+    uint8_t                                 red,
+    uint8_t                                 green,
+    uint8_t                                 blue
 );
 static inline ssize_t                   amp_encode_layer(
     const struct amp_type *                 ansmap,
@@ -1753,6 +1763,426 @@ static const struct amp_rgb16_type amp_rgb16_bg_table[] = {
     [AMP_MAX_COLOR] = {}
 };
 
+static const struct amp_color_combo_type amp_color_combo_table[] = {
+    [  0] = { .colors = { AMP_DARK } },
+    [  2] = { .colors = { AMP_DARK, AMP_NAVY } },
+    [  4] = { .colors = { AMP_NAVY } },
+    [  6] = { .colors = { AMP_NAVY, AMP_BLUE } },
+    [  8] = { .colors = { AMP_BLUE } },
+    [ 10] = { .colors = { AMP_DARK, AMP_GREEN, AMP_NAVY } },
+    [ 12] = { .colors = { AMP_DARK, AMP_NAVY, AMP_TEAL } },
+    [ 13] = { .colors = { AMP_GREEN, AMP_NAVY, AMP_BLUE } },
+    [ 14] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_BLUE } },
+    [ 18] = { .colors = { AMP_DARK, AMP_GREEN } },
+    [ 20] = { .colors = { AMP_GREEN, AMP_NAVY } },
+    [ 21] = { .colors = { AMP_DARK, AMP_GREEN, AMP_TEAL, AMP_BLUE } },
+    [ 22] = { .colors = { AMP_NAVY, AMP_TEAL } },
+    [ 23] = { .colors = { AMP_DARK, AMP_NAVY, AMP_BLUE, AMP_AQUA } },
+    [ 24] = { .colors = { AMP_TEAL, AMP_BLUE } },
+    [ 28] = { .colors = { AMP_DARK, AMP_GREEN, AMP_TEAL } },
+    [ 29] = { .colors = { AMP_DARK, AMP_NAVY, AMP_TEAL, AMP_LIME } },
+    [ 30] = { .colors = { AMP_GREEN, AMP_NAVY, AMP_TEAL } },
+    [ 31] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_BLUE } },
+    [ 32] = { .colors = { AMP_DARK, AMP_BLUE, AMP_AQUA } },
+    [ 33] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_BLUE, AMP_AQUA } },
+    [ 34] = { .colors = { AMP_NAVY, AMP_BLUE, AMP_AQUA } },
+    [ 36] = { .colors = { AMP_GREEN } },
+    [ 37] = { .colors = { AMP_GREEN, AMP_NAVY, AMP_LIME } },
+    [ 38] = { .colors = { AMP_GREEN, AMP_TEAL } },
+    [ 39] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_LIME } },
+    [ 40] = { .colors = { AMP_TEAL } },
+    [ 41] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_AQUA } },
+    [ 42] = { .colors = { AMP_NAVY, AMP_AQUA } },
+    [ 43] = { .colors = { AMP_TEAL, AMP_BLUE, AMP_AQUA } },
+    [ 44] = { .colors = { AMP_BLUE, AMP_AQUA } },
+    [ 46] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_LIME } },
+    [ 47] = { .colors = { AMP_DARK, AMP_GREEN, AMP_LIME, AMP_AQUA } },
+    [ 48] = { .colors = { AMP_DARK, AMP_LIME, AMP_AQUA } },
+    [ 49] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_AQUA } },
+    [ 50] = { .colors = { AMP_LIME, AMP_BLUE, AMP_AQUA } },
+    [ 54] = { .colors = { AMP_GREEN, AMP_LIME } },
+    [ 56] = { .colors = { AMP_TEAL, AMP_LIME } },
+    [ 57] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_LIME, AMP_AQUA } },
+    [ 58] = { .colors = { AMP_GREEN, AMP_AQUA } },
+    [ 60] = { .colors = { AMP_TEAL, AMP_AQUA } },
+    [ 66] = { .colors = { AMP_GREEN, AMP_LIME, AMP_AQUA } },
+    [ 67] = { .colors = { AMP_TEAL, AMP_LIME, AMP_AQUA } },
+    [ 72] = { .colors = { AMP_LIME } },
+    [ 76] = { .colors = { AMP_LIME, AMP_AQUA } },
+    [ 80] = { .colors = { AMP_AQUA } },
+    [ 82] = { .colors = { AMP_DARK, AMP_MAROON, AMP_NAVY } },
+    [ 84] = { .colors = { AMP_DARK, AMP_NAVY, AMP_PURPLE } },
+    [ 85] = { .colors = { AMP_MAROON, AMP_NAVY, AMP_BLUE } },
+    [ 86] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_BLUE } },
+    [ 90] = { .colors = { AMP_DARK, AMP_MAROON, AMP_GREEN } },
+    [ 91] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_NAVY } },
+    [ 92] = { .colors = { AMP_DARK, AMP_GREEN, AMP_NAVY, AMP_PURPLE } },
+    [ 93] = { .colors = { AMP_GREEN, AMP_NAVY, AMP_PURPLE } },
+    [ 94] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_TEAL } },
+    [ 95] = { .colors = { AMP_PURPLE, AMP_TEAL, AMP_BLUE } },
+    [100] = { .colors = { AMP_DARK, AMP_GREEN, AMP_OLIVE, AMP_NAVY } },
+    [101] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_NAVY, AMP_TEAL } },
+    [102] = { .colors = { AMP_GREEN, AMP_NAVY, AMP_PURPLE, AMP_TEAL } },
+    [103] = { .colors = { AMP_OLIVE, AMP_NAVY, AMP_TEAL, AMP_BLUE } },
+    [104] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_CHARCOAL, AMP_BLUE } },
+    [105] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_BLUE, AMP_AQUA } },
+    [108] = { .colors = { AMP_DARK, AMP_GREEN, AMP_OLIVE } },
+    [109] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_NAVY } },
+    [110] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_NAVY, AMP_TEAL } },
+    [111] = { .colors = { AMP_OLIVE, AMP_NAVY, AMP_TEAL } },
+    [112] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_CHARCOAL } },
+    [113] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_BLUE } },
+    [114] = { .colors = { AMP_PURPLE, AMP_TEAL, AMP_BLUE, AMP_AQUA } },
+    [115] = { .colors = { AMP_PURPLE, AMP_BLUE, AMP_AQUA } },
+    [117] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_LIME } },
+    [118] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_TEAL } },
+    [119] = { .colors = { AMP_OLIVE, AMP_NAVY, AMP_TEAL, AMP_LIME } },
+    [120] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_CHARCOAL } },
+    [121] = { .colors = { AMP_CHARCOAL, AMP_LIME, AMP_BLUE } },
+    [122] = { .colors = { AMP_PURPLE, AMP_TEAL, AMP_AQUA } },
+    [123] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_BLUE, AMP_AQUA } },
+    [124] = { .colors = { AMP_CHARCOAL, AMP_BLUE, AMP_AQUA } },
+    [126] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_LIME } },
+    [127] = { .colors = { AMP_OLIVE, AMP_TEAL, AMP_LIME } },
+    [128] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_CHARCOAL, AMP_LIME } },
+    [129] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_LIME } },
+    [130] = { .colors = { AMP_OLIVE, AMP_TEAL, AMP_AQUA } },
+    [131] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_AQUA } },
+    [137] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_LIME, AMP_AQUA } },
+    [138] = { .colors = { AMP_OLIVE, AMP_TEAL, AMP_LIME, AMP_AQUA } },
+    [139] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_LIME, AMP_AQUA } },
+    [147] = { .colors = { AMP_OLIVE, AMP_LIME, AMP_AQUA } },
+    [148] = { .colors = { AMP_CHARCOAL, AMP_LIME, AMP_AQUA } },
+    [162] = { .colors = { AMP_DARK, AMP_MAROON } },
+    [164] = { .colors = { AMP_MAROON, AMP_NAVY } },
+    [165] = { .colors = { AMP_DARK, AMP_MAROON, AMP_PURPLE, AMP_BLUE } },
+    [166] = { .colors = { AMP_NAVY, AMP_PURPLE } },
+    [167] = { .colors = { AMP_DARK, AMP_NAVY, AMP_BLUE, AMP_FUCHSIA } },
+    [168] = { .colors = { AMP_PURPLE, AMP_BLUE } },
+    [172] = { .colors = { AMP_DARK, AMP_MAROON, AMP_OLIVE, AMP_NAVY } },
+    [173] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_NAVY, AMP_PURPLE } },
+    [174] = { .colors = { AMP_MAROON, AMP_NAVY, AMP_PURPLE, AMP_TEAL } },
+    [175] = { .colors = { AMP_OLIVE, AMP_NAVY, AMP_PURPLE, AMP_BLUE } },
+    [176] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_CHARCOAL, AMP_BLUE } },
+    [177] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_BLUE, AMP_FUCHSIA } },
+    [180] = { .colors = { AMP_MAROON, AMP_GREEN } },
+    [181] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_OLIVE, AMP_NAVY } },
+    [182] = { .colors = { AMP_OLIVE, AMP_NAVY } },
+    [183] = { .colors = { AMP_DARK, AMP_NAVY, AMP_SILVER } },
+    [184] = { .colors = { AMP_PURPLE, AMP_TEAL } },
+    [185] = { .colors = { AMP_DARK, AMP_SILVER, AMP_BLUE } },
+    [186] = { .colors = { AMP_CHARCOAL, AMP_BLUE } },
+    [187] = { .colors = { AMP_NAVY, AMP_BLUE, AMP_FUCHSIA, AMP_AQUA } },
+    [189] = { .colors = { AMP_DARK, AMP_MAROON, AMP_OLIVE, AMP_LIME } },
+    [190] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_OLIVE, AMP_TEAL } },
+    [191] = { .colors = { AMP_DARK, AMP_GREEN, AMP_SILVER } },
+    [192] = { .colors = { AMP_GREEN, AMP_NAVY, AMP_SILVER } },
+    [193] = { .colors = { AMP_DARK, AMP_NAVY, AMP_TEAL, AMP_SILVER } },
+    [194] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_SILVER } },
+    [195] = { .colors = { AMP_TEAL, AMP_SILVER, AMP_BLUE } },
+    [196] = { .colors = { AMP_TEAL, AMP_BLUE, AMP_FUCHSIA, AMP_AQUA } },
+    [198] = { .colors = { AMP_GREEN, AMP_OLIVE } },
+    [199] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_PURPLE, AMP_LIME } },
+    [200] = { .colors = { AMP_OLIVE, AMP_TEAL } },
+    [201] = { .colors = { AMP_DARK, AMP_GREEN, AMP_TEAL, AMP_SILVER } },
+    [202] = { .colors = { AMP_TEAL, AMP_CHARCOAL } },
+    [203] = { .colors = { AMP_NAVY, AMP_TEAL, AMP_SILVER, AMP_AQUA } },
+    [204] = { .colors = { AMP_PURPLE, AMP_AQUA } },
+    [205] = { .colors = { AMP_NAVY, AMP_BLUE, AMP_AQUA, AMP_WHITE } },
+    [207] = { .colors = { AMP_DARK, AMP_GREEN, AMP_LIME, AMP_YELLOW } },
+    [208] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_CHARCOAL, AMP_LIME } },
+    [209] = { .colors = { AMP_DARK, AMP_SILVER, AMP_LIME } },
+    [210] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_SILVER } },
+    [211] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_SILVER, AMP_AQUA } },
+    [212] = { .colors = { AMP_SILVER, AMP_LIME, AMP_BLUE } },
+    [213] = { .colors = { AMP_NAVY, AMP_SILVER, AMP_AQUA } },
+    [214] = { .colors = { AMP_SILVER, AMP_BLUE, AMP_AQUA } },
+    [216] = { .colors = { AMP_OLIVE, AMP_LIME } },
+    [217] = { .colors = { AMP_GREEN, AMP_TEAL, AMP_LIME, AMP_YELLOW } },
+    [218] = { .colors = { AMP_CHARCOAL, AMP_LIME } },
+    [219] = { .colors = { AMP_TEAL, AMP_SILVER, AMP_LIME } },
+    [220] = { .colors = { AMP_OLIVE, AMP_AQUA } },
+    [221] = { .colors = { AMP_GREEN, AMP_SILVER, AMP_AQUA } },
+    [222] = { .colors = { AMP_CHARCOAL, AMP_AQUA } },
+    [227] = { .colors = { AMP_GREEN, AMP_LIME, AMP_YELLOW, AMP_AQUA } },
+    [228] = { .colors = { AMP_TEAL, AMP_LIME, AMP_YELLOW, AMP_AQUA } },
+    [229] = { .colors = { AMP_GREEN, AMP_LIME, AMP_AQUA, AMP_WHITE } },
+    [230] = { .colors = { AMP_SILVER, AMP_LIME, AMP_AQUA } },
+    [244] = { .colors = { AMP_DARK, AMP_MAROON, AMP_PURPLE } },
+    [245] = { .colors = { AMP_DARK, AMP_NAVY, AMP_PURPLE, AMP_RED } },
+    [246] = { .colors = { AMP_MAROON, AMP_NAVY, AMP_PURPLE } },
+    [247] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_BLUE } },
+    [248] = { .colors = { AMP_DARK, AMP_BLUE, AMP_FUCHSIA } },
+    [249] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_BLUE, AMP_FUCHSIA } },
+    [250] = { .colors = { AMP_NAVY, AMP_BLUE, AMP_FUCHSIA } },
+    [252] = { .colors = { AMP_DARK, AMP_MAROON, AMP_OLIVE } },
+    [253] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_NAVY } },
+    [254] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_NAVY, AMP_PURPLE } },
+    [255] = { .colors = { AMP_OLIVE, AMP_NAVY, AMP_PURPLE } },
+    [256] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_CHARCOAL } },
+    [257] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_BLUE } },
+    [258] = { .colors = { AMP_PURPLE, AMP_TEAL, AMP_BLUE, AMP_FUCHSIA } },
+    [259] = { .colors = { AMP_TEAL, AMP_BLUE, AMP_FUCHSIA } },
+    [261] = { .colors = { AMP_DARK, AMP_GREEN, AMP_OLIVE, AMP_RED } },
+    [262] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_OLIVE, AMP_PURPLE } },
+    [263] = { .colors = { AMP_DARK, AMP_MAROON, AMP_SILVER } },
+    [264] = { .colors = { AMP_MAROON, AMP_NAVY, AMP_SILVER } },
+    [265] = { .colors = { AMP_DARK, AMP_NAVY, AMP_PURPLE, AMP_SILVER } },
+    [266] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_SILVER } },
+    [267] = { .colors = { AMP_PURPLE, AMP_SILVER, AMP_BLUE } },
+    [268] = { .colors = { AMP_PURPLE, AMP_BLUE, AMP_FUCHSIA, AMP_AQUA } },
+    [270] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_OLIVE } },
+    [271] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_PURPLE } },
+    [272] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_SILVER } },
+    [273] = { .colors = { AMP_DARK, AMP_SILVER } },
+    [274] = { .colors = { AMP_PURPLE, AMP_TEAL, AMP_CHARCOAL } },
+    [275] = { .colors = { AMP_NAVY, AMP_SILVER } },
+    [276] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_BLUE } },
+    [277] = { .colors = { AMP_SILVER, AMP_BLUE } },
+    [278] = { .colors = { AMP_BLUE, AMP_FUCHSIA, AMP_AQUA } },
+    [279] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_LIME } },
+    [280] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_CHARCOAL } },
+    [281] = { .colors = { AMP_DARK, AMP_GREEN, AMP_OLIVE, AMP_SILVER } },
+    [282] = { .colors = { AMP_OLIVE, AMP_TEAL, AMP_CHARCOAL } },
+    [283] = { .colors = { AMP_TEAL, AMP_YELLOW, AMP_BLUE } },
+    [284] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_AQUA } },
+    [285] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_BLUE, AMP_AQUA } },
+    [286] = { .colors = { AMP_TEAL, AMP_FUCHSIA, AMP_AQUA } },
+    [288] = { .colors = { AMP_DARK, AMP_LIME, AMP_YELLOW } },
+    [289] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_LIME } },
+    [290] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_SILVER } },
+    [291] = { .colors = { AMP_GREEN, AMP_SILVER } },
+    [292] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_AQUA } },
+    [293] = { .colors = { AMP_TEAL, AMP_SILVER } },
+    [294] = { .colors = { AMP_PURPLE, AMP_SILVER, AMP_AQUA } },
+    [295] = { .colors = { AMP_NAVY, AMP_AQUA, AMP_WHITE } },
+    [296] = { .colors = { AMP_BLUE, AMP_AQUA, AMP_WHITE } },
+    [297] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_LIME, AMP_YELLOW } },
+    [298] = { .colors = { AMP_OLIVE, AMP_TEAL, AMP_LIME, AMP_YELLOW } },
+    [299] = { .colors = { AMP_OLIVE, AMP_SILVER, AMP_LIME } },
+    [300] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_LIME } },
+    [301] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_LIME, AMP_AQUA } },
+    [302] = { .colors = { AMP_OLIVE, AMP_SILVER, AMP_AQUA } },
+    [303] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_AQUA } },
+    [306] = { .colors = { AMP_GREEN, AMP_LIME, AMP_YELLOW } },
+    [307] = { .colors = { AMP_TEAL, AMP_LIME, AMP_YELLOW } },
+    [308] = { .colors = { AMP_OLIVE, AMP_LIME, AMP_YELLOW, AMP_AQUA } },
+    [309] = { .colors = { AMP_SILVER, AMP_LIME } },
+    [310] = { .colors = { AMP_TEAL, AMP_YELLOW, AMP_AQUA } },
+    [311] = { .colors = { AMP_GREEN, AMP_AQUA, AMP_WHITE } },
+    [313] = { .colors = { AMP_SILVER, AMP_AQUA } },
+    [318] = { .colors = { AMP_LIME, AMP_YELLOW, AMP_AQUA } },
+    [320] = { .colors = { AMP_LIME, AMP_AQUA, AMP_WHITE } },
+    [324] = { .colors = { AMP_MAROON } },
+    [325] = { .colors = { AMP_MAROON, AMP_NAVY, AMP_RED } },
+    [326] = { .colors = { AMP_MAROON, AMP_PURPLE } },
+    [327] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_RED } },
+    [328] = { .colors = { AMP_PURPLE } },
+    [329] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_FUCHSIA } },
+    [330] = { .colors = { AMP_NAVY, AMP_FUCHSIA } },
+    [331] = { .colors = { AMP_PURPLE, AMP_BLUE, AMP_FUCHSIA } },
+    [332] = { .colors = { AMP_BLUE, AMP_FUCHSIA } },
+    [333] = { .colors = { AMP_MAROON, AMP_GREEN, AMP_RED } },
+    [334] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_PURPLE } },
+    [335] = { .colors = { AMP_OLIVE, AMP_NAVY, AMP_PURPLE, AMP_RED } },
+    [336] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_CHARCOAL } },
+    [337] = { .colors = { AMP_CHARCOAL, AMP_RED, AMP_BLUE } },
+    [338] = { .colors = { AMP_PURPLE, AMP_TEAL, AMP_FUCHSIA } },
+    [339] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_BLUE, AMP_FUCHSIA } },
+    [340] = { .colors = { AMP_CHARCOAL, AMP_BLUE, AMP_FUCHSIA } },
+    [342] = { .colors = { AMP_MAROON, AMP_OLIVE } },
+    [343] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_PURPLE, AMP_RED } },
+    [344] = { .colors = { AMP_OLIVE, AMP_PURPLE } },
+    [345] = { .colors = { AMP_DARK, AMP_MAROON, AMP_PURPLE, AMP_SILVER } },
+    [346] = { .colors = { AMP_PURPLE, AMP_CHARCOAL } },
+    [347] = { .colors = { AMP_NAVY, AMP_PURPLE, AMP_SILVER, AMP_FUCHSIA } },
+    [348] = { .colors = { AMP_TEAL, AMP_FUCHSIA } },
+    [349] = { .colors = { AMP_NAVY, AMP_BLUE, AMP_FUCHSIA, AMP_WHITE } },
+    [351] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_RED } },
+    [352] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_CHARCOAL } },
+    [353] = { .colors = { AMP_DARK, AMP_MAROON, AMP_OLIVE, AMP_SILVER } },
+    [354] = { .colors = { AMP_OLIVE, AMP_PURPLE, AMP_CHARCOAL } },
+    [355] = { .colors = { AMP_PURPLE, AMP_YELLOW, AMP_BLUE } },
+    [356] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_FUCHSIA } },
+    [357] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_BLUE, AMP_FUCHSIA } },
+    [358] = { .colors = { AMP_PURPLE, AMP_FUCHSIA, AMP_AQUA } },
+    [360] = { .colors = { AMP_OLIVE } },
+    [361] = { .colors = { AMP_CHARCOAL, AMP_RED, AMP_LIME } },
+    [362] = { .colors = { AMP_OLIVE, AMP_CHARCOAL } },
+    [363] = { .colors = { AMP_PURPLE, AMP_TEAL, AMP_YELLOW } },
+    [364] = { .colors = { AMP_CHARCOAL } },
+    [365] = { .colors = { AMP_OLIVE, AMP_FUCHSIA, AMP_AQUA } },
+    [366] = { .colors = { AMP_NAVY, AMP_WHITE } },
+    [367] = { .colors = { AMP_CHARCOAL, AMP_FUCHSIA, AMP_AQUA } },
+    [368] = { .colors = { AMP_FUCHSIA, AMP_AQUA } },
+    [369] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_YELLOW } },
+    [370] = { .colors = { AMP_OLIVE, AMP_TEAL, AMP_YELLOW } },
+    [371] = { .colors = { AMP_GREEN, AMP_OLIVE, AMP_SILVER, AMP_YELLOW } },
+    [372] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_YELLOW } },
+    [373] = { .colors = { AMP_PURPLE, AMP_YELLOW, AMP_AQUA } },
+    [374] = { .colors = { AMP_TEAL, AMP_CHARCOAL, AMP_WHITE } },
+    [375] = { .colors = { AMP_PURPLE, AMP_SILVER, AMP_AQUA, AMP_WHITE } },
+    [376] = { .colors = { AMP_PURPLE, AMP_AQUA, AMP_WHITE } },
+    [378] = { .colors = { AMP_GREEN, AMP_YELLOW } },
+    [379] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_LIME, AMP_YELLOW } },
+    [380] = { .colors = { AMP_TEAL, AMP_YELLOW } },
+    [381] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_LIME, AMP_YELLOW } },
+    [382] = { .colors = { AMP_GREEN, AMP_WHITE } },
+    [383] = { .colors = { AMP_OLIVE, AMP_SILVER, AMP_AQUA, AMP_WHITE } },
+    [384] = { .colors = { AMP_TEAL, AMP_WHITE } },
+    [387] = { .colors = { AMP_OLIVE, AMP_LIME, AMP_YELLOW } },
+    [388] = { .colors = { AMP_CHARCOAL, AMP_LIME, AMP_YELLOW } },
+    [389] = { .colors = { AMP_GREEN, AMP_LIME, AMP_YELLOW, AMP_WHITE } },
+    [390] = { .colors = { AMP_OLIVE, AMP_YELLOW, AMP_AQUA } },
+    [391] = { .colors = { AMP_CHARCOAL, AMP_YELLOW, AMP_AQUA } },
+    [392] = { .colors = { AMP_OLIVE, AMP_AQUA, AMP_WHITE } },
+    [394] = { .colors = { AMP_CHARCOAL, AMP_AQUA, AMP_WHITE } },
+    [396] = { .colors = { AMP_LIME, AMP_YELLOW } },
+    [400] = { .colors = { AMP_YELLOW, AMP_AQUA } },
+    [404] = { .colors = { AMP_AQUA, AMP_WHITE } },
+    [406] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_RED } },
+    [407] = { .colors = { AMP_DARK, AMP_MAROON, AMP_RED, AMP_FUCHSIA } },
+    [408] = { .colors = { AMP_DARK, AMP_RED, AMP_FUCHSIA } },
+    [409] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_FUCHSIA } },
+    [410] = { .colors = { AMP_RED, AMP_BLUE, AMP_FUCHSIA } },
+    [414] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_RED } },
+    [415] = { .colors = { AMP_OLIVE, AMP_PURPLE, AMP_RED } },
+    [416] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_CHARCOAL, AMP_RED } },
+    [417] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_RED } },
+    [418] = { .colors = { AMP_OLIVE, AMP_PURPLE, AMP_FUCHSIA } },
+    [419] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_FUCHSIA } },
+    [423] = { .colors = { AMP_DARK, AMP_MAROON, AMP_RED, AMP_YELLOW } },
+    [424] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_CHARCOAL, AMP_RED } },
+    [425] = { .colors = { AMP_DARK, AMP_SILVER, AMP_RED } },
+    [426] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_SILVER } },
+    [427] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_SILVER, AMP_FUCHSIA } },
+    [428] = { .colors = { AMP_SILVER, AMP_RED, AMP_BLUE } },
+    [429] = { .colors = { AMP_NAVY, AMP_SILVER, AMP_FUCHSIA } },
+    [430] = { .colors = { AMP_SILVER, AMP_BLUE, AMP_FUCHSIA } },
+    [432] = { .colors = { AMP_DARK, AMP_RED, AMP_YELLOW } },
+    [433] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_RED } },
+    [434] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_SILVER } },
+    [435] = { .colors = { AMP_MAROON, AMP_SILVER } },
+    [436] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_FUCHSIA } },
+    [437] = { .colors = { AMP_PURPLE, AMP_SILVER } },
+    [438] = { .colors = { AMP_TEAL, AMP_SILVER, AMP_FUCHSIA } },
+    [439] = { .colors = { AMP_NAVY, AMP_FUCHSIA, AMP_WHITE } },
+    [440] = { .colors = { AMP_BLUE, AMP_FUCHSIA, AMP_WHITE } },
+    [441] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_YELLOW } },
+    [442] = { .colors = { AMP_OLIVE, AMP_PURPLE, AMP_YELLOW } },
+    [443] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_SILVER, AMP_YELLOW } },
+    [444] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_YELLOW } },
+    [445] = { .colors = { AMP_TEAL, AMP_YELLOW, AMP_FUCHSIA } },
+    [446] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_WHITE } },
+    [447] = { .colors = { AMP_TEAL, AMP_SILVER, AMP_FUCHSIA, AMP_WHITE } },
+    [448] = { .colors = { AMP_TEAL, AMP_FUCHSIA, AMP_WHITE } },
+    [450] = { .colors = { AMP_RED, AMP_LIME, AMP_YELLOW } },
+    [451] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_YELLOW } },
+    [452] = { .colors = { AMP_SILVER, AMP_RED, AMP_LIME } },
+    [453] = { .colors = { AMP_OLIVE, AMP_SILVER } },
+    [454] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_WHITE } },
+    [455] = { .colors = { AMP_SILVER, AMP_CHARCOAL } },
+    [456] = { .colors = { AMP_NAVY, AMP_SILVER, AMP_WHITE } },
+    [457] = { .colors = { AMP_SILVER, AMP_FUCHSIA, AMP_AQUA } },
+    [458] = { .colors = { AMP_FUCHSIA, AMP_AQUA, AMP_WHITE } },
+    [461] = { .colors = { AMP_GREEN, AMP_SILVER, AMP_YELLOW } },
+    [462] = { .colors = { AMP_TEAL, AMP_SILVER, AMP_YELLOW } },
+    [463] = { .colors = { AMP_TEAL, AMP_SILVER, AMP_YELLOW, AMP_WHITE } },
+    [464] = { .colors = { AMP_GREEN, AMP_SILVER, AMP_WHITE } },
+    [465] = { .colors = { AMP_TEAL, AMP_SILVER, AMP_WHITE } },
+    [470] = { .colors = { AMP_SILVER, AMP_LIME, AMP_YELLOW } },
+    [471] = { .colors = { AMP_GREEN, AMP_YELLOW, AMP_WHITE } },
+    [472] = { .colors = { AMP_TEAL, AMP_YELLOW, AMP_WHITE } },
+    [473] = { .colors = { AMP_SILVER, AMP_YELLOW, AMP_AQUA } },
+    [475] = { .colors = { AMP_SILVER, AMP_AQUA, AMP_WHITE } },
+    [480] = { .colors = { AMP_LIME, AMP_YELLOW, AMP_WHITE } },
+    [482] = { .colors = { AMP_YELLOW, AMP_AQUA, AMP_WHITE } },
+    [486] = { .colors = { AMP_MAROON, AMP_RED } },
+    [488] = { .colors = { AMP_PURPLE, AMP_RED } },
+    [489] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_RED, AMP_FUCHSIA } },
+    [490] = { .colors = { AMP_MAROON, AMP_FUCHSIA } },
+    [492] = { .colors = { AMP_PURPLE, AMP_FUCHSIA } },
+    [497] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_RED, AMP_FUCHSIA } },
+    [498] = { .colors = { AMP_OLIVE, AMP_PURPLE, AMP_RED, AMP_FUCHSIA } },
+    [499] = { .colors = { AMP_PURPLE, AMP_CHARCOAL, AMP_RED, AMP_FUCHSIA } },
+    [504] = { .colors = { AMP_OLIVE, AMP_RED } },
+    [505] = { .colors = { AMP_MAROON, AMP_PURPLE, AMP_RED, AMP_YELLOW } },
+    [506] = { .colors = { AMP_CHARCOAL, AMP_RED } },
+    [507] = { .colors = { AMP_PURPLE, AMP_SILVER, AMP_RED } },
+    [508] = { .colors = { AMP_OLIVE, AMP_FUCHSIA } },
+    [509] = { .colors = { AMP_MAROON, AMP_SILVER, AMP_FUCHSIA } },
+    [510] = { .colors = { AMP_CHARCOAL, AMP_FUCHSIA } },
+    [513] = { .colors = { AMP_MAROON, AMP_OLIVE, AMP_RED, AMP_YELLOW } },
+    [514] = { .colors = { AMP_OLIVE, AMP_PURPLE, AMP_RED, AMP_YELLOW } },
+    [515] = { .colors = { AMP_OLIVE, AMP_SILVER, AMP_RED } },
+    [516] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_RED } },
+    [517] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_RED, AMP_FUCHSIA } },
+    [518] = { .colors = { AMP_OLIVE, AMP_SILVER, AMP_FUCHSIA } },
+    [519] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_FUCHSIA } },
+    [522] = { .colors = { AMP_MAROON, AMP_YELLOW } },
+    [523] = { .colors = { AMP_OLIVE, AMP_CHARCOAL, AMP_RED, AMP_YELLOW } },
+    [524] = { .colors = { AMP_PURPLE, AMP_YELLOW } },
+    [525] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_RED, AMP_YELLOW } },
+    [526] = { .colors = { AMP_MAROON, AMP_WHITE } },
+    [527] = { .colors = { AMP_OLIVE, AMP_SILVER, AMP_FUCHSIA, AMP_WHITE } },
+    [528] = { .colors = { AMP_PURPLE, AMP_WHITE } },
+    [533] = { .colors = { AMP_MAROON, AMP_SILVER, AMP_YELLOW } },
+    [534] = { .colors = { AMP_PURPLE, AMP_SILVER, AMP_YELLOW } },
+    [535] = { .colors = { AMP_PURPLE, AMP_SILVER, AMP_YELLOW, AMP_WHITE } },
+    [536] = { .colors = { AMP_MAROON, AMP_SILVER, AMP_WHITE } },
+    [537] = { .colors = { AMP_PURPLE, AMP_SILVER, AMP_WHITE } },
+    [540] = { .colors = { AMP_OLIVE, AMP_YELLOW } },
+    [542] = { .colors = { AMP_CHARCOAL, AMP_YELLOW } },
+    [543] = { .colors = { AMP_SILVER, AMP_CHARCOAL, AMP_YELLOW } },
+    [544] = { .colors = { AMP_OLIVE, AMP_WHITE } },
+    [545] = { .colors = { AMP_OLIVE, AMP_SILVER, AMP_WHITE } },
+    [546] = { .colors = { AMP_SILVER } },
+    [570] = { .colors = { AMP_MAROON, AMP_RED, AMP_FUCHSIA } },
+    [571] = { .colors = { AMP_PURPLE, AMP_RED, AMP_FUCHSIA } },
+    [579] = { .colors = { AMP_OLIVE, AMP_RED, AMP_FUCHSIA } },
+    [580] = { .colors = { AMP_CHARCOAL, AMP_RED, AMP_FUCHSIA } },
+    [587] = { .colors = { AMP_MAROON, AMP_RED, AMP_YELLOW, AMP_FUCHSIA } },
+    [588] = { .colors = { AMP_PURPLE, AMP_RED, AMP_YELLOW, AMP_FUCHSIA } },
+    [589] = { .colors = { AMP_MAROON, AMP_RED, AMP_FUCHSIA, AMP_WHITE } },
+    [590] = { .colors = { AMP_SILVER, AMP_RED, AMP_FUCHSIA } },
+    [594] = { .colors = { AMP_MAROON, AMP_RED, AMP_YELLOW } },
+    [595] = { .colors = { AMP_PURPLE, AMP_RED, AMP_YELLOW } },
+    [596] = { .colors = { AMP_OLIVE, AMP_RED, AMP_YELLOW, AMP_FUCHSIA } },
+    [597] = { .colors = { AMP_SILVER, AMP_RED } },
+    [598] = { .colors = { AMP_PURPLE, AMP_YELLOW, AMP_FUCHSIA } },
+    [599] = { .colors = { AMP_MAROON, AMP_FUCHSIA, AMP_WHITE } },
+    [601] = { .colors = { AMP_SILVER, AMP_FUCHSIA } },
+    [603] = { .colors = { AMP_OLIVE, AMP_RED, AMP_YELLOW } },
+    [604] = { .colors = { AMP_CHARCOAL, AMP_RED, AMP_YELLOW } },
+    [605] = { .colors = { AMP_MAROON, AMP_RED, AMP_YELLOW, AMP_WHITE } },
+    [606] = { .colors = { AMP_OLIVE, AMP_YELLOW, AMP_FUCHSIA } },
+    [607] = { .colors = { AMP_CHARCOAL, AMP_YELLOW, AMP_FUCHSIA } },
+    [608] = { .colors = { AMP_OLIVE, AMP_FUCHSIA, AMP_WHITE } },
+    [610] = { .colors = { AMP_CHARCOAL, AMP_FUCHSIA, AMP_WHITE } },
+    [614] = { .colors = { AMP_SILVER, AMP_RED, AMP_YELLOW } },
+    [615] = { .colors = { AMP_MAROON, AMP_YELLOW, AMP_WHITE } },
+    [616] = { .colors = { AMP_PURPLE, AMP_YELLOW, AMP_WHITE } },
+    [617] = { .colors = { AMP_SILVER, AMP_YELLOW, AMP_FUCHSIA } },
+    [619] = { .colors = { AMP_SILVER, AMP_FUCHSIA, AMP_WHITE } },
+    [633] = { .colors = { AMP_SILVER, AMP_YELLOW } },
+    [634] = { .colors = { AMP_CHARCOAL, AMP_YELLOW, AMP_WHITE } },
+    [635] = { .colors = { AMP_SILVER, AMP_YELLOW, AMP_WHITE } },
+    [637] = { .colors = { AMP_SILVER, AMP_WHITE } },
+    [648] = { .colors = { AMP_RED } },
+    [652] = { .colors = { AMP_RED, AMP_FUCHSIA } },
+    [656] = { .colors = { AMP_FUCHSIA } },
+    [678] = { .colors = { AMP_RED, AMP_YELLOW, AMP_FUCHSIA } },
+    [680] = { .colors = { AMP_RED, AMP_FUCHSIA, AMP_WHITE } },
+    [684] = { .colors = { AMP_RED, AMP_YELLOW } },
+    [688] = { .colors = { AMP_YELLOW, AMP_FUCHSIA } },
+    [692] = { .colors = { AMP_FUCHSIA, AMP_WHITE } },
+    [696] = { .colors = { AMP_RED, AMP_YELLOW, AMP_WHITE } },
+    [698] = { .colors = { AMP_YELLOW, AMP_FUCHSIA, AMP_WHITE } },
+    [720] = { .colors = { AMP_YELLOW } },
+    [724] = { .colors = { AMP_YELLOW, AMP_WHITE } },
+    [728] = { .colors = { AMP_WHITE } }
+};
+
 static const char *amp_number_table[] = {
       "0",   "1",   "2",   "3",   "4",   "5",   "6",   "7",   "8",   "9",  "10",
      "11",  "12",  "13",  "14",  "15",  "16",  "17",  "18",  "19",  "20",  "21",
@@ -2080,15 +2510,23 @@ static inline AMP_STYLE amp_get_style(
     }
 
     if (mode.bitset.bg) {
-        style |= amp_lookup_color(
-            amp_find_rgb16(amp_rgb16_bg_table, mode.bg).index
-        ).style.bg;
+        auto const combo = amp_lookup_color_combo(
+            mode.bg.r, mode.bg.g, mode.bg.b
+        );
+
+        for (size_t i=0; combo.colors[i] != AMP_COLOR_NONE; ++i) {
+            style |= amp_lookup_color(combo.colors[i]).style.bg;
+        }
     }
 
     if (mode.bitset.fg) {
-        style |= amp_lookup_color(
-            amp_find_rgb16(amp_rgb16_fg_table, mode.fg).index
-        ).style.fg;
+        auto const combo = amp_lookup_color_combo(
+            mode.fg.r, mode.fg.g, mode.fg.b
+        );
+
+        for (size_t i=0; combo.colors[i] != AMP_COLOR_NONE; ++i) {
+            style |= amp_lookup_color(combo.colors[i]).style.fg;
+        }
     }
 
     return (
@@ -3319,6 +3757,23 @@ static inline struct amp_inline_style_type amp_lookup_inline_style(
     return amp_inline_style_table[0];
 }
 
+static inline struct amp_color_combo_type amp_lookup_color_combo(
+    uint8_t r, uint8_t g, uint8_t b
+) {
+    size_t cluster_r = (size_t) (round(r / 32.0));
+    size_t cluster_g = (size_t) (round(g / 32.0));
+    size_t cluster_b = (size_t) (round(b / 32.0));
+    size_t index = cluster_r * 9 * 9 + cluster_g * 9 + cluster_b;
+
+    return (
+        index < (
+            sizeof(amp_color_combo_table)/sizeof(amp_color_combo_table[0])
+        ) ? (amp_color_combo_table[index]) : (
+            (amp_color_combo_table[0])
+        )
+    );
+}
+
 static inline struct amp_rgb_type amp_map_rgb(
     uint8_t r, uint8_t g, uint8_t b
 ) {
@@ -4061,30 +4516,28 @@ static inline AMP_STYLE amp_styles_to_layer(
     }
 
     AMP_STYLE layer_styles = 0;
+    AMP_STYLE blacklist = 0;
 
     for (long y = 0; y < amp->height; ++y) {
         for (long x = 0; x < amp->width; ++x) {
             AMP_STYLE style = amp_get_style(amp, x, y);
-            AMP_STYLE match = style & whitelist;
+            AMP_STYLE match = style & whitelist & ~blacklist;
 
-            if (stdc_count_ones_ull(match) <= 1) {
-                layer_styles |= match;
+            if (!match) {
                 continue;
             }
 
-            // Ambiguity detected.
-
-            if (layer_styles & match) {
-                // Prefer the flag that we have already assigned for this layer.
-                continue;
-            }
+            layer_styles &= ~match;
 
             // Prefer the flag with the greatest value.
             size_t index = stdc_first_leading_one_ull(match);
 
             if (index) {
                 constexpr AMP_STYLE most_significant_bit = 1ULL << 63;
-                layer_styles |= most_significant_bit >> (index - 1);
+                AMP_STYLE layer_style = most_significant_bit >> (index - 1);
+
+                layer_styles |= layer_style;
+                blacklist |= (match & ~layer_style);
             }
         }
     }
