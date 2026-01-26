@@ -26,30 +26,38 @@ int main(int argc, char **argv) {
     amp_init(&canvas, width, height, canvas_data, canvas_size);
 
     const char *error_message = nullptr;
-    uint32_t spr_w, spr_h;
-    size_t spr_size = amp_parse_size(
-        spr_blob.data, spr_blob.size, &spr_w, &spr_h
-    );
-
     uint8_t *spr_data = nullptr;
 
-    if (spr_size) {
-        spr_data = malloc(spr_size);
+    do {
+        uint32_t spr_w, spr_h;
+        size_t spr_size = amp_parse_size(
+            spr_blob.data, spr_blob.size, &spr_w, &spr_h
+        );
 
-        if (spr_data) {
-            struct amp_type spr;
-
-            if (amp_init(&spr, spr_w, spr_h, spr_data, spr_size) <= spr_size) {
-                if (amp_decode(&spr, spr_blob.data, spr_blob.size)) {
-                    amp_draw_sprite(&canvas, 0, 0, &spr);
-                }
-                else error_message = "amp_decode: parse error\n";
-            }
-            else error_message = "amp_init: not enough memory provided\n";
+        if (!spr_size) {
+            error_message = "amp_parse_size: parse error\n";
+            break;
         }
-        else error_message = "malloc: allocation failed\n";
-    }
-    else error_message = "amp_parse_size: parse error\n";
+
+        if ((spr_data = malloc(spr_size)) == nullptr) {
+            error_message = "malloc: allocation failed\n";
+            break;
+        }
+
+        struct amp_type spr;
+
+        if (amp_init(&spr, spr_w, spr_h, spr_data, spr_size) > spr_size) {
+            error_message = "amp_init: not enough memory provided\n";
+            break;
+        }
+
+        if (!amp_decode(&spr, spr_blob.data, spr_blob.size)) {
+            error_message = "amp_decode: parse error\n";
+            break;
+        }
+
+        amp_draw_sprite(&canvas, 0, 0, &spr);
+    } while (false);
 
     if (!error_message) {
         amp_set_palette(&canvas, AMP_PAL_24BIT);
