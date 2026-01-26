@@ -3,6 +3,18 @@
 #define UTILS_H_26_01_2026
 
 
+static inline const char *basename(const char *path) {
+    const char *file = path;
+
+    while (*path) {
+        if (*path++ == '/') {
+            file = path;
+        }
+    }
+
+    return file;
+}
+
 static inline struct {
     char *data;
     size_t size;
@@ -11,7 +23,23 @@ static inline struct {
     size_t data_size = 0, data_capacity = INITIAL_BUFFER_CAPACITY;
     char *data = nullptr;
     typeof(load_file(nullptr)) blob = {};
+
     FILE *fp = fopen(fname, "r");
+
+    if (fp == nullptr) {
+        char buf[256] = "./";
+        const char *base = basename(fname);
+        size_t buflen = strlen(buf);
+        size_t baselen = strlen(base);
+
+        if (baselen + buflen < sizeof(buf)) {
+            memcpy(buf + buflen, base, baselen + 1);
+
+            if (strcmp(buf, fname)) {
+                fp = fopen(buf, "r");
+            }
+        }
+    }
 
     if (fp == nullptr) {
         const char *error_message = "fopen: error opening file\n";
