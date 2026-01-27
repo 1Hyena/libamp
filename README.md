@@ -77,18 +77,10 @@ the start of a new one if followed by `═` characters equal to the ansmap's wid
 and a `╣`. Lines starting with `╚` mark the end of a layer and the end of the
 AMP file if followed by `═` characters equal to the ansmap's width and a `╝`.
 
-Here is an example of the contents of a valid AMP document:
+Here is an example of the contents of [ansiart.amp](examples/ansiart.amp) and
+its resulting ANSI escape sequences displayed in the terminal:
 
-```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║             navy background, red foreground, italic, faint italic            ║
-║                                                                              ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║             NNNNNNNNNNNNNNN  rrrrrrrrrrrrrr  //////  ////////////            ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-║                                                      ????????????            ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-```
+![screenshot](img/ansiart.png "ansiart.amp displayed in terminal")
 
 The letters and symbols in the second and third box in the example above serve
 as style markers for the cells in the first box. Each style marker applies to a
