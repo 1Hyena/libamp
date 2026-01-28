@@ -3115,10 +3115,8 @@ static inline struct amp_mode_code_type amp_mode_to_codes(
         }
     }
     else {
-        struct amp_color_type bg_color_row;
-
         if (mode.bitset.bg) {
-            bg_color_row = amp_find_color(mode.bg);
+            struct amp_color_type bg_color_row = amp_find_color(mode.bg);
 
             if (bg_color_row.bitset.bright) {
                 struct amp_rgb_type buf = mode.bg;
@@ -3142,6 +3140,8 @@ static inline struct amp_mode_code_type amp_mode_to_codes(
         }
 
         if (mode.bitset.bg) {
+            struct amp_color_type bg_color_row = amp_find_color(mode.bg);
+
             codes.color.bg.data[codes.color.bg.size++] = bg_color_row.code.bg;
         }
     }
@@ -3634,7 +3634,7 @@ static inline struct amp_color_type amp_find_color(struct amp_rgb_type rgb) {
         long dr = rgb.r - row.rgb.r;
         long dg = rgb.g - row.rgb.g;
         long db = rgb.b - row.rgb.b;
-        long d = dr * dr + dg * dg + db * db;
+        long d = 3 * dr * dr + 4 * dg * dg + 2 * db * db;
 
         if (d < best_d) {
             best_d = d;
