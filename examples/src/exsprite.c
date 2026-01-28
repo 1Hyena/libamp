@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 
     do {
         uint32_t spr_w, spr_h;
-        size_t spr_size = amp_parse_size(
+        size_t spr_size = amp_doc_parse_size(
             spr_blob.data, spr_blob.size, &spr_w, &spr_h
         );
 

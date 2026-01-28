@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     }
 
     uint32_t w, h;
-    size_t canvas_size = amp_parse_size(input_data, input_size, &w, &h);
+    size_t canvas_size = amp_doc_parse_size(input_data, input_size, &w, &h);
     uint8_t *canvas_data = nullptr;
 
     if (canvas_size) {

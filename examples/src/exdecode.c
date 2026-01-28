@@ -4,7 +4,7 @@
 
 int main(int, char **) {
     const char *error_message = nullptr;
-    static const char input_data[] =
+    static const char doc[] =
         "╔════════════════╗\n"
         "╠════════════════╣\n"
         "║    WS    SW  AA║\n"
@@ -17,7 +17,7 @@ int main(int, char **) {
         "║  CC      CC  OO║\n"
         "╚════════════════╝";
     uint32_t w, h;
-    size_t data_size = amp_parse_size(input_data, sizeof(input_data), &w, &h);
+    size_t data_size = amp_doc_parse_size(doc, sizeof(doc), &w, &h);
     uint8_t *data = nullptr;
 
     if (data_size) {
@@ -27,7 +27,7 @@ int main(int, char **) {
             struct amp_type amp;
 
             if (amp_init(&amp, w, h, data, data_size) <= data_size) {
-                if (amp_decode(&amp, input_data, sizeof(input_data))) {
+                if (amp_decode(&amp, doc, sizeof(doc))) {
                     amp_to_ans(&amp, nullptr, 0);
                     amp_stdout("\n", 1);
                 }

@@ -255,7 +255,7 @@ https://github.com/1Hyena/libamp/blob/22ad2533481528d96bd86d5e515f41bb7b86ef74/e
   - [amp_to_ans](#amp_to_ans) (&*ansmap*, &*data*, *data size*) → `ssize_t`
   - [amp_row_to_ans](#amp_row_to_ans) (&*ansmap*, *y*, &*data*, *data size*) → `ssize_t`
   - [amp_clip_to_ans](#amp_clip_to_ans) (&*ansmap*, *x*, *y*, *width*, &*data*, *data size*) → `ssize_t`
-  - [amp_parse_size](#amp_parse_size) (&*data*, *data size*, &*width*, &*height*) → `size_t`
+  - [amp_doc_parse_size](#amp_doc_parse_size) (&*data*, *data size*, &*width*, &*height*) → `size_t`
   - [amp_decode](#amp_decode) (&*ansmap*, &*data*, *data size*) → `size_t`
   - [amp_encode](#amp_encode) (&*ansmap*, settings, &*data*, *data size*) → `ssize_t`
   - [amp_stdout](#amp_stdout) (&*string*, *string size*) → `ssize_t`
@@ -454,7 +454,7 @@ https://github.com/1Hyena/libamp/blob/22ad2533481528d96bd86d5e515f41bb7b86ef74/a
 https://github.com/1Hyena/libamp/blob/22ad2533481528d96bd86d5e515f41bb7b86ef74/amp.h#L230-L246
 
 
-##### amp_parse_size ###########################################################
+##### amp_doc_parse_size #######################################################
 
 https://github.com/1Hyena/libamp/blob/22ad2533481528d96bd86d5e515f41bb7b86ef74/amp.h#L490-L504
 

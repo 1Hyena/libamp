@@ -487,11 +487,11 @@ static inline ssize_t                   amp_encode(
     // indicates an error.
 );
 
-static inline size_t                    amp_parse_size(
-    const void *                            data,
-    size_t                                  data_size,
-    uint32_t *                              width,
-    uint32_t *                              height
+static inline size_t                    amp_doc_parse_size(
+    const void *                            doc_data,
+    size_t                                  doc_data_size,
+    uint32_t *                              amp_width,
+    uint32_t *                              amp_height
 
     // Parses the provided data as an AMP document and attempts to determine the
     // size of a buffer required for the deserialization of the document. If the
@@ -499,8 +499,8 @@ static inline size_t                    amp_parse_size(
     // written to the memory addresses specified by the width and height pointer
     // arguments respectively.
     //
-    // Returns the size of the buffer required for ansmap deserialization. The
-    // return value of zero indicates a parsing error.
+    // Returns the size of the buffer required for ansmap decoding. The return
+    // value of zero indicates a parsing error.
 );
 
 static inline size_t                    amp_decode(
@@ -811,6 +811,20 @@ static inline ssize_t                   amp_encode_layer_cell(
 static inline AMP_STYLE                 amp_styles_to_layer(
     const struct amp_type *                 ansmap,
     AMP_STYLE                               whitelist
+);
+static inline uint32_t                  amp_doc_seg_parse_width(
+    const char *                            str,
+    size_t                                  str_sz
+);
+static inline size_t                    amp_decode_glyphs(
+    struct amp_type *                       amp,
+    const char *                            str,
+    size_t                                  str_sz
+);
+static inline size_t                    amp_decode_styles(
+    struct amp_type *                       amp,
+    const char *                            str,
+    size_t                                  str_sz
 );
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -2188,6 +2202,10 @@ static inline size_t amp_init(
 }
 
 static inline void amp_clear(struct amp_type *amp) {
+    if (!amp) {
+        return;
+    }
+
     memset(amp->canvas.glyph.data, 0, amp->canvas.glyph.size);
     memset(amp->canvas.mode.data, 0, amp->canvas.mode.size);
 }
@@ -4624,109 +4642,305 @@ static inline ssize_t amp_encode(
     return written > SSIZE_MAX ? -1 : (ssize_t) written;
 }
 
-static inline size_t amp_parse_size(
+static inline uint32_t amp_doc_seg_parse_width(const char *str, size_t str_sz) {
+    size_t width = 0;
+    const char *prev_char = str;
+    const char *next_char = amp_str_seg_skip_str(prev_char, str_sz, "╔═");
+
+    if (next_char > prev_char) {
+        while (next_char > prev_char) {
+            if (++width > UINT32_MAX) return 0;
+
+            prev_char = next_char;
+            next_char = amp_str_seg_skip_str(
+                prev_char, str_sz - (size_t) (prev_char - str), "═"
+            );
+        }
+
+        prev_char = next_char;
+        next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "╗"
+        );
+
+        if (next_char <= prev_char) {
+            width = 0;
+        }
+    }
+
+    return (uint32_t) width;
+}
+
+static inline size_t amp_doc_parse_size(
     const void *data, size_t data_size, uint32_t *canvas_w, uint32_t *canvas_h
 ) {
     const char *str = (const char *) data;
     const size_t str_sz = data_size;
-    const char *s = str;
 
-    long width = 0;
-    long height = 0;
-    long layer_height = 0;
-    size_t layer = 0;
-    long y = 0;
+    uint32_t width = 0;
+    uint32_t height = 0;
+    uint32_t layer_height = 0;
 
     if (canvas_w) *canvas_w = 0;
     if (canvas_h) *canvas_h = 0;
 
-    while (*s && s < str + str_sz) {
-        size_t linesz;
+    for (const char *s = str; *s && s < str + str_sz;) {
         const char *next_line = amp_str_seg_first_line_size(
-            s, str_sz - (size_t) (s - str), &linesz
+            s, str_sz - (size_t) (s - str), nullptr
         );
 
         if (next_line <= s) {
             break;
         }
 
-        if (width) {
-            const char *prev_char = s;
-            const char *next_char = amp_str_seg_skip_str(
-                prev_char, str_sz - (size_t) (prev_char - str), "║"
-            );
-
-            if (next_char == prev_char) {
-                next_char = amp_str_seg_skip_str(
-                    prev_char, str_sz - (size_t) (prev_char - str), "╠"
-                );
-
-                if (next_char == prev_char) {
-                    next_char = amp_str_seg_skip_str(
-                        prev_char, str_sz - (size_t) (prev_char - str), "╚"
-                    );
-
-                    if (next_char > prev_char) {
-                        height = height < layer_height ? layer_height : height;
-
-                        if (canvas_w) *canvas_w = (uint32_t) width;
-                        if (canvas_h) *canvas_h = (uint32_t) height;
-
-                        return amp_calc_size(
-                            (uint32_t) width, (uint32_t) height
-                        );
-                    }
-                }
-                else {
-                    height = height < layer_height ? layer_height : height;
-                    ++layer;
-                    y = 0;
-                    layer_height = 0;
-                }
-            }
-            else {
-                if (++layer_height > UINT32_MAX) {
-                    return 0;
-                }
-
-                ++y;
-            }
-
-            if (next_char == prev_char) {
-                return 0;
-            }
-        }
-        else {
-            const char *prev_char = s;
-            const char *next_char = amp_str_seg_skip_str(
-                prev_char, str_sz - (size_t) (prev_char - str), "╔═"
-            );
-
-            if (next_char > prev_char) {
-                while (next_char > prev_char) {
-                    if (++width > UINT32_MAX) return 0;
-
-                    prev_char = next_char;
-                    next_char = amp_str_seg_skip_str(
-                        prev_char, str_sz - (size_t) (prev_char - str), "═"
-                    );
-                }
-
-                prev_char = next_char;
-                next_char = amp_str_seg_skip_str(
-                    prev_char, str_sz - (size_t) (prev_char - str), "╗"
-                );
-
-                if (next_char <= prev_char) {
-                    width = 0;
-                }
-            }
+        if (!width) {
+            width = amp_doc_seg_parse_width(s, str_sz - (size_t) (s - str));
 
             if (!width) {
-                return 0;
+                return 0; // Invalid or corrupt AMP file detected.
             }
+
+            s = next_line;
+            continue;
         }
 
+        const char *prev_char = s;
+        const char *next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "╚"
+        );
+
+        if (next_char > prev_char) {
+            // Container end detected.
+
+            height = height < layer_height ? layer_height : height;
+
+            if (canvas_w) *canvas_w = width;
+            if (canvas_h) *canvas_h = height;
+
+            return amp_calc_size(width, height);
+        }
+
+        next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "╠"
+        );
+
+        if (next_char > prev_char) {
+            // Layer end detected.
+
+            height = height < layer_height ? layer_height : height;
+            layer_height = 0;
+            s = next_line;
+
+            continue;
+        }
+
+        next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "║"
+        );
+
+        if (next_char == prev_char) {
+            return 0; // Invalid or corrupt AMP file detected.
+        }
+
+        if (layer_height++ == UINT32_MAX) {
+            return 0; // Excessively tall AMP layer detected.
+        }
+
+        s = next_line;
+    }
+
+    return 0;
+}
+
+static inline size_t amp_decode_glyphs(
+    struct amp_type *amp, const char *str, size_t str_sz
+) {
+    uint32_t width = 0;
+    uint32_t height = 0;
+    long y = 0;
+
+    for (const char *s = str; *s && s < str + str_sz;) {
+        const char *next_line = amp_str_seg_first_line_size(
+            s, str_sz - (size_t) (s - str), nullptr
+        );
+
+        if (next_line <= s) {
+            break;
+        }
+
+        if (!width) {
+            width = amp_doc_seg_parse_width(s, str_sz - (size_t) (s - str));
+
+            if (!width) {
+                return 0; // Invalid or corrupt AMP file detected.
+            }
+
+            s = next_line;
+            continue;
+        }
+
+        const char *prev_char = s;
+        const char *next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "╚"
+        );
+
+        if (next_char > prev_char) {
+            // Container end detected.
+            return amp_calc_size(width, height);
+        }
+
+        next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "╠"
+        );
+
+        if (next_char > prev_char) {
+            // Layer end detected.
+            return amp_calc_size(width, height);
+        }
+
+        next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "║"
+        );
+
+        if (next_char == prev_char) {
+            return 0; // Invalid or corrupt AMP file detected.
+        }
+
+        if (height++ == UINT32_MAX) {
+            return 0; // Excessively tall AMP file detected.
+        }
+
+        long x = 0;
+
+        while (x < width) {
+            prev_char = next_char;
+            next_char = amp_str_seg_skip_any_utf8_symbol(
+                prev_char, str_sz - (size_t) (prev_char - str)
+            );
+
+            if (next_char <= prev_char) {
+                return 0; // Invalid or corrupt AMP file detected.
+            }
+
+            if (amp) {
+                // Let's allow decoding in simulation mode when amp is nullptr.
+                amp_put_glyph(amp, x, y, prev_char);
+            }
+
+            ++x;
+        }
+
+        ++y;
+        s = next_line;
+    }
+
+    return 0;
+}
+
+static inline size_t amp_decode_styles(
+    struct amp_type *amp, const char *str, size_t str_sz
+) {
+    uint32_t width = 0;
+    uint32_t height = 0;
+    uint32_t layer_height = 0;
+    size_t layer = 0;
+    long y = 0;
+
+    for (const char *s = str; *s && s < str + str_sz;) {
+        const char *next_line = amp_str_seg_first_line_size(
+            s, str_sz - (size_t) (s - str), nullptr
+        );
+
+        if (next_line <= s) {
+            break;
+        }
+
+        if (!width) {
+            width = amp_doc_seg_parse_width(s, str_sz - (size_t) (s - str));
+
+            if (!width) {
+                return 0; // Invalid or corrupt AMP file detected.
+            }
+
+            s = next_line;
+            continue;
+        }
+
+        const char *prev_char = s;
+        const char *next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "╚"
+        );
+
+        if (next_char > prev_char) {
+            // Container end detected.
+
+            height = height < layer_height ? layer_height : height;
+
+            return amp_calc_size(width, height);
+        }
+
+        next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "╠"
+        );
+
+        if (next_char > prev_char) {
+            // Layer end detected.
+
+            ++layer;
+            height = height < layer_height ? layer_height : height;
+            layer_height = 0;
+            s = next_line;
+            y = 0;
+
+            continue;
+        }
+
+        next_char = amp_str_seg_skip_str(
+            prev_char, str_sz - (size_t) (prev_char - str), "║"
+        );
+
+        if (next_char == prev_char) {
+            return 0; // Invalid or corrupt AMP file detected.
+        }
+
+        if (layer_height++ == UINT32_MAX) {
+            return 0; // Excessively tall AMP layer detected.
+        }
+
+        if (layer == 0) {
+            // Let's skip the text layer as we are only decoding the styles.
+            s = next_line;
+            continue;
+        }
+
+        long x = 0;
+
+        while (x < width) {
+            prev_char = next_char;
+            next_char = amp_str_seg_skip_any_utf8_symbol(
+                prev_char, str_sz - (size_t) (prev_char - str)
+            );
+
+            if (next_char <= prev_char) {
+                return 0; // Invalid or corrupt AMP file detected.
+            }
+
+            if (amp && *prev_char != ' ') {
+                // Let's allow decoding in simulation mode when amp is nullptr.
+
+                AMP_STYLE new_style = (
+                    amp_lookup_inline_style(prev_char).style
+                );
+
+                if (new_style != AMP_STYLE_NONE) {
+                    AMP_STYLE old_style = amp_get_style(amp, x, y);
+                    amp_put_style(amp, x, y, old_style|new_style);
+                }
+            }
+
+            ++x;
+        }
+
+        ++y;
         s = next_line;
     }
 
@@ -4738,133 +4952,16 @@ static inline size_t amp_decode(
 ) {
     const char *str = (const char *) data;
     const size_t str_sz = data_size;
-    const char *s = str;
-
-    long width = 0;
-    long height = 0;
-    long layer_height = 0;
-    size_t layer = 0;
-    long y = 0;
 
     amp_clear(amp);
 
-    while (*s && s < str + str_sz) {
-        size_t linesz;
-        const char *next_line = amp_str_seg_first_line_size(
-            s, str_sz - (size_t) (s - str), &linesz
-        );
+    size_t decoded_amp_size = amp_decode_styles(amp, str, str_sz);
 
-        if (next_line <= s) {
-            break;
-        }
-
-        if (width) {
-            const char *prev_char = s;
-            const char *next_char = amp_str_seg_skip_str(
-                prev_char, str_sz - (size_t) (prev_char - str), "║"
-            );
-
-            if (next_char == prev_char) {
-                next_char = amp_str_seg_skip_str(
-                    prev_char, str_sz - (size_t) (prev_char - str), "╠"
-                );
-
-                if (next_char == prev_char) {
-                    next_char = amp_str_seg_skip_str(
-                        prev_char, str_sz - (size_t) (prev_char - str), "╚"
-                    );
-
-                    if (next_char > prev_char) {
-                        height = height < layer_height ? layer_height : height;
-
-                        return amp_calc_size(
-                            (uint32_t) width, (uint32_t) height
-                        );
-                    }
-                }
-                else {
-                    height = height < layer_height ? layer_height : height;
-                    ++layer;
-                    y = 0;
-                    layer_height = 0;
-                }
-            }
-            else {
-                if (++layer_height > UINT32_MAX) {
-                    return 0;
-                }
-
-                long x = 0;
-
-                while (x < width) {
-                    prev_char = next_char;
-                    next_char = amp_str_seg_skip_any_utf8_symbol(
-                        prev_char, str_sz - (size_t) (prev_char - str)
-                    );
-
-                    if (next_char <= prev_char) {
-                        break;
-                    }
-
-                    if (layer == 0) {
-                        amp_put_glyph(amp, x, y, prev_char);
-                    }
-                    else if (*prev_char != ' ') {
-                        AMP_STYLE new_style = (
-                            amp_lookup_inline_style(prev_char).style
-                        );
-
-                        if (new_style != AMP_STYLE_NONE) {
-                            AMP_STYLE old_style = amp_get_style(amp, x, y);
-                            amp_put_style(amp, x, y, old_style|new_style);
-                        }
-                    }
-
-                    ++x;
-                }
-
-                ++y;
-            }
-
-            if (next_char == prev_char) {
-                return 0;
-            }
-        }
-        else {
-            const char *prev_char = s;
-            const char *next_char = amp_str_seg_skip_str(
-                prev_char, str_sz - (size_t) (prev_char - str), "╔═"
-            );
-
-            if (next_char > prev_char) {
-                while (next_char > prev_char) {
-                    if (++width > UINT32_MAX) return 0;
-
-                    prev_char = next_char;
-                    next_char = amp_str_seg_skip_str(
-                        prev_char, str_sz - (size_t) (prev_char - str), "═"
-                    );
-                }
-
-                prev_char = next_char;
-                next_char = amp_str_seg_skip_str(
-                    prev_char, str_sz - (size_t) (prev_char - str), "╗"
-                );
-
-                if (next_char <= prev_char) {
-                    width = 0;
-                }
-            }
-
-            if (!width) {
-                return 0;
-            }
-        }
-
-        s = next_line;
+    if (decoded_amp_size) {
+        amp_decode_glyphs(amp, str, str_sz);
     }
 
-    return 0;
+    return decoded_amp_size;
 }
 
 static inline void amp_draw_ansmap(
