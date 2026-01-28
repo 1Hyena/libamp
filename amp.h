@@ -52,7 +52,7 @@
 struct amp_type;
 
 static constexpr size_t AMP_CELL_GLYPH_SIZE = 5; // 4 bytes for UTF8 + null byte
-static constexpr size_t AMP_CELL_MODE_SIZE  = 7;
+static constexpr size_t AMP_CELL_MODE_SIZE  = 8;
 static constexpr size_t AMP_CELL_SIZE       = (
     AMP_CELL_GLYPH_SIZE + AMP_CELL_MODE_SIZE
 );
@@ -622,6 +622,11 @@ static inline bool                      amp_set_mode(
 );
 static inline struct amp_mode_type      amp_get_mode(
     const struct amp_type *                 ansmap,
+    long                                    x,
+    long                                    y
+);
+static inline uint8_t *                 amp_get_mode_data(
+    const struct amp_type *                 amp,
     long                                    x,
     long                                    y
 );
@@ -2399,20 +2404,13 @@ static inline const char *amp_put_glyph(
 static inline bool amp_set_mode(
     struct amp_type *amp, long x, long y, struct amp_mode_type mode
 ) {
-    ssize_t cell_index = amp_get_cell_index(amp, x, y);
+    uint8_t *mode_data = amp_get_mode_data(amp, x, y);
 
-    if (cell_index < 0) {
+    if (!mode_data) {
         return false;
     }
 
-    if ((size_t) cell_index * AMP_CELL_MODE_SIZE >= amp->canvas.mode.size) {
-        return false;
-    }
-
-    return amp_mode_cell_serialize(
-        mode, amp->canvas.mode.data + (size_t) cell_index * AMP_CELL_MODE_SIZE,
-        AMP_CELL_MODE_SIZE
-    );
+    return amp_mode_cell_serialize(mode, mode_data, AMP_CELL_MODE_SIZE);
 }
 
 static inline struct amp_mode_type amp_get_mode(
@@ -2422,20 +2420,29 @@ static inline struct amp_mode_type amp_get_mode(
         .bitset = { .broken = true }
     };
 
+    uint8_t *mode_data = amp_get_mode_data(amp, x, y);
+
+    if (!mode_data) {
+        return broken_cell;
+    }
+
+    return amp_mode_cell_deserialize(mode_data, AMP_CELL_MODE_SIZE);
+}
+
+static inline uint8_t *amp_get_mode_data(
+    const struct amp_type *amp, long x, long y
+) {
     ssize_t cell_index = amp_get_cell_index(amp, x, y);
 
     if (cell_index < 0) {
-        return broken_cell;
+        return nullptr;
     }
 
     if ((size_t) cell_index * AMP_CELL_MODE_SIZE >= amp->canvas.mode.size) {
-        return broken_cell;
+        return nullptr;
     }
 
-    return amp_mode_cell_deserialize(
-        amp->canvas.mode.data + (size_t) cell_index * AMP_CELL_MODE_SIZE,
-        AMP_CELL_MODE_SIZE
-    );
+    return amp->canvas.mode.data + (size_t) cell_index * AMP_CELL_MODE_SIZE;
 }
 
 static inline AMP_STYLE amp_get_style(
@@ -3608,6 +3615,7 @@ static inline bool amp_mode_cell_serialize(
         (cell.bitset.blinking       ? (1 << 6) : 0) |
         (cell.bitset.strikethrough  ? (1 << 7) : 0)
     );
+    dst[7] = 0; // temporarily used when decoding style layers
 
     return true;
 }
@@ -4844,6 +4852,14 @@ static inline size_t amp_decode_styles(
     uint32_t layer_height = 0;
     size_t layer = 0;
     long y = 0;
+    long first_used_x = LONG_MAX;
+    long first_used_y = LONG_MAX;
+    long last_used_x = LONG_MIN;
+    long last_used_y = LONG_MIN;
+
+    if (amp) {
+        memset(amp->canvas.mode.data, 0, amp->canvas.mode.size);
+    }
 
     for (const char *s = str; *s && s < str + str_sz;) {
         const char *next_line = amp_str_seg_first_line_size(
@@ -4872,6 +4888,24 @@ static inline size_t amp_decode_styles(
 
         if (next_char > prev_char) {
             // Container end detected.
+
+            if (amp
+            && first_used_x <= last_used_x
+            && first_used_y <= last_used_y) {
+                for (long y = first_used_y; y <= last_used_y; ++y) {
+                    for (long x = first_used_x; x <= last_used_x; ++x) {
+                        uint8_t *mode_data = amp_get_mode_data(amp, x, y);
+
+                        if (!mode_data) {
+                            continue;
+                        }
+
+                        AMP_STYLE style;
+                        memcpy(&style, mode_data, sizeof(style));
+                        amp_put_style(amp, x, y, style);
+                    }
+                }
+            }
 
             height = height < layer_height ? layer_height : height;
 
@@ -4932,8 +4966,19 @@ static inline size_t amp_decode_styles(
                 );
 
                 if (new_style != AMP_STYLE_NONE) {
-                    AMP_STYLE old_style = amp_get_style(amp, x, y);
-                    amp_put_style(amp, x, y, old_style|new_style);
+                    uint8_t *mode_data = amp_get_mode_data(amp, x, y);
+
+                    if (mode_data) {
+                        AMP_STYLE old_style;
+                        memcpy(&old_style, mode_data, sizeof(old_style));
+                        new_style |= old_style;
+                        memcpy(mode_data, &new_style, sizeof(new_style));
+
+                        if (x < first_used_x) first_used_x = x;
+                        if (y < first_used_y) first_used_y = y;
+                        if (x > last_used_x) last_used_x = x;
+                        if (y > last_used_y) last_used_y = y;
+                    }
                 }
             }
 
