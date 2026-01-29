@@ -1,35 +1,35 @@
-╔══════════════════════════════╗
-║ 🭋🭆🭂🭍🭑🭀🭯   🭄𜷊𜶶🭏 🬿     ▄🮏      ║
-║ 🭢🭪🬂🭻🬂🭗🬂 𜺠𜺣🬲🬂🭺🬂𜺣🮌   🮑🮎🮒🮏      ║
-║▆🮄𜵗𜵗𜵗𜵗▀🮄 ▌𜷕𜷠𜶮𜷖𜷎▀𜶮 ▄🮏🮑🮎🮒🮏🮑🮎    ║
-║ 𜺠▄🬆🬊▄𜺣█ 𜺫𜺠🮏🬆🬊🮏𜺣  🮎▀🮑🮎▀▀      ║
-║   Orc      Man     Coins     ║
-║                              ║
-║ Dungeon Tiles by Erich Erstu ║
-╠══════════════════════════════╣
-║ scswsww   ssss a     yy      ║
-║ ccmdmsc ttsdmdsc   yyyy      ║
-║llccccll ttssssrc yyyyyyyy    ║
-║ ssmmsso tssccss  ymyyom      ║
-╠══════════════════════════════╣
-║       c    WW                ║
-║  LLLL O   RRRR A   MMMM      ║
-║ooOOOOoO AAWWWWsR   MMMMMM    ║
-║ dM  Mdc   C  C    oMM o      ║
-╠══════════════════════════════╣
-║                              ║
-║   rgr                        ║
-║  dddd o        t             ║
-╠══════════════════════════════╣
-║                              ║
-║       C                      ║
-║  CCCC C                      ║
-╠══════════════════════════════╣
-║                              ║
-║  OOOO M   SSSS     OOOO      ║
-║  MMMM M        S   OOOOOO    ║
-║  d  d m            OO        ║
-║   ___      ___     _____     ║
-║                              ║
-║ ??????? ????? ?? ????? ????? ║
-╚══════════════════════════════╝
+╔════════════════════════════════════════════════════════════╗
+║ 🭋🭆🭂🭍🭑🭀🭯   🭄𜷊𜶶🭏 🬿     ▄🮏   🮅🮅🮅𜴍🮅🮅🮅𜴍                         ║
+║ 🭢🭪🬂🭻🬂🭗🬂 𜺠𜺣🬲🬂🭺🬂𜺣🮌   🮑🮎🮒🮏   🮅𜴍🮅🮅🮅𜴍🮅🮅                         ║
+║▆🮄𜵗𜵗𜵗𜵗▀🮄 ▌𜷕𜷠𜶮𜷖𜷎▀𜶮 ▄🮏🮑🮎🮒🮏🮑🮎 🮅🮅🮅𜴍🮅🮅🮅𜴍                         ║
+║ 𜺠▄🬆🬊▄𜺣█ 𜺫𜺠🮏🬆🬊🮏𜺣  🮎▀🮑🮎▀▀   🮅𜴍🮅🮅🮅𜴍🮅🮅                         ║
+║   Orc      Man     Coins    Wall                           ║
+║                                                            ║
+║ Dungeon Tiles by Erich Erstu                               ║
+╠════════════════════════════════════════════════════════════╣
+║ scswsww   ssss a     yy   CCCCCCCC                         ║
+║ ccmdmsc ttsdmdsc   yyyy   CCCCCCCC                         ║
+║llccccll ttssssrc yyyyyyyy CCCCCCCC                         ║
+║ ssmmsso tssccss  ymyyom   CCCCCCCC                         ║
+╠════════════════════════════════════════════════════════════╣
+║       c    WW             ssssssss                         ║
+║  LLLL O   RRRR A   MMMM   ssssssss                         ║
+║ooOOOOoO AAWWWWsR   MMMMMM ssssssss                         ║
+║ dM  Mdc   C  C    oMM o   ssssssss                         ║
+╠════════════════════════════════════════════════════════════╣
+║                                                            ║
+║   rgr                                                      ║
+║  dddd o        t                                           ║
+╠════════════════════════════════════════════════════════════╣
+║                                                            ║
+║       C                                                    ║
+║  CCCC C                                                    ║
+╠════════════════════════════════════════════════════════════╣
+║                                                            ║
+║  OOOO M   SSSS     OOOO                                    ║
+║  MMMM M        S   OOOOOO                                  ║
+║  d  d m            OO                                      ║
+║   ___      ___     _____    ____                           ║
+║                                                            ║
+║ ??????? ????? ?? ????? ?????                               ║
+╚════════════════════════════════════════════════════════════╝
