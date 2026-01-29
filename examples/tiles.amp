@@ -1,21 +1,21 @@
 ╔════════════════════════════════════════════════════════════╗
-║ 🭋🭆🭂🭍🭑🭀🭯   🭄𜷊𜶶🭏 🬿     ▄🮏   🮅🮅🮅𜴍🮅🮅🮅𜴍                         ║
-║ 🭢🭪🬂🭻🬂🭗🬂 𜺠𜺣🬲🬂🭺🬂𜺣🮌   🮑🮎🮒🮏   🮅𜴍🮅🮅🮅𜴍🮅🮅                         ║
-║▆🮄𜵗𜵗𜵗𜵗▀🮄 ▌𜷕𜷠𜶮𜷖𜷎▀𜶮 ▄🮏🮑🮎🮒🮏🮑🮎 🮅🮅🮅𜴍🮅🮅🮅𜴍                         ║
-║ 𜺠▄🬆🬊▄𜺣█ 𜺫𜺠🮏🬆🬊🮏𜺣  🮎▀🮑🮎▀▀   🮅𜴍🮅🮅🮅𜴍🮅🮅                         ║
-║   Orc      Man     Coins    Wall                           ║
+║ 🭋🭆🭂🭍🭑🭀🭯   🭄𜷊𜶶🭏 🬿     ▄🮏   🮅🮅🮅𜴍🮅🮅🮅𜴍 🮐🮐🮐🮐░░░░                ║
+║ 🭢🭪🬂🭻🬂🭗🬂 𜺠𜺣🬲🬂🭺🬂𜺣🮌   🮑🮎🮒🮏   🮅𜴍🮅🮅🮅𜴍🮅🮅 🮎🮏🮏🮎🮐🮐░🮐                ║
+║▆🮄𜵗𜵗𜵗𜵗▀🮄 ▌𜷕𜷠𜶮𜷖𜷎▀𜶮 ▄🮏🮑🮎🮒🮏🮑🮎 🮅🮅🮅𜴍🮅🮅🮅𜴍 🮐🮐🮐🮐░░░░                ║
+║ 𜺠▄🬆🬊▄𜺣█ 𜺫𜺠🮏🬆🬊🮏𜺣  🮎▀🮑🮎▀▀   🮅𜴍🮅🮅🮅𜴍🮅🮅 ░░░░🮑🮒🮒🮑                ║
+║   Orc      Man     Coins    Wall     Floor                 ║
 ║                                                            ║
 ║ Dungeon Tiles by Erich Erstu                               ║
 ╠════════════════════════════════════════════════════════════╣
-║ scswsww   ssss a     yy   CCCCCCCC                         ║
-║ ccmdmsc ttsdmdsc   yyyy   CCCCCCCC                         ║
-║llccccll ttssssrc yyyyyyyy CCCCCCCC                         ║
-║ ssmmsso tssccss  ymyyom   CCCCCCCC                         ║
+║ scswsww   ssss a     yy   CCCCCCCC MMMMMMMM                ║
+║ ccmdmsc ttsdmdsc   yyyy   CCCCCCCC MMMMMMMM                ║
+║llccccll ttssssrc yyyyyyyy CCCCCCCC MMMMMMMM                ║
+║ ssmmsso tssccss  ymyyom   CCCCCCCC MMMMDDDD                ║
 ╠════════════════════════════════════════════════════════════╣
-║       c    WW             ssssssss                         ║
-║  LLLL O   RRRR A   MMMM   ssssssss                         ║
-║ooOOOOoO AAWWWWsR   MMMMMM ssssssss                         ║
-║ dM  Mdc   C  C    oMM o   ssssssss                         ║
+║       c    WW             ssssssss oooooooo                ║
+║  LLLL O   RRRR A   MMMM   ssssssss oooooooo                ║
+║ooOOOOoO AAWWWWsR   MMMMMM ssssssss oooooooo                ║
+║ dM  Mdc   C  C    oMM o   ssssssss oooommmm                ║
 ╠════════════════════════════════════════════════════════════╣
 ║                                                            ║
 ║   rgr                                                      ║
@@ -29,7 +29,7 @@
 ║  OOOO M   SSSS     OOOO                                    ║
 ║  MMMM M        S   OOOOOO                                  ║
 ║  d  d m            OO                                      ║
-║   ___      ___     _____    ____                           ║
+║   ___      ___     _____    ____     _____                 ║
 ║                                                            ║
 ║ ??????? ????? ?? ????? ?????                               ║
 ╚════════════════════════════════════════════════════════════╝
