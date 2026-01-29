@@ -528,6 +528,24 @@ static inline void                      amp_draw_ansmap(
     // of the source image. Transparent cells are marked by their glyphs
     // containing either a space or an empty string, having no style specified.
 );
+
+static inline void                      amp_draw_ansmap_region(
+    struct amp_type *                       dst_ansmap,
+    long                                    x_on_dst_ansmap,
+    long                                    y_on_dst_ansmap,
+    const struct amp_type *                 src_ansmap,
+    long                                    x_on_src_ansmap,
+    long                                    y_on_src_ansmap,
+    long                                    region_width,
+    long                                    region_height
+
+    // Draws a copy of a region from the source ansmap onto the destination
+    // ansmap at the specified position. It uses a masked drawing mode where
+    // transparent cells are skipped, so the background image will show through
+    // the masked parts of the source image. Transparent cells are marked by
+    // their glyphs containing either a space or an empty string, having no
+    // style specified.
+);
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -5013,27 +5031,49 @@ static inline void amp_draw_ansmap(
     struct amp_type *amp, long x_on_amp, long y_on_amp,
     const struct amp_type *sprite
 ) {
-    for (long dy=0; dy<sprite->height; ++dy) {
-        if (y_on_amp + dy >= amp->height) {
+    amp_draw_ansmap_region(
+        amp, x_on_amp, y_on_amp, sprite, 0, 0, sprite->width, sprite->height
+    );
+}
+
+static inline void amp_draw_ansmap_region(
+    struct amp_type *dst, long x_on_dst, long y_on_dst,
+    const struct amp_type *src, long x_on_src, long y_on_src, long region_w,
+    long region_h
+) {
+    for (long dy=0; dy<region_h; ++dy) {
+        if (y_on_dst + dy >= dst->height) {
             break;
         }
 
-        for (long dx=0; dx<sprite->width; ++dx) {
-            if (x_on_amp + dx >= amp->width) {
+        for (long dx=0; dx<region_w; ++dx) {
+            if (x_on_dst + dx >= dst->width) {
                 break;
             }
 
-            auto const mode = amp_get_mode(sprite, dx, dy);
-            const char *glyph = amp_get_glyph(sprite, dx, dy);
+            auto new_mode = amp_get_mode(
+                src, x_on_src + dx, y_on_src + dy
+            );
 
-            if (mode.bitset.bg == false) {
-                if (!glyph || *glyph == '\0') {
+            const char *glyph = amp_get_glyph(src, x_on_src + dx, y_on_src+dy);
+
+            if (new_mode.bitset.bg == false) {
+                if (!glyph || *glyph == '\0' || *glyph == ' ') {
                     continue;
+                }
+
+                auto const dst_mode = amp_get_mode(
+                    dst, x_on_dst + dx, y_on_dst + dy
+                );
+
+                if (dst_mode.bitset.bg) {
+                    new_mode.bitset.bg = true;
+                    new_mode.bg = dst_mode.bg;
                 }
             }
 
-            amp_set_mode(amp, x_on_amp + dx, y_on_amp + dy, mode);
-            amp_put_glyph(amp, x_on_amp + dx, y_on_amp + dy, glyph);
+            amp_set_mode(dst, x_on_dst + dx, y_on_dst + dy, new_mode);
+            amp_put_glyph(dst, x_on_dst + dx, y_on_dst + dy, glyph);
         }
     }
 }

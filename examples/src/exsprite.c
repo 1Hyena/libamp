@@ -3,6 +3,9 @@
 #include "utils.h"
 
 
+static void draw_dungeon(struct amp_type *canvas, const struct amp_type *tiles);
+
+
 int main(int argc, char **argv) {
     auto spr_blob = load_file("../tiles.amp");
 
@@ -56,7 +59,7 @@ int main(int argc, char **argv) {
             break;
         }
 
-        amp_draw_ansmap(&canvas, 0, 0, &spr);
+        draw_dungeon(&canvas, &spr);
     } while (false);
 
     if (!error_message) {
@@ -76,4 +79,57 @@ int main(int argc, char **argv) {
     }
 
     return EXIT_SUCCESS;
+}
+
+static void draw_dungeon(
+    struct amp_type *canvas, const struct amp_type *tiles
+) {
+    constexpr uint8_t dungeon_w = 10;
+    constexpr uint8_t dungeon_h = 6;
+    constexpr uint8_t dungeon_d = 2;
+
+    static const uint8_t dungeon[dungeon_d][dungeon_h][dungeon_w] = {
+        {
+            { 4, 4, 4, 4, 5, 5, 4, 4, 4, 4 },
+            { 4, 4, 5, 5, 5, 5, 5, 4, 4, 4 },
+            { 5, 5, 5, 5, 5, 4, 5, 5, 5, 4 },
+            { 4, 4, 5, 5, 5, 4, 5, 5, 4, 4 },
+            { 4, 4, 4, 4, 5, 5, 5, 4, 4, 4 },
+            { 4, 4, 4, 4, 4, 5, 5, 4, 4, 4 }
+        },
+        {
+            { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 1, 0, 3, 0 },
+            { 0, 0, 3, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 2, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+        }
+    };
+
+    for (long d=0; d<dungeon_d; ++d) {
+        for (long y=0; y<dungeon_h; ++y) {
+            for (long x=0; x<dungeon_w; ++x) {
+                uint8_t tile_index = dungeon[d][y][x];
+
+                if (!tile_index) {
+                    continue;
+                }
+
+                tile_index--;
+
+                uint8_t tile_w = 8;
+                uint8_t tile_h = 4;
+                long tile_from_x = tile_w * tile_index + tile_index;
+                long tile_from_y = 0;
+                long tile_to_x = tile_w * x;
+                long tile_to_y = tile_h * y;
+
+                amp_draw_ansmap_region(
+                    canvas, tile_to_x, tile_to_y,
+                    tiles, tile_from_x, tile_from_y, tile_w, tile_h
+                );
+            }
+        }
+    }
 }
