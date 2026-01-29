@@ -402,6 +402,9 @@ https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/a
 
 https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/amp.h#L364-L379
 
+Examples:
+[exrich](https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/examples/src/exrich.c#L45)
+
 
 ##### amp_snprint_rich_textf ###################################################
 
