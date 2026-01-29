@@ -34,6 +34,8 @@ int main(int argc, char **argv) {
                 if (amp_decode(&amp, input_data, input_size)) {
                     amp_encode(&amp, AMP_DEFLATE, nullptr, 0);
                     amp_stdout("\n", 1);
+                    amp_to_ans(&amp, nullptr, 0);
+                    amp_stdout("\n", 1);
                     amp_set_palette(&amp, AMP_PAL_24BIT);
                     amp_to_ans(&amp, nullptr, 0);
                     amp_stdout("\n", 1);
