@@ -7,9 +7,9 @@ static void draw_dungeon(struct amp_type *canvas, const struct amp_type *tiles);
 
 
 int main(int argc, char **argv) {
-    auto spr_blob = load_file("../tiles.amp");
+    auto gfx_blob = load_file("../tiles.amp");
 
-    if (!spr_blob.data) {
+    if (!gfx_blob.data) {
         return EXIT_FAILURE;
     }
 
@@ -29,37 +29,37 @@ int main(int argc, char **argv) {
     amp_init(&canvas, width, height, canvas_data, canvas_size);
 
     const char *error_message = nullptr;
-    uint8_t *spr_data = nullptr;
+    uint8_t *gfx_data = nullptr;
 
     do {
-        uint32_t spr_w, spr_h;
-        size_t spr_size = amp_doc_parse_size(
-            spr_blob.data, spr_blob.size, &spr_w, &spr_h
+        uint32_t gfx_w, gfx_h;
+        size_t gfx_size = amp_doc_parse_size(
+            gfx_blob.data, gfx_blob.size, &gfx_w, &gfx_h
         );
 
-        if (!spr_size) {
+        if (!gfx_size) {
             error_message = "amp_parse_size: parse error\n";
             break;
         }
 
-        if ((spr_data = malloc(spr_size)) == nullptr) {
+        if ((gfx_data = malloc(gfx_size)) == nullptr) {
             error_message = "malloc: allocation failed\n";
             break;
         }
 
-        struct amp_type spr;
+        struct amp_type gfx;
 
-        if (amp_init(&spr, spr_w, spr_h, spr_data, spr_size) > spr_size) {
+        if (amp_init(&gfx, gfx_w, gfx_h, gfx_data, gfx_size) > gfx_size) {
             error_message = "amp_init: not enough memory provided\n";
             break;
         }
 
-        if (!amp_decode(&spr, spr_blob.data, spr_blob.size)) {
+        if (!amp_decode(&gfx, gfx_blob.data, gfx_blob.size)) {
             error_message = "amp_decode: parse error\n";
             break;
         }
 
-        draw_dungeon(&canvas, &spr);
+        draw_dungeon(&canvas, &gfx);
     } while (false);
 
     if (!error_message) {
@@ -68,9 +68,9 @@ int main(int argc, char **argv) {
         amp_stdout("\n", 1);
     }
 
-    free(spr_data);
+    free(gfx_data);
     free(canvas_data);
-    free(spr_blob.data);
+    free(gfx_blob.data);
 
     if (error_message) {
         write(2, error_message, strlen(error_message));
