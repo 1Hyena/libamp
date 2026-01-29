@@ -216,6 +216,16 @@ https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/e
 ![screenshot](img/exmemory.png "console output of exmemory")
 
 
+#### ExTiles ###################################################################
+
+The [extiles](examples/src/extiles.c) example shows how to fill a canvas with
+tiles from a different ansmap image.
+
+https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/examples/src/extiles.c#L111-L133
+
+![screenshot](img/extiles.png "console output of extiles")
+
+
 ### API ########################################################################
 
 * [Colors](#colors)
@@ -249,6 +259,8 @@ https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/e
   - [amp_put_style](#amp_put_style) (&*ansmap*, *x*, *y*, *style*) → `bool`
   - [amp_set_bg_color](#amp_set_bg_color) (&*ansmap*, *x*, *y*, *color*) → `bool`
   - [amp_set_fg_color](#amp_set_fg_color) (&*ansmap*, *x*, *y*, *color*) → `bool`
+  - [amp_draw_ansmap](#amp_draw_ansmap) (&*dst_amp*, *dst_x*, *dst_y*, &*src_amp*) → `void`
+  - [amp_draw_ansmap_region](#amp_draw_ansmap_region) (&*dst_amp*, *dst_x*, *dst_y*, &*src_amp*, *src_x*, *src_y*, *width*, *height*) → `void`
 
 * [Image I/O](#image-io)
   - [amp_set_palette](#amp_set_palette) (&*ansmap*, palette)
@@ -420,6 +432,19 @@ Examples:
 ##### amp_set_fg_color #########################################################
 
 https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/amp.h#L318-L327
+
+
+##### amp_draw_ansmap ##########################################################
+
+https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/amp.h#L519-L530
+
+
+##### amp_draw_ansmap_region ###################################################
+
+https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/amp.h#L532-L548
+
+Examples:
+[extiles](https://github.com/1Hyena/libamp/blob/ce0207e34fca3e9a6305fac89936c7dd2373114a/examples/src/extiles.c#L128)
 
 
 #### Image I/O #################################################################
