@@ -2332,49 +2332,6 @@ static inline int amp_utf8_code_point_size(const char *str, size_t n) {
     return -1;
 }
 
-/* commented out the implementation inspired by libunistring
-static inline int amp_utf8_code_point_size(const char *str, size_t n) {
-    uint8_t *s = (uint8_t *) str;
-
-    if (n > 0) {
-        uint8_t c = *s;
-
-        if (c < 0x80) {
-            return (c != 0 ? 1 : 0);
-        }
-
-        if (c >= 0xc2) {
-            if (c < 0xe0) {
-                if (n >= 2 && (s[1] ^ 0x80) < 0x40) {
-                    return 2;
-                }
-            }
-            else if (c < 0xf0) {
-                if (n >= 3
-                && (s[1] ^ 0x80) < 0x40
-                && (s[2] ^ 0x80) < 0x40
-                && (c >= 0xe1 || s[1] >= 0xa0)
-                && (c != 0xed || s[1] < 0xa0)) {
-                    return 3;
-                }
-            }
-            else if (c < 0xf8) {
-                if (n >= 4
-                && (s[1] ^ 0x80) < 0x40
-                && (s[2] ^ 0x80) < 0x40
-                && (s[3] ^ 0x80) < 0x40
-                && (c >= 0xf1 || s[1] >= 0x90)
-                && (c < 0xf4 || (c == 0xf4 && s[1] < 0x90))) {
-                    return 4;
-                }
-            }
-        }
-    }
-
-    return -1; // invalid or incomplete multibyte character
-}
-*/
-
 static inline size_t amp_utf8_code_point_count(
     const char *utf8_str, size_t utf8_str_size
 ) {
