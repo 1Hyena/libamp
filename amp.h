@@ -2260,6 +2260,80 @@ static inline ssize_t amp_get_cell_index(
 }
 
 static inline int amp_utf8_code_point_size(const char *str, size_t n) {
+    if (!n) {
+        return -1;
+    }
+
+    uint8_t *s = (uint8_t *) str;
+
+    if (0xf0 == (0xf8 & *s)) {
+        if (n < 4) {
+            return -1;
+        }
+
+        if ((0x80 != (0xc0 & s[1]))
+        ||  (0x80 != (0xc0 & s[2]))
+        ||  (0x80 != (0xc0 & s[3]))) {
+            return -1;
+        }
+
+        if ((n != 4) && (0x80 == (0xc0 & s[4]))) {
+            return -1;
+        }
+
+        if ((0 == (0x07 & s[0])) && (0 == (0x30 & s[1]))) {
+            return -1;
+        }
+
+        return 4;
+    }
+    else if (0xe0 == (0xf0 & *s)) {
+        if (n < 3) {
+            return -1;
+        }
+
+        if ((0x80 != (0xc0 & s[1])) || (0x80 != (0xc0 & s[2]))) {
+            return -1;
+        }
+
+        if ((n != 3) && (0x80 == (0xc0 & s[3]))) {
+            return -1;
+        }
+
+        if ((0 == (0x0f & s[0])) && (0 == (0x20 & s[1]))) {
+            return -1;
+        }
+
+        return 3;
+    }
+    else if (0xc0 == (0xe0 & *s)) {
+        if (n < 2) {
+            return -1;
+        }
+
+        if (0x80 != (0xc0 & s[1])) {
+            return -1;
+        }
+
+        if ((n != 2) && (0x80 == (0xc0 & s[2]))) {
+            return -1;
+        }
+
+        if (0 == (0x1e & s[0])) {
+            return -1;
+        }
+
+        return 2;
+    }
+    else if (0x00 == (0x80 & *s)) {
+        return 1;
+    }
+
+    return -1;
+}
+
+/* commented out the implementation inspired by libunistring
+static inline int amp_utf8_code_point_size(const char *str, size_t n) {
     uint8_t *s = (uint8_t *) str;
 
     if (n > 0) {
@@ -2299,6 +2373,7 @@ static inline int amp_utf8_code_point_size(const char *str, size_t n) {
 
     return -1; // invalid or incomplete multibyte character
 }
+*/
 
 static inline size_t amp_utf8_code_point_count(
     const char *utf8_str, size_t utf8_str_size
